@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Multivariate data analysis &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Community analysis" href="community_analysis.html" />
+    <link rel="prev" title="Standard statistical analyses" href="standard_statistical_analyses.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="community_analysis.html" title="Community analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="standard_statistical_analyses.html" title="Standard statistical analyses"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="multivariate-data-analysis">
+<span id="multivariate-analysis"></span><h1>Multivariate data analysis<a class="headerlink" href="#multivariate-data-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principal-coordinates-analysis">
+<h2>Principal Coordinates Analysis<a class="headerlink" href="#principal-coordinates-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Principal Coordinates Analysis works on a matrix of pairwise distances. In this example we start by calculating the pairwise distances for a set of aligned sequences, though any distance matrix can be used with PCoA, relating any objects, not only sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.phylo</span> <span class="kn">import</span> <span class="n">distance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.cluster.metric_scaling</span> <span class="kn">import</span> <span class="n">PCoA</span>
+</pre></div>
+</div>
+<p>Import a substitution model (or create your own).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+</pre></div>
+</div>
+<p>Load the alignment.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/test.paml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a pairwise distances object calculator for the alignment, providing a substitution model instance.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">EstimateDistances</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">submodel</span><span class="o">=</span> <span class="n">HKY85</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now use this matrix to perform principal coordinates analysis.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">PCoA_result</span> <span class="o">=</span> <span class="n">PCoA</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">getPairwiseDistances</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">PCoA_result</span> 
+<span class="go">======================================================================================</span>
+<span class="go">        Type              Label  vec_num-0  vec_num-1  vec_num-2  vec_num-3  vec_num-4</span>
+<span class="go">--------------------------------------------------------------------------------------</span>
+<span class="go">Eigenvectors          NineBande      -0.02       0.01       0.04       0.01       0.00</span>
+<span class="go">Eigenvectors           DogFaced      -0.04      -0.06      -0.01       0.00       0.00</span>
+<span class="go">Eigenvectors          HowlerMon      -0.07       0.01       0.01      -0.02       0.00</span>
+<span class="go">Eigenvectors              Mouse       0.20       0.01      -0.01      -0.00       0.00</span>
+<span class="go">Eigenvectors              Human      -0.07       0.04      -0.03       0.01       0.00</span>
+<span class="go"> Eigenvalues        eigenvalues       0.05       0.01       0.00       0.00      -0.00</span>
+<span class="go"> Eigenvalues  var explained (%)      85.71       9.60       3.73       0.95      -0.00</span>
+<span class="go">--------------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+<p>We can save these results to a file in a delimited format (we&#8217;ll use tab here) that can be opened up in any data analysis program, like R or Excel. Here the principal coordinates can be plotted against each other for visualization.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">PCoA_result</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s">&#39;PCoA_results.txt&#39;</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fast-mds">
+<h2>Fast-MDS<a class="headerlink" href="#fast-mds" title="Permalink to this headline">¶</a></h2>
+<p>The eigendecomposition step in Principal Coordinates Analysis (PCoA)
+doesn&#8217;t scale very well. And for thousands of objects the computation
+of all pairwise distance alone can get very slow, because it scales
+quadratically. For a huge number of objects this might even pose a
+memory problem. Fast-MDS methods approximate an MDS/PCoA solution and
+do not suffer from these problems.</p>
+<p>First, let&#8217;s simulate a big data sample by creating 1500 objects living
+in 10 dimension. Then compute their pairwise distances and perform a
+principal coordinates analysis on it. Note that the last two steps might take
+already a couple of minutes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.distance_transform</span> <span class="kn">import</span> <span class="n">dist_euclidean</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.cluster.metric_scaling</span> <span class="kn">import</span> <span class="n">principal_coordinates_analysis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objs</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distmtx</span> <span class="o">=</span> <span class="n">dist_euclidean</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">full_pcoa</span> <span class="o">=</span> <span class="n">principal_coordinates_analysis</span><span class="p">(</span><span class="n">distmtx</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>PyCogent implements two fast MDS approximations called
+Split-and-Combine MDS (SCMDS, still in development) and Nystrom (also known as
+Landmark-MDS). Both can easily handle many thousands objects. One
+reason is that they don&#8217;t require all distances to be computed.
+Instead you pass down the distance function and only required
+distances are calculated.</p>
+<p>Nystrom works by using a so called seed-matrix, which contains (only) k by
+n distances, where n is the total number of objects and k&lt;&lt;n. The
+bigger k, the more exact the approximation will be and the longer the
+computation will take. One further difference to normal Principal
+Coordinates Analysis is, that no eigenvalues, but only approximate
+eigenvectors of length dim will be returned.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.cluster.approximate_mds</span> <span class="kn">import</span> <span class="n">nystrom</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_seeds</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seeds</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="n">distmtx</span><span class="p">,</span><span class="n">n_seeds</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dims</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nystrom_3d</span> <span class="o">=</span> <span class="n">nystrom</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A good rule of thumb for picking n_seeds is log(n), log(n)**2 or
+sqrt(n).</p>
+<p>SCMDS works by dividing the pairwise distance matrix into chunks of
+certain size and overlap. MDS is performed on each chunk individually
+and the resulting solutions are progressively joined. As in the case
+of Nystrom not all distances will be computed, but only those of the
+overlapping tiles. The size and overlap of the tiles determine the
+quality of the approximation as well as the run-time.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.cluster.approximate_mds</span> <span class="kn">import</span> <span class="n">CombineMds</span><span class="p">,</span> <span class="n">cmds_tzeng</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">combine_mds</span> <span class="o">=</span> <span class="n">CombineMds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tile_overlap</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dims</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_eigvals</span> <span class="o">=</span> <span class="n">cmds_tzeng</span><span class="p">(</span><span class="n">distmtx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">],</span> <span class="n">dims</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">combine_mds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_overlap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_eigvals</span> <span class="o">=</span> <span class="n">cmds_tzeng</span><span class="p">(</span><span class="n">distmtx</span><span class="p">[</span><span class="mi">400</span><span class="p">:</span><span class="mi">900</span><span class="p">,</span><span class="mi">400</span><span class="p">:</span><span class="mi">900</span><span class="p">],</span> <span class="n">dims</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">combine_mds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_overlap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_eigvals</span> <span class="o">=</span> <span class="n">cmds_tzeng</span><span class="p">(</span><span class="n">distmtx</span><span class="p">[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1300</span><span class="p">,</span><span class="mi">800</span><span class="p">:</span><span class="mi">1300</span><span class="p">],</span> <span class="n">dims</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">combine_mds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_overlap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_eigvals</span> <span class="o">=</span> <span class="n">cmds_tzeng</span><span class="p">(</span><span class="n">distmtx</span><span class="p">[</span><span class="mi">1200</span><span class="p">:</span><span class="mi">1500</span><span class="p">,</span><span class="mi">1200</span><span class="p">:</span><span class="mi">1500</span><span class="p">],</span> <span class="n">dims</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">combine_mds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tile_eigvecs</span><span class="p">,</span> <span class="n">tile_overlap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">combien_mds_3d</span> <span class="o">=</span> <span class="n">combine_mds</span><span class="o">.</span><span class="n">getFinalMDS</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you want to know how good the returned approximations are, you will
+have to perform principal_coordinates_analysis() on a smallish
+submatrix and perform a goodness_of_fit analysis.</p>
+</div>
+<div class="section" id="nmds">
+<h2>NMDS<a class="headerlink" href="#nmds" title="Permalink to this headline">¶</a></h2>
+<p>NMDS (Non-metric MultiDimensional Scaling) works on a matrix of pairwise distances. In this example, we generate a matrix based on the euclidean distances of an abundance matrix.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.cluster.nmds</span> <span class="kn">import</span> <span class="n">NMDS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.distance_transform</span> <span class="kn">import</span> <span class="n">dist_euclidean</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+</pre></div>
+</div>
+<p>We start with an abundance matrix, samples (rows) by sequences/species (cols)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">abundance</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span>
+<span class="gp">... </span>       <span class="p">[[</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="c">#idx 5</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="c">#idx 10</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="c">#idx 15</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> <span class="s">&#39;float&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then compute a distance matrix using euclidean distance, and perform nmds on that matrix</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">euc_distmtx</span> <span class="o">=</span> <span class="n">dist_euclidean</span><span class="p">(</span><span class="n">abundance</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nm</span> <span class="o">=</span> <span class="n">NMDS</span><span class="p">(</span><span class="n">euc_distmtx</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The NMDS object provides a list of points, which can be plotted if desired</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pts</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">getPoints</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stress</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">getStress</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>With matplotlib installed, we could then do <tt class="docutils literal"><span class="pre">plt.plot(pts[:,0],</span> <span class="pre">pts[:,1])</span></tt></p>
+</div>
+<div class="section" id="hierarchical-clustering-upgma-nj">
+<h2>Hierarchical clustering (UPGMA, NJ)<a class="headerlink" href="#hierarchical-clustering-upgma-nj" title="Permalink to this headline">¶</a></h2>
+<p>Hierarchical clustering techniques work on a matrix of pairwise distances. In this case, we use the distance matrix from the NMDS example, relating samples of species to one another using UPGMA (NJ below).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">UPGMA should not be used for phylogenetic reconstruction.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.cluster.UPGMA</span> <span class="kn">import</span> <span class="n">upgma</span>
+</pre></div>
+</div>
+<p>we start with the distance matrix and list of sample names:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sample_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sample&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">euc_distmtx</span><span class="p">))]</span>
+</pre></div>
+</div>
+<p>make 2d dict:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">euc_distdict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_names</span><span class="p">)):</span>
+<span class="gp">... </span>   <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_names</span><span class="p">)):</span>
+<span class="gp">... </span>       <span class="n">euc_distdict</span><span class="p">[(</span><span class="n">sample_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">sample_names</span><span class="p">[</span><span class="n">j</span><span class="p">])]</span><span class="o">=</span><span class="n">euc_distmtx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>e.g.: <tt class="docutils literal"><span class="pre">euc_distdict[('sample6',</span> <span class="pre">'sample5')]</span> <span class="pre">==</span> <span class="pre">3.7416573867739413</span></tt></p>
+<p>Now use this matrix to build a UPGMA cluster.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mycluster</span> <span class="o">=</span> <span class="n">upgma</span><span class="p">(</span><span class="n">euc_distdict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">mycluster</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">                                                  /-sample10</span>
+<span class="go">                                        /edge.3--|</span>
+<span class="go">                              /edge.2--|          \-sample8</span>
+<span class="go">                             |         |</span>
+<span class="go">                             |          \-sample9</span>
+<span class="go">                    /edge.1--|</span>
+<span class="go">                   |         |                    /-sample12</span>
+<span class="go">                   |         |          /edge.5--|</span>
+<span class="go">                   |         |         |          \-sample11</span>
+<span class="go">                   |          \edge.4--|</span>
+<span class="go">                   |                   |          /-sample6</span>
+<span class="go">                   |                    \edge.6--|</span>
+<span class="go">          /edge.0--|                              \-sample7</span>
+<span class="go">         |         |</span>
+<span class="go">         |         |                                        /-sample15</span>
+<span class="go">         |         |                              /edge.10-|</span>
+<span class="go">         |         |                    /edge.9--|          \-sample14</span>
+<span class="go">         |         |                   |         |</span>
+<span class="go">         |         |          /edge.8--|          \-sample13</span>
+<span class="go">         |         |         |         |</span>
+<span class="go">         |          \edge.7--|          \-sample16</span>
+<span class="go">-root----|                   |</span>
+<span class="go">         |                   |          /-sample17</span>
+<span class="go">         |                    \edge.11-|</span>
+<span class="go">         |                              \-sample18</span>
+<span class="go">         |</span>
+<span class="go">         |                              /-sample5</span>
+<span class="go">         |                    /edge.14-|</span>
+<span class="go">         |          /edge.13-|          \-sample4</span>
+<span class="go">         |         |         |</span>
+<span class="go">         |         |          \-sample3</span>
+<span class="go">          \edge.12-|</span>
+<span class="go">                   |                    /-sample2</span>
+<span class="go">                   |          /edge.16-|</span>
+<span class="go">                    \edge.15-|          \-sample1</span>
+<span class="go">                             |</span>
+<span class="go">                              \-sample0</span>
+</pre></div>
+</div>
+<p>We demonstrate saving this UPGMA cluster to a file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mycluster</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s">&#39;test_upgma.tree&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can use neighbor joining (NJ) instead of UPGMA:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.phylo.nj</span> <span class="kn">import</span> <span class="n">nj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">njtree</span> <span class="o">=</span> <span class="n">nj</span><span class="p">(</span><span class="n">euc_distdict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">njtree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">          /-sample16</span>
+<span class="go">         |</span>
+<span class="go">         |                    /-sample12</span>
+<span class="go">         |          /edge.2--|</span>
+<span class="go">         |         |         |          /-sample13</span>
+<span class="go">         |         |          \edge.1--|</span>
+<span class="go">         |         |                   |          /-sample14</span>
+<span class="go">         |         |                    \edge.0--|</span>
+<span class="go">         |         |                              \-sample15</span>
+<span class="go">         |         |</span>
+<span class="go">         |         |                              /-sample7</span>
+<span class="go">         |-edge.14-|                    /edge.5--|</span>
+<span class="go">         |         |                   |         |          /-sample8</span>
+<span class="go">         |         |                   |          \edge.4--|</span>
+<span class="go">         |         |          /edge.6--|                   |          /-sample10</span>
+<span class="go">         |         |         |         |                    \edge.3--|</span>
+<span class="go">         |         |         |         |                              \-sample9</span>
+<span class="go">-root----|         |         |         |</span>
+<span class="go">         |         |         |          \-sample11</span>
+<span class="go">         |         |         |</span>
+<span class="go">         |          \edge.13-|                    /-sample6</span>
+<span class="go">         |                   |                   |</span>
+<span class="go">         |                   |                   |                              /-sample4</span>
+<span class="go">         |                   |          /edge.10-|                    /edge.7--|</span>
+<span class="go">         |                   |         |         |          /edge.8--|          \-sample3</span>
+<span class="go">         |                   |         |         |         |         |</span>
+<span class="go">         |                   |         |          \edge.9--|          \-sample5</span>
+<span class="go">         |                    \edge.12-|                   |</span>
+<span class="go">         |                             |                    \-sample2</span>
+<span class="go">         |                             |</span>
+<span class="go">         |                             |          /-sample0</span>
+<span class="go">         |                              \edge.11-|</span>
+<span class="go">         |                                        \-sample1</span>
+<span class="go">         |</span>
+<span class="go">         |          /-sample18</span>
+<span class="go">          \edge.15-|</span>
+<span class="go">                    \-sample17</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Multivariate data analysis</a><ul>
+<li><a class="reference internal" href="#principal-coordinates-analysis">Principal Coordinates Analysis</a></li>
+<li><a class="reference internal" href="#fast-mds">Fast-MDS</a></li>
+<li><a class="reference internal" href="#nmds">NMDS</a></li>
+<li><a class="reference internal" href="#hierarchical-clustering-upgma-nj">Hierarchical clustering (UPGMA, NJ)</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="standard_statistical_analyses.html"
+                        title="previous chapter">Standard statistical analyses</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="community_analysis.html"
+                        title="next chapter">Community analysis</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/multivariate_data_analysis.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="community_analysis.html" title="Community analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="standard_statistical_analyses.html" title="Standard statistical analyses"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

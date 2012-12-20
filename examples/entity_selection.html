@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Selecting and grouping entities &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Querying NCBI for VWF" href="query_ncbi.html" />
+    <link rel="prev" title="Working with macromolecular structures" href="handling_3dstructures.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="query_ncbi.html" title="Querying NCBI for VWF"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="handling_3dstructures.html" title="Working with macromolecular structures"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="selecting-and-grouping-entities">
+<h1>Selecting and grouping entities<a class="headerlink" href="#selecting-and-grouping-entities" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Marcin Cieslik</em></p>
+<p>The feature, which distinguishes PyCogent&#8217;s approach to the handling of macromolecular structures is the flexible and concise way of selecting, grouping and retrieving data from entities. The concepts of entity and hierarchy are similar.</p>
+<div class="section" id="overview-of-methods-and-functions-covered">
+<h2>Overview of methods and functions covered.<a class="headerlink" href="#overview-of-methods-and-functions-covered" title="Permalink to this headline">¶</a></h2>
+<p>The methods covered in this section of the manual deal with selecting entities for purposes like: &#8220;select all hydrogen atoms from chain B&#8221;, &#8220;mask all hetero atoms&#8221;, &#8220;remove all water molecules&#8221; etc. We start with the high-level functions first, which are concise and standard to low-level methods for fine grained manipulations</p>
+</div>
+<div class="section" id="selection-based-on-hierarchy">
+<h2>Selection based on hierarchy.<a class="headerlink" href="#selection-based-on-hierarchy" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s start by accessing a PDB file and creating a structure entity. We establish a connection to the PDB file server download a file and parse it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="kn">import</span> <span class="n">PDBParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.pdb</span> <span class="kn">import</span> <span class="n">Pdb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb</span> <span class="o">=</span> <span class="n">Pdb</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">socket_handle</span> <span class="o">=</span> <span class="n">pdb</span><span class="p">[</span><span class="s">&#39;2E1F&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">socket_handle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let&#8217;s see what we got</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+<span class="go">HYDROLASE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;experiment_type&#39;</span><span class="p">]</span>
+<span class="go">X-RAY DIFFRACTION</span>
+</pre></div>
+</div>
+<p>WOW, thats descriptive. At least we know it is an X-Ray structure. Now how many chains does it have?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)]</span><span class="o">.</span><span class="n">getChildren</span><span class="p">()</span>
+<span class="go">[&lt;Chain id=A&gt;]</span>
+</pre></div>
+</div>
+<p>We found the &#8216;A&#8217; chain of the first (0-based indexing) model. We can dig deeper</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)][(</span><span class="s">&#39;A&#39;</span><span class="p">,)]</span><span class="o">.</span><span class="n">sortedkeys</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">[((&#39;H_HOH&#39;, 1, &#39; &#39;),), ((&#39;H_HOH&#39;, 2, &#39; &#39;),)]</span>
+</pre></div>
+</div>
+<p>Only waters? Probably not. You can see what is inside a chain by looking inside the dictionary to get the list of short ids and child entities:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain_A</span> <span class="o">=</span> <span class="n">structure</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)][(</span><span class="s">&#39;A&#39;</span><span class="p">,)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># chain_A.keys() # get the short_ids</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># chain_A.values() # get the children</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">chain_A</span><span class="p">)</span>
+<span class="go">147</span>
+</pre></div>
+</div>
+<p>This number is too high because we counted water molecules not only amino acids. But typing <tt class="docutils literal"><span class="pre">structure[(0,)][('A',)]</span></tt> is pretty boring and it requires to inspect the number of models and chain ids first. The function which allows to select entities from the hierarchy based on their identity is called <tt class="docutils literal"><span class="pre">einput</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.selection</span> <span class="kn">import</span> <span class="n">einput</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_residues</span> <span class="o">=</span> <span class="n">einput</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="s">&#39;R&#39;</span><span class="p">,</span> <span class="s">&#39;my_residues&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_atoms</span> <span class="o">=</span> <span class="n">einput</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">all_residues</span><span class="p">)</span>
+<span class="go">147</span>
+</pre></div>
+</div>
+<p>Still waters are included.</p>
+</div>
+<div class="section" id="selection-based-on-properties">
+<h2>Selection based on properties.<a class="headerlink" href="#selection-based-on-properties" title="Permalink to this headline">¶</a></h2>
+<p>We already have a collection of entities <tt class="docutils literal"><span class="pre">all_residues</span></tt> which contains all residues in the structure regardless of the number of chains and models. Our task is to determine the number of non-water residues. The property which allows us to distinguish a water molecule from an amino acid is the name, which is stored as the <tt class="docutils literal"><span class="pre">name</span></tt> attribute.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain_A</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">first_child</span> <span class="o">=</span> <span class="n">chain_A</span><span class="o">.</span><span class="n">sortedvalues</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">first_child</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;H_HOH&#39;</span>
+</pre></div>
+</div>
+<p>We could write a loop to select those residues we can either loop over the residues in <tt class="docutils literal"><span class="pre">chain_A</span></tt> or <tt class="docutils literal"><span class="pre">all_residues</span></tt> as they are the same:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">non_water</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">chain_A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">residue</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s">&#39;H_HOH&#39;</span><span class="p">:</span>
+<span class="gp">... </span>         <span class="n">non_water</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">residue</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">non_water</span><span class="p">)</span>
+<span class="go">95</span>
+</pre></div>
+</div>
+<p>To make this more convenient each entity e.g. a <tt class="docutils literal"><span class="pre">Chain</span></tt> instance has a method to select children based on a property <tt class="docutils literal"><span class="pre">selectChildren</span></tt>. The equivalent of the above expression is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">non_water</span> <span class="o">=</span> <span class="n">chain_A</span><span class="o">.</span><span class="n">selectChildren</span><span class="p">(</span><span class="s">&#39;H_HOH&#39;</span><span class="p">,</span> <span class="s">&#39;ne&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">non_water</span> <span class="o">=</span> <span class="n">all_residues</span><span class="o">.</span><span class="n">selectChildren</span><span class="p">(</span><span class="s">&#39;H_HOH&#39;</span><span class="p">,</span> <span class="s">&#39;ne&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">non_water</span><span class="p">)</span>
+<span class="go">95</span>
+</pre></div>
+</div>
+<p>The first argument is a value, the second an operator name from the <tt class="docutils literal"><span class="pre">operator</span></tt> module, here &#8216;ne&#8217; is for &#8216;Not Equal&#8217;. The last argument &#8216;name&#8217; is resolved by the <tt class="docutils literal"><span class="pre">data_children</span></tt> method which allows the user to retrieve data from a child entities attributes, xtra dictionary or methods. Here we get the data from the &#8216;name&#8217; attribute. The <tt class="docutils literal"><span class="pre">selectChildren</span></tt> method returns a dictionary, where keys are the short ids and values are the child entities. The result can be put into a new entity holder.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">non_water_holder</span> <span class="o">=</span> <span class="n">einput</span><span class="p">(</span><span class="n">non_water</span><span class="p">,</span> <span class="s">&#39;R&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But having to first group the entities via <tt class="docutils literal"><span class="pre">einput</span></tt> then select them only to put them into a new container seems awkward. It can be done in one step using the <tt class="docutils literal"><span class="pre">select</span></tt> function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.selection</span> <span class="kn">import</span> <span class="n">select</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">non_water_holder</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="s">&#39;R&#39;</span><span class="p">,</span> <span class="s">&#39;H_HOH&#39;</span><span class="p">,</span> <span class="s">&#39;ne&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">non_water_holder</span><span class="p">)</span>
+<span class="go">95</span>
+</pre></div>
+</div>
+<p>Is there a serine(s) in the sequence?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">serines</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="s">&#39;R&#39;</span><span class="p">,</span> <span class="s">&#39;SER&#39;</span><span class="p">,</span> <span class="s">&#39;eq&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">serines</span><span class="o">.</span><span class="n">sortedkeys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;2E1F&#39;, 0, &#39;A&#39;, (&#39;SER&#39;, 1146, &#39; &#39;))</span>
+</pre></div>
+</div>
+<p>The function raises a <tt class="docutils literal"><span class="pre">ValueError</span></tt> if no entities can be selected.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Selecting and grouping entities</a><ul>
+<li><a class="reference internal" href="#overview-of-methods-and-functions-covered">Overview of methods and functions covered.</a></li>
+<li><a class="reference internal" href="#selection-based-on-hierarchy">Selection based on hierarchy.</a></li>
+<li><a class="reference internal" href="#selection-based-on-properties">Selection based on properties.</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="handling_3dstructures.html"
+                        title="previous chapter">Working with macromolecular structures</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="query_ncbi.html"
+                        title="next chapter">Querying NCBI for VWF</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/entity_selection.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="query_ncbi.html" title="Querying NCBI for VWF"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="handling_3dstructures.html" title="Working with macromolecular structures"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Seqsim Simple Alignment Simulation Example &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Seqsim Alignment Simulation Example with Non-standard alphabet" href="seqsim_aln_sim_user_alphabet.html" />
+    <link rel="prev" title="Evaluate process heterogeneity using a Hidden Markov Model" href="hmm_par_heterogeneity.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="seqsim_aln_sim_user_alphabet.html" title="Seqsim Alignment Simulation Example with Non-standard alphabet"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hmm_par_heterogeneity.html" title="Evaluate process heterogeneity using a Hidden Markov Model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="seqsim-simple-alignment-simulation-example">
+<h1>Seqsim Simple Alignment Simulation Example<a class="headerlink" href="#seqsim-simple-alignment-simulation-example" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Julia Goodrich</em></p>
+<p>This is a very simple example of how to use the <tt class="docutils literal"><span class="pre">seqsim</span></tt> module to simulate
+an alignment for a tree starting with a random sequence and substitution rate
+matrix (q). The rate matrix gives the rate constant of going from one character
+in the sequence to another character in the sequence, the Q matrix determines
+the rate of change of the sequence.</p>
+<p>First we will perform the necessary imports:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">Rates</span></tt> is an object that stores the rate matrix data, it can also be used</dt>
+<dd><p class="first last">to generate a random rate matrix given an <tt class="docutils literal"><span class="pre">Alphabet</span></tt>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">DnaUsage</span></tt> is a <tt class="docutils literal"><span class="pre">Usage</span></tt> object that stores the usage of each nucleotide.</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">DnaPairs</span></tt> is an Alphabet it stores the DNA pairs (AA,AT,AC,...), it can</dt>
+<dd><p class="first last">be passed into the <tt class="docutils literal"><span class="pre">Rates</span></tt> object, defining the rate matrix pairs for DNA.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">DNA</span></tt> is a <tt class="docutils literal"><span class="pre">MolType</span></tt> object for DNA.</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">RangeNode</span></tt> is the main <tt class="docutils literal"><span class="pre">seqsim</span></tt> Node object, it allows for the easy</dt>
+<dd><p class="first last">evolution of sequences.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">DndParser</span></tt> is a parser for a newick format tree.</p>
+</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.seqsim.usage</span> <span class="kn">import</span> <span class="n">Rates</span><span class="p">,</span> <span class="n">DnaUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">DnaPairs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.moltype</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alignment</span> <span class="kn">import</span> <span class="n">Alignment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.seqsim.tree</span> <span class="kn">import</span> <span class="n">RangeNode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.tree</span> <span class="kn">import</span> <span class="n">DndParser</span>
+</pre></div>
+</div>
+<p>Now, lets specify a 4 taxon tree:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">DndParser</span><span class="p">(</span><span class="s">&#39;(a:0.4,b:0.3,(c:0.15,d:0.2)edge.0:0.1);&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">constructor</span> <span class="o">=</span> <span class="n">RangeNode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To generate a random DNA sequence, we first specify nucleotide frequencies
+with the <tt class="docutils literal"><span class="pre">DnaUsage</span></tt> object. Then we create a random DNA sequence that is
+five bases long.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">DnaUsage</span><span class="p">({</span><span class="s">&#39;A&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span><span class="s">&#39;T&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s">&#39;C&#39;</span><span class="p">:</span><span class="mf">0.15</span><span class="p">,</span><span class="s">&#39;G&#39;</span><span class="p">:</span><span class="mf">0.25</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">ModelSeq</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">randomIndices</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">Rates</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">DnaPairs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Set q at the base of the tree and propagate it to all nodes in the tree,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">q</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">propagateAttr</span><span class="p">(</span><span class="s">&#39;Q&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Set a P matrix (probability matrix) from every Q matrix on each node:</dt>
+<dd>P(t) = e^(Qt),</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">assignP</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Use <tt class="docutils literal"><span class="pre">evolve</span></tt> to evolve sequences for each tip, Note: must evolve sequence
+data, not sequence object itself (for speed)</p>
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
+<p>Build alignment,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">tips</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">seqs</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">ModelSeq</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">Alignment</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a Cogent <tt class="docutils literal"><span class="pre">Alignment</span></tt> object, which can be used the same way as
+any other alignment object.</p>
+<p><tt class="docutils literal"><span class="pre">evolveSeqs</span></tt> can be used instead of evolve to evolve multiple sequences
+according to the same tree (can model either different genes, or different rate
+categories within a gene that you then combine, etc...),</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">concatenate</span>
+</pre></div>
+</div>
+<p>First you need to use <tt class="docutils literal"><span class="pre">assignPs</span></tt> to assign the proper P matricies given rates:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">assignPs</span><span class="p">([</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>There needs to be the same number of random sequences as there are rate
+catigories so we create a list of 3 random sequences,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="n">DNA</span><span class="o">.</span><span class="n">ModelSeq</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">randomIndices</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">_data</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Then use <tt class="docutils literal"><span class="pre">evolveSeqs</span></tt> to evolve a sequence for every tip with every rate.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">evolveSeqs</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now to concatenate the sequences,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">tips</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">Sequences</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">seqs</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">ModelSeq</span><span class="p">(</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">Sequences</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">Alignment</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hmm_par_heterogeneity.html"
+                        title="previous chapter">Evaluate process heterogeneity using a Hidden Markov Model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="seqsim_aln_sim_user_alphabet.html"
+                        title="next chapter">Seqsim Alignment Simulation Example with Non-standard alphabet</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/seqsim_alignment_simulation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="seqsim_aln_sim_user_alphabet.html" title="Seqsim Alignment Simulation Example with Non-standard alphabet"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hmm_par_heterogeneity.html" title="Evaluate process heterogeneity using a Hidden Markov Model"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

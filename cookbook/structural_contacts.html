@@ -1,0 +1,166 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Intramolecular contacts &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
+    <link rel="next" title="Accessing databases" href="accessing_databases.html" />
+    <link rel="prev" title="Structural Data Advanced" href="structural_data_2.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="accessing_databases.html" title="Accessing databases"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structural_data_2.html" title="Structural Data Advanced"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="intramolecular-contacts">
+<h1>Intramolecular contacts<a class="headerlink" href="#intramolecular-contacts" title="Permalink to this headline">¶</a></h1>
+<p>This section of the documentation explains how to use several PyCogent modules to find contacts between macromolecular entities e.g. residues or chains both within and outside the context of a crystal. It assumes that the following boilerplate code is entered into the interpreter. This includes the necessary imports and sets up a working set of <tt class="docutils literal"><span class="pre">Entity</span></tt> instances.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct</span> <span class="kn">import</span> <span class="n">contact</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="kn">import</span> <span class="n">PDBParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct</span> <span class="kn">import</span> <span class="n">selection</span><span class="p">,</span> <span class="n">manipulation</span><span class="p">,</span> <span class="n">annotation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/1HQF.pdb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_structure</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">pdb_fh</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">pdb_structure</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chainA</span> <span class="o">=</span> <span class="n">model</span><span class="p">[(</span><span class="s">&#39;A&#39;</span><span class="p">,)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chainB</span> <span class="o">=</span> <span class="n">model</span><span class="p">[(</span><span class="s">&#39;B&#39;</span><span class="p">,)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chainC</span> <span class="o">=</span> <span class="n">model</span><span class="p">[(</span><span class="s">&#39;C&#39;</span><span class="p">,)]</span>
+</pre></div>
+</div>
+<div class="section" id="find-contacts-within-a-asymmetric-unit">
+<h2>Find contacts within a asymmetric unit<a class="headerlink" href="#find-contacts-within-a-asymmetric-unit" title="Permalink to this headline">¶</a></h2>
+<p>To find contacts and save the result in the xtra dictionary of an <tt class="docutils literal"><span class="pre">Entity</span></tt> instance we have to use the <tt class="docutils literal"><span class="pre">contact.contacts_xtra</span></tt> function. This function calls is a wrapper around a low level function to find the contacts and annotates the input with the result of this call, but also returns a dictionary of the annotations.</p>
+<p>In this simple case we do not look for contacts in the crystal lattice, but for contacts between chains in the asymmetric unit, which corresponds to the default parameters of the <tt class="docutils literal"><span class="pre">contacts_xtra</span></tt> function. We seek for all contacts between all atoms in the asymmetric unit, which are at most 5.0A apart and belong to different chains.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conts</span> <span class="o">=</span> <span class="n">contact</span><span class="o">.</span><span class="n">contacts_xtra</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">xtra_key</span><span class="o">=</span><span class="s">&#39;CNT&#39;</span><span class="p">,</span> <span class="n">search_limit</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let&#8217;s explore what the output is all about. The keys in the dictionary are all the atoms, which have are involved in some contact(s). The length of the dictionary is not the total number of contacts.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">atom_id</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;1HQF&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;VAL&#39;</span><span class="p">,</span> <span class="mi">182</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atom_id_conts</span> <span class="o">=</span> <span class="n">conts</span><span class="p">[</span><span class="n">atom_id</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The value for this is a dictionary, where the contacts are store in the given <tt class="docutils literal"><span class="pre">xtra_key</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">atom_id_conts</span>
+<span class="go">{&#39;CNT&#39;: {(&#39;1HQF&#39;, 0, &#39;A&#39;, (&#39;GLY&#39;, 310, &#39; &#39;), (&#39;CA&#39;, &#39; &#39;)): (4.5734119648245102, 0, 0)}}</span>
+</pre></div>
+</div>
+<p>The value is a dictionary of contacts with keys being ids of the involved atoms and values tuples defining the distance in A, symmetry operation id, and unit cell id. For contacts within the asymmetric unit there is no symmetry operation and no unit cell translation so both are <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Intramolecular contacts</a><ul>
+<li><a class="reference internal" href="#find-contacts-within-a-asymmetric-unit">Find contacts within a asymmetric unit</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structural_data_2.html"
+                        title="previous chapter">Structural Data Advanced</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="accessing_databases.html"
+                        title="next chapter">Accessing databases</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/structural_contacts.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="accessing_databases.html" title="Accessing databases"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structural_data_2.html" title="Structural Data Advanced"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

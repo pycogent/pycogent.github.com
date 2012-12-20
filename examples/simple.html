@@ -1,0 +1,159 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The simplest script &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Performing a relative rate test" href="relative_rate.html" />
+    <link rel="prev" title="Drawing a dotplot" href="draw_dotplot.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="relative_rate.html" title="Performing a relative rate test"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="draw_dotplot.html" title="Drawing a dotplot"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-simplest-script">
+<h1>The simplest script<a class="headerlink" href="#the-simplest-script" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>This is just about the simplest possible Cogent script for evolutionary modelling. We use a canned nucleotide substitution model (the <tt class="docutils literal"><span class="pre">HKY85</span></tt> model) on just three primate species. As there is only unrooted tree possible, the sequence names are all that&#8217;s required to make the tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">HKY85</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/primate_cdx2_promoter.fasta&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">tip_names</span><span class="o">=</span><span class="n">aln</span><span class="o">.</span><span class="n">Names</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">======</span>
+<span class="go"> kappa</span>
+<span class="go">------</span>
+<span class="go">5.9589</span>
+<span class="go">------</span>
+<span class="go">===========================</span>
+<span class="go">   edge    parent    length</span>
+<span class="go">---------------------------</span>
+<span class="go">  human      root    0.0040</span>
+<span class="go">macaque      root    0.0384</span>
+<span class="go">  chimp      root    0.0061</span>
+<span class="go">---------------------------</span>
+<span class="go">===============</span>
+<span class="go">motif    mprobs</span>
+<span class="go">---------------</span>
+<span class="go">    T    0.2552</span>
+<span class="go">    C    0.2581</span>
+<span class="go">    A    0.2439</span>
+<span class="go">    G    0.2428</span>
+<span class="go">---------------</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="draw_dotplot.html"
+                        title="previous chapter">Drawing a dotplot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relative_rate.html"
+                        title="next chapter">Performing a relative rate test</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/simple.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="relative_rate.html" title="Performing a relative rate test"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="draw_dotplot.html" title="Drawing a dotplot"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

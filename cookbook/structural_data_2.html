@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Structural Data Advanced &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
+    <link rel="next" title="Intramolecular contacts" href="structural_contacts.html" />
+    <link rel="prev" title="Structural data" href="structural_data.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structural_contacts.html" title="Intramolecular contacts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structural_data.html" title="Structural data"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="structural-data-advanced">
+<h1>Structural Data Advanced<a class="headerlink" href="#structural-data-advanced" title="Permalink to this headline">¶</a></h1>
+<p>This section covers more advanced structural entity handling tasks.</p>
+<div class="section" id="adding-an-entity-when-it-exists">
+<h2>Adding an entity when it exists<a class="headerlink" href="#adding-an-entity-when-it-exists" title="Permalink to this headline">¶</a></h2>
+<p>A PyCogent <tt class="docutils literal"><span class="pre">Entity</span></tt> is a subclass of a dictionary. Adding children is essentially the same as updating a dictionary, with a minimal amount of book-keeping. It is equivalent to the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">child</span><span class="o">.</span><span class="n">setParent</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+<span class="n">child_id</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+<span class="n">parent</span><span class="p">[</span><span class="n">child_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span>
+<span class="n">parent</span><span class="o">.</span><span class="n">setModified</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This points the child entity to it&#8217;s new parent (line 1) and adds the child to the parent dictionary (line 3). The call to <tt class="docutils literal"><span class="pre">setModified</span></tt> notifies all parents of the parent of the modification. A dictionary has unique keys and so a parent has children with unique ids. If you try to add a child which has an id clash it will update the parent and override the previous child, just like you would update a dictionary.</p>
+</div>
+<div class="section" id="why-are-the-short-ids-inside-a-tuple">
+<h2>Why are the short ids inside a tuple?<a class="headerlink" href="#why-are-the-short-ids-inside-a-tuple" title="Permalink to this headline">¶</a></h2>
+<p>Short ids are parts of a long id. The long id is a tuple. Short ids can be concatenated to form a long id. This would not be possible if short ids were not within a tuple initially. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">0</span><span class="p">,)</span> <span class="o">+</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,)</span> <span class="o">+</span> <span class="p">((</span><span class="s">&#39;GLY&#39;</span><span class="p">,</span> <span class="mi">209</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),)</span> <span class="o">+</span> <span class="p">((</span><span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),)</span>
+<span class="go">(0, &#39;A&#39;, (&#39;GLY&#39;, 209, &#39; &#39;), (&#39;C&#39;, &#39; &#39;))</span>
+</pre></div>
+</div>
+<p>The output here is a valid long id of an atom for use in <tt class="docutils literal"><span class="pre">AtomHolder</span></tt> instances.</p>
+</div>
+<div class="section" id="select-children-of-a-multientity-instance-by-a-feature">
+<h2>Select children of a <tt class="docutils literal"><span class="pre">MultiEntity</span></tt> instance by a feature<a class="headerlink" href="#select-children-of-a-multientity-instance-by-a-feature" title="Permalink to this headline">¶</a></h2>
+<p>Selection is a common task and <tt class="docutils literal"><span class="pre">PyCogent</span></tt> has a unified syntax for this via the <tt class="docutils literal"><span class="pre">selectChildren</span></tt> method. The idea behind it is as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>gather &#8220;requested data&#8221; from all children.</li>
+<li>compare each returned child value to the template &#8220;value&#8221; using the
+&#8220;operator&#8221;</li>
+<li>return children for which the comparison is <tt class="docutils literal"><span class="pre">True</span></tt></li>
+</ol>
+</div></blockquote>
+<p>The signature of this method is selectChildren(&#8220;value&#8221;, &#8220;operator&#8221;, &#8220;requested data&#8221;). In the first step all children return the &#8220;requested data&#8221;, the request might be an attribute, a value corresponding to a key in the <tt class="docutils literal"><span class="pre">parent.xtra</span></tt> dictionary or any other query supported by the <tt class="docutils literal"><span class="pre">getData</span></tt> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="kn">import</span> <span class="n">PDBParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/1HQF.pdb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_structure</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">pdb_fh</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">pdb_structure</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chainA</span> <span class="o">=</span> <span class="n">model</span><span class="p">[(</span><span class="s">&#39;A&#39;</span><span class="p">,)]</span>
+</pre></div>
+</div>
+<div class="section" id="example-1-select-all-alanines-from-a-chain">
+<h3>Example 1: select all alanines from a chain.<a class="headerlink" href="#example-1-select-all-alanines-from-a-chain" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">alanines</span> <span class="o">=</span> <span class="n">chainA</span><span class="o">.</span><span class="n">selectChildren</span><span class="p">(</span><span class="s">&#39;ALA&#39;</span><span class="p">,</span> <span class="s">&#39;eq&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This requests the &#8220;name&#8221; attribute from all children in chain A and uses the &#8220;eq&#8221; (equals) operator to compare this to &#8220;ALA&#8221;. It returns a list of residues which have this name.</p>
+</div>
+<div class="section" id="example-2-select-all-residues-which-are-not-amino-acids-or-nucleic-acids">
+<h3>Example 2: select all residues, which are not amino acids or nucleic acids.<a class="headerlink" href="#example-2-select-all-residues-which-are-not-amino-acids-or-nucleic-acids" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">selection</span> <span class="o">=</span> <span class="n">chainA</span><span class="o">.</span><span class="n">selectChildren</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="s">&#39;eq&#39;</span><span class="p">,</span> <span class="s">&#39;h_flag&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This requests the &#8220;h_flag&#8221; i.e. hetero-atom flag from all residues. For amino acids and nucleic acids this should be &#8220;&#8221; for all other molecular entities &#8220;H&#8221;, so the function returns only ligands, waters etc.</p>
+</div>
+<div class="section" id="example-3-what-if-some-children-have-data-to-return">
+<h3>Example 3: What if some children have data to return?<a class="headerlink" href="#example-3-what-if-some-children-have-data-to-return" title="Permalink to this headline">¶</a></h3>
+<p>First we pick out a residue and modify it&#8217;s xtra dictionary to contain some
+custom data. We mark <tt class="docutils literal"><span class="pre">lys39</span></tt> as a catalytic residue.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lys39</span> <span class="o">=</span> <span class="n">chainA</span><span class="p">[((</span><span class="s">&#39;LYS&#39;</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lys39</span><span class="o">.</span><span class="n">xtra</span><span class="p">[</span><span class="s">&#39;CATALYTIC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>All other residues do not have a value corresponding to the &#8220;CATALYTIC&#8221; key. But we still can select all &#8220;CATALYTIC&#8221; residues in chain A.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">catalytic</span> <span class="o">=</span> <span class="n">chainA</span><span class="o">.</span><span class="n">selectChildren</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="s">&#39;eq&#39;</span><span class="p">,</span> <span class="s">&#39;CATALYTIC&#39;</span><span class="p">,</span> <span class="n">xtra</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">catalytic</span>
+<span class="go">{((&#39;LYS&#39;, 39, &#39; &#39;),): &lt;Residue LYS resseq=39 icode= &gt;}</span>
+</pre></div>
+</div>
+<p>The difference is that we have requested a value from the &#8220;xtra&#8221; dictionary instead of a hypothetical &#8220;CATALYTIC&#8221; attribute.</p>
+</div>
+</div>
+<div class="section" id="comparison-operators-supported-for-the-selectchildren-method">
+<h2>Comparison &#8220;operators&#8221; supported for the <tt class="docutils literal"><span class="pre">selectChildren</span></tt> method<a class="headerlink" href="#comparison-operators-supported-for-the-selectchildren-method" title="Permalink to this headline">¶</a></h2>
+<p>The &#8220;operator&#8221; can be either a) a string corresponding to a function from the <tt class="docutils literal"><span class="pre">operator</span></tt> module from the python standard library. The list of currently supported operators is: <tt class="docutils literal"><span class="pre">gt</span></tt>, <tt class="docutils literal"><span class="pre">ge</span></tt>, <tt class="docutils literal"><span class="pre">lt</span></tt>, <tt class="docutils literal"><span class="pre">le</span></tt>, <tt class="docutils literal"><span class="pre">eq</span></tt>, <tt class="docutils literal"><span class="pre">ne</span></tt>, <tt class="docutils literal"><span class="pre">or_</span></tt>, <tt class="docutils literal"><span class="pre">and_</span></tt>, <tt class="docutils literal"><span class="pre">contains</span></tt>, <tt class="docutils literal"><span class="pre">is_</span></tt>, <tt class="docutils literal"><span class="pre">is_not</span></tt> or alternatively it can be a a custom function, which has the following signature operator (value, got), where &#8220;got&#8221; is the value returned by the child and &#8220;value&#8221; is what it is compared to.</p>
+</div>
+<div class="section" id="copying-or-serializing-an-entity">
+<h2>Copying or serializing an entity<a class="headerlink" href="#copying-or-serializing-an-entity" title="Permalink to this headline">¶</a></h2>
+<p>PyCogent <tt class="docutils literal"><span class="pre">MutltiEntity</span></tt> and <tt class="docutils literal"><span class="pre">Entity</span></tt> are Python objects and they support the copy and deepcopy protocols.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cPickle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pickledA</span> <span class="o">=</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chainA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unpickledA</span> <span class="o">=</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pickledA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unpickledA</span> <span class="ow">is</span> <span class="n">chainA</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unpickledA</span> <span class="o">==</span> <span class="n">chainA</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>In the above we have pickled and unpickled a <tt class="docutils literal"><span class="pre">MultiEntity</span></tt> instance. This results in a new instance &#8220;unpickledA&#8221; which is the same as &#8220;chainA&#8221;, but has a different id (different objects, identity fails).</p>
+<p>If you are only interested in obtaining a copy of an <tt class="docutils literal"><span class="pre">Entity</span></tt> instance and not being able to share entities between python sessions. You can use the functions from the <tt class="docutils literal"><span class="pre">copy</span></tt> module. Please note that copies and deep copies are the same</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span><span class="p">,</span> <span class="n">deepcopy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">otherA</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">chainA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">otherA</span> <span class="ow">is</span> <span class="n">chainA</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">otherA</span> <span class="o">==</span> <span class="n">chainA</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cys119</span> <span class="o">=</span> <span class="n">chainA</span><span class="p">[((</span><span class="s">&#39;CYS&#39;</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cys119_other</span> <span class="o">=</span> <span class="n">otherA</span><span class="p">[((</span><span class="s">&#39;CYS&#39;</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cys119</span> <span class="ow">is</span> <span class="n">cys119_other</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cys119</span> <span class="o">==</span> <span class="n">cys119_other</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Structural Data Advanced</a><ul>
+<li><a class="reference internal" href="#adding-an-entity-when-it-exists">Adding an entity when it exists</a></li>
+<li><a class="reference internal" href="#why-are-the-short-ids-inside-a-tuple">Why are the short ids inside a tuple?</a></li>
+<li><a class="reference internal" href="#select-children-of-a-multientity-instance-by-a-feature">Select children of a <tt class="docutils literal"><span class="pre">MultiEntity</span></tt> instance by a feature</a><ul>
+<li><a class="reference internal" href="#example-1-select-all-alanines-from-a-chain">Example 1: select all alanines from a chain.</a></li>
+<li><a class="reference internal" href="#example-2-select-all-residues-which-are-not-amino-acids-or-nucleic-acids">Example 2: select all residues, which are not amino acids or nucleic acids.</a></li>
+<li><a class="reference internal" href="#example-3-what-if-some-children-have-data-to-return">Example 3: What if some children have data to return?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#comparison-operators-supported-for-the-selectchildren-method">Comparison &#8220;operators&#8221; supported for the <tt class="docutils literal"><span class="pre">selectChildren</span></tt> method</a></li>
+<li><a class="reference internal" href="#copying-or-serializing-an-entity">Copying or serializing an entity</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structural_data.html"
+                        title="previous chapter">Structural data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structural_contacts.html"
+                        title="next chapter">Intramolecular contacts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/structural_data_2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structural_contacts.html" title="Intramolecular contacts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structural_data.html" title="Structural data"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

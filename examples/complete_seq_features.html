@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Complete version of manipulating sequence annotations &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Getting the reverse complement" href="reverse_complement.html" />
+    <link rel="prev" title="Advanced sequence handling" href="seq_features.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reverse_complement.html" title="Getting the reverse complement"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="seq_features.html" title="Advanced sequence handling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="complete-version-of-manipulating-sequence-annotations">
+<h1>Complete version of manipulating sequence annotations<a class="headerlink" href="#complete-version-of-manipulating-sequence-annotations" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Peter Maxwell, Gavin Huttley</em></p>
+<p>A Sequence with a couple of exons on it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.annotation</span> <span class="kn">import</span> <span class="n">Feature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&quot;AAGAAGAAGACCCCCAAAAAAAAAATTTTTTTTTTAAAAAAAAAAAAA&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">Name</span><span class="o">=</span><span class="s">&quot;Orig&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon1</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;fred&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon2</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;trev&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>The corresponding sequence can be extracted either with slice notation or by asking the feature to do it, since the feature knows what sequence it belongs to.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">exon1</span><span class="p">]</span>
+<span class="go">DnaSequence(CCCCC)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon1</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">DnaSequence(CCCCC)</span>
+</pre></div>
+</div>
+<p>Usually the only way to get a <tt class="docutils literal"><span class="pre">Feature</span></tt> object like <tt class="docutils literal"><span class="pre">exon1</span></tt> is to ask the sequence for it. There is one method for querying annotations by type and optionally by name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exons</span>
+<span class="go">[exon &quot;fred&quot; at [10:15]/48, exon &quot;trev&quot; at [30:40]/48]</span>
+</pre></div>
+</div>
+<p>If the sequence does not have a matching feature you get back an empty list, and slicing the sequence with that returns a sequence of length 0.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dont_exist</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s">&#39;dont_exist&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dont_exist</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">dont_exist</span><span class="p">]</span>
+<span class="go">DnaSequence()</span>
+</pre></div>
+</div>
+<p>To construct a pseudo-feature covering (or excluding) multiple features, use <tt class="docutils literal"><span class="pre">getRegionCoveringAll</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span>
+<span class="go">region &quot;exon&quot; at [10:15, 30:40]/48</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span><span class="o">.</span><span class="n">getShadow</span><span class="p">()</span>
+<span class="go">region &quot;not exon&quot; at [0:10, 15:30, 40:48]/48</span>
+</pre></div>
+</div>
+<p>eg: all the exon sequence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">DnaSequence(CCCCCTT... 15)</span>
+</pre></div>
+</div>
+<p>or with slice notation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">exon1</span><span class="p">,</span> <span class="n">exon2</span><span class="p">]</span>
+<span class="go">DnaSequence(CCCCCTT... 15)</span>
+</pre></div>
+</div>
+<p>Though <tt class="docutils literal"><span class="pre">.getRegionCoveringAll</span></tt> also guarantees no overlaps within the result, slicing does not:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="o">+</span><span class="n">exons</span><span class="p">)</span>
+<span class="go">region &quot;exon&quot; at [10:15, 30:40]/48</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">exon1</span><span class="p">,</span> <span class="n">exon1</span><span class="p">,</span> <span class="n">exon1</span><span class="p">,</span> <span class="n">exon1</span><span class="p">,</span> <span class="n">exon1</span><span class="p">]</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">ValueError: Uninvertable. Overlap</span>: <span class="n">10 &lt; 15</span>
+</pre></div>
+</div>
+<p>You can use features, maps, slices or integers, but non-monotonic slices are not allowed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">ValueError: Uninvertable. Overlap</span>: <span class="n">15 &lt; 16</span>
+</pre></div>
+</div>
+<p>Features are themselves sliceable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exon1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">DnaSequence(CCC)</span>
+</pre></div>
+</div>
+<p>When sequences are concatenated they keep their (non-overlapping) annotations:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">exon1</span><span class="p">[</span><span class="mi">4</span><span class="p">:]]</span><span class="o">+</span><span class="n">s</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">49</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span>  <span class="n">c</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">feat</span>
+<span class="gp">...</span>
+<span class="go">exon &quot;fred&quot; at [-4-, 0:1]/49</span>
+<span class="go">exon &quot;fred&quot; at [11:16]/49</span>
+<span class="go">exon &quot;trev&quot; at [31:41]/49</span>
+</pre></div>
+</div>
+<p>Since features know their parents you can&#8217;t use a feature from one sequence to slice another:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="p">[</span><span class="n">exon1</span><span class="p">]</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">ValueError</span>: <span class="n">Can&#39;t map exon &quot;fred&quot; at [10:15]/48 onto ...</span>
+</pre></div>
+</div>
+<p>Features are generally attached to the thing they annotate, but in those cases where a free-floating feature is created it can later be attached:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">region</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">region</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">region</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>When dealing with sequences that can be reverse complemented (e.g. <tt class="docutils literal"><span class="pre">DnaSequence</span></tt>) features are <strong>not</strong> reversed. Features are considered to have strand specific meaning (.e.g CDS, exons) and so stay on their original strands. We create a sequence with a CDS that spans multiple exons, and show that after getting the reverse complement we have exactly the same result from getting the CDS annotation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&quot;AAGGGGAAAACCCCCAAAAAAAAAATTTTTTTTTTAAA&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">Name</span><span class="o">=</span><span class="s">&quot;plus&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus_cds</span> <span class="o">=</span> <span class="n">plus</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="s">&#39;CDS&#39;</span><span class="p">,</span> <span class="s">&#39;gene&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                          <span class="p">[(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">),(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">),(</span><span class="mi">25</span><span class="p">,</span><span class="mi">35</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">plus_cds</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">GGGGCCCCCTTTTTTTTTT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">minus</span> <span class="o">=</span> <span class="n">plus</span><span class="o">.</span><span class="n">rc</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">minus_cds</span> <span class="o">=</span> <span class="n">minus</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s">&#39;CDS&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">minus_cds</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">GGGGCCCCCTTTTTTTTTT</span>
+</pre></div>
+</div>
+<p>Sequence features can be accessed via a containing <tt class="docutils literal"><span class="pre">Alignment</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;-AAAAAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;TTTT--TTTT&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span>
+<span class="go">&gt;x</span>
+<span class="go">-AAAAAAAAA</span>
+<span class="go">&gt;y</span>
+<span class="go">TTTT--TTTT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;fred&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromAnySequence</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But these will be returned as <strong>alignment</strong> features with locations in alignment coordinates.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exon</span>
+<span class="go">exon &quot;fred&quot; at [3:8]/9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">exon &quot;fred&quot; at [4:9]/10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">&gt;x</span>
+<span class="go">AAAAA</span>
+<span class="go">&gt;y</span>
+<span class="go">--TTT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>Similarly alignment features can be projected onto the aligned sequences, where they may end up falling across gaps:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getProjectedAnnotations</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exons</span>
+<span class="go">[exon &quot;fred&quot; at [-2-, 4:7]/8]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)[</span><span class="n">exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">withoutGaps</span><span class="p">()]</span>
+<span class="go">TTT</span>
+</pre></div>
+</div>
+<p>We copy the annotations from another sequence,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;-AAAAAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;TTTT--CCCC&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&quot;AAAAAAAAA&quot;</span><span class="p">,</span> <span class="n">Name</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;fred&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copyAnnotations</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span>
+<span class="go">[exon &quot;fred&quot; at [4:9]/10]</span>
+</pre></div>
+</div>
+<p>even if the name is different.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copyAnnotations</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span>
+<span class="go">[exon &quot;fred&quot; at [3:4, 6:10]/10]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="p">[</span><span class="n">aln_exons</span><span class="p">]</span>
+<span class="go">&gt;x</span>
+<span class="go">AAAAA</span>
+<span class="go">&gt;y</span>
+<span class="go">TCCCC</span>
+</pre></div>
+</div>
+<p>If the feature lies outside the sequence being copied to, you get a lost span</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;-AAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;TTTTT&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;CCCCCCCCCCCCCCCCCCCC&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copyAnnotations</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span>
+<span class="go">[exon &quot;A&quot; at [5:5, -4-]/5]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">2 x 4 text alignment: x[----], y[----]</span>
+</pre></div>
+</div>
+<p>You can copy to a sequence with a different name, in a different alignment if the feature lies within the length</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;-AAAAAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;TTTT--TTTT&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;CCCCCCCCCCCCCCCCCCCC&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">match_exon</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copyAnnotations</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span>
+<span class="go">[exon &quot;A&quot; at [7:10]/10]</span>
+</pre></div>
+</div>
+<p>If the sequence is shorter, again you get a lost span.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;-AAAAAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;TTTT--TTTT&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_len_seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;CCCCCCCCCCCCCCCCCCCCCCCCCCCC&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nonmatch</span> <span class="o">=</span> <span class="n">diff_len_seq</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copyAnnotations</span><span class="p">(</span><span class="n">diff_len_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;repeat&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied</span>
+<span class="go">[repeat &quot;A&quot; at [10:10, -6-]/10]</span>
+</pre></div>
+</div>
+<p>We consider cases where there are terminal gaps.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;-AAAAAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;------TTTT&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;fred&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span>
+<span class="go">[exon &quot;fred&quot; at [4:9]/10]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">&gt;x</span>
+<span class="go">AAAAA</span>
+<span class="go">&gt;y</span>
+<span class="go">--TTT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;-AAAAAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;TTTT--T---&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;fred&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">&gt;x</span>
+<span class="go">AAAAA</span>
+<span class="go">&gt;y</span>
+<span class="go">--T--</span>
+</pre></div>
+</div>
+<p>In this case, only those residues included within the feature are covered - note the omission of the T in <tt class="docutils literal"><span class="pre">y</span></tt> opposite the gap in <tt class="docutils literal"><span class="pre">x</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;C-CCCAAAAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;-T----TTTT&#39;</span><span class="p">]],</span>
+<span class="gp">... </span>                     <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCCAAAAA</span>
+<span class="go">&gt;y</span>
+<span class="go">-T----TTTT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;ex1&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exon</span>
+<span class="go">exon &quot;ex1&quot; at [0:4]/9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exon</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">CCCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">getAnnotationsFromSequence</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span>
+<span class="go">[exon &quot;ex1&quot; at [0:1, 2:5]/10]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">&gt;x</span>
+<span class="go">CCCC</span>
+<span class="go">&gt;y</span>
+<span class="go">----</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">Feature.asOneSpan()</span></tt>, is applied to the exon that straddles the gap in <tt class="docutils literal"><span class="pre">x</span></tt>. The result is we preserve that feature.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">asOneSpan</span><span class="p">()</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCC</span>
+<span class="go">&gt;y</span>
+<span class="go">-T---</span>
+</pre></div>
+</div>
+<p>These properties also are consistently replicated with reverse complemented sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln_rc</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">rc</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rc_exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln_rc</span><span class="o">.</span><span class="n">getAnnotationsFromAnySequence</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_rc</span><span class="p">[</span><span class="n">rc_exons</span><span class="p">]</span> <span class="c"># not using asOneSpan, so gap removed from x</span>
+<span class="go">&gt;x</span>
+<span class="go">CCCC</span>
+<span class="go">&gt;y</span>
+<span class="go">----</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln_rc</span><span class="p">[</span><span class="n">rc_exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">asOneSpan</span><span class="p">()]</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCC</span>
+<span class="go">&gt;y</span>
+<span class="go">-T---</span>
+</pre></div>
+</div>
+<p>Features can provide their coordinates, useful for custom analyses.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">all_exons</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">aln_exons</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coords</span> <span class="o">=</span> <span class="n">all_exons</span><span class="o">.</span><span class="n">getCoordinates</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">coords</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Annotated regions can be masked (observed sequence characters replaced by another), either through the sequence on which they reside or by projection from the alignment. Note that <tt class="docutils literal"><span class="pre">mask_char</span></tt> must be a valid character for the sequence <tt class="docutils literal"><span class="pre">MolType</span></tt>. Either the features (multiple can be named), or their shadow, can be masked.</p>
+<p>We create an alignment with a sequence that has two different annotation types.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;C-CCCAAAAAGGGAA&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;-T----TTTTG-GTT&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCCAAAAAGGGAA</span>
+<span class="go">&gt;y</span>
+<span class="go">-T----TTTTG-GTT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;norwegian&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exon</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">CCCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repeat</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">9</span><span class="p">,</span><span class="mi">12</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">repeat</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">GGG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repeat</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="s">&#39;frog&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">repeat</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">GG</span>
+</pre></div>
+</div>
+<p>Each sequence should correctly mask either the single feature, it&#8217;s shadow, or the multiple features, or shadow.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">????AAAAAGGGAA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                        <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">CCCC??????????</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">([</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;repeat&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                          <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">????AAAAA???AA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">([</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;repeat&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                          <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">CCCC?????GGG??</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">TTTTTGGTT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">TTTTT??TT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                         <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">?????GG??</span>
+</pre></div>
+</div>
+<p>The same methods can be applied to annotated Alignment&#8217;s.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">&gt;x</span>
+<span class="go">?-???AAAAAGGGAA</span>
+<span class="go">&gt;y</span>
+<span class="go">-T----TTTTG-GTT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCC??????????</span>
+<span class="go">&gt;y</span>
+<span class="go">-?----?????-???</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCCAAAAA???AA</span>
+<span class="go">&gt;y</span>
+<span class="go">-T----TTTT?-?TT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&gt;x</span>
+<span class="go">?-????????GGG??</span>
+<span class="go">&gt;y</span>
+<span class="go">-?----????G-G??</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">([</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">],</span> <span class="n">mask_char</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+<span class="go">&gt;x</span>
+<span class="go">?-???AAAAA???AA</span>
+<span class="go">&gt;y</span>
+<span class="go">-T----TTTT?-?TT</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aln</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">([</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">],</span><span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&gt;x</span>
+<span class="go">C-CCC?????GGG??</span>
+<span class="go">&gt;y</span>
+<span class="go">-?----????G-G??</span>
+</pre></div>
+</div>
+<p>It shouldn&#8217;t matter whether annotated coordinates are entered separately, or as a series.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="s">&#39;CGAAACGTTT&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;mouse&#39;</span><span class="p">,</span> <span class="s">&#39;CTAAACGTCG&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_series</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_items</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We add annotations to the sequences as a series.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">as_series</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;cpgsite&#39;</span><span class="p">,</span> <span class="s">&#39;cpg&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="go">cpgsite &quot;cpg&quot; at [0:2, 5:7]/10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_series</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;mouse&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;cpgsite&#39;</span><span class="p">,</span> <span class="s">&#39;cpg&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)])</span>
+<span class="go">cpgsite &quot;cpg&quot; at [5:7, 8:10]/10</span>
+</pre></div>
+</div>
+<p>We add the annotations to the sequences one segment at a time.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">as_items</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;cpgsite&#39;</span><span class="p">,</span> <span class="s">&#39;cpg&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)])</span>
+<span class="go">cpgsite &quot;cpg&quot; at [0:2]/10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_items</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;cpgsite&#39;</span><span class="p">,</span> <span class="s">&#39;cpg&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="go">cpgsite &quot;cpg&quot; at [5:7]/10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_items</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;mouse&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;cpgsite&#39;</span><span class="p">,</span> <span class="s">&#39;cpg&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="go">cpgsite &quot;cpg&quot; at [5:7]/10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_items</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;mouse&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;cpgsite&#39;</span><span class="p">,</span> <span class="s">&#39;cpg&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)])</span>
+<span class="go">cpgsite &quot;cpg&quot; at [8:10]/10</span>
+</pre></div>
+</div>
+<p>These different constructions should generate the same output.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">serial</span> <span class="o">=</span> <span class="n">as_series</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">([</span><span class="s">&#39;cpgsite&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">serial</span>
+<span class="go">&gt;human</span>
+<span class="go">??AAA??TTT</span>
+<span class="go">&gt;mouse</span>
+<span class="go">CTAAA??T??</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">itemwise</span> <span class="o">=</span> <span class="n">as_items</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">([</span><span class="s">&#39;cpgsite&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">itemwise</span>
+<span class="go">&gt;human</span>
+<span class="go">??AAA??TTT</span>
+<span class="go">&gt;mouse</span>
+<span class="go">CTAAA??T??</span>
+</pre></div>
+</div>
+<p>Annotations should be correctly masked, whether the sequence has been reverse complemented or not. We use the plus/minus strand CDS containing sequences created above.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">plus</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&quot;CDS&quot;</span><span class="p">)</span>
+<span class="go">AA????AAAA?????AAAAAAAAAA??????????AAA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">minus</span><span class="o">.</span><span class="n">withMaskedAnnotations</span><span class="p">(</span><span class="s">&quot;CDS&quot;</span><span class="p">)</span>
+<span class="go">TTT??????????TTTTTTTTTT?????TTTT????TT</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="seq_features.html"
+                        title="previous chapter">Advanced sequence handling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reverse_complement.html"
+                        title="next chapter">Getting the reverse complement</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/complete_seq_features.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reverse_complement.html" title="Getting the reverse complement"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="seq_features.html" title="Advanced sequence handling"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

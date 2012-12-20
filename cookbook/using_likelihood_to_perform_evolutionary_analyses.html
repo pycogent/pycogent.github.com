@@ -1,0 +1,819 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Evolutionary analysis using likelihood &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Sequence simulation" href="sequence_simulation.html" />
+    <link rel="prev" title="Building phylogenies" href="building_phylogenies.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sequence_simulation.html" title="Sequence simulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="building_phylogenies.html" title="Building phylogenies"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="evolutionary-analysis-using-likelihood">
+<h1>Evolutionary analysis using likelihood<a class="headerlink" href="#evolutionary-analysis-using-likelihood" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="specifying-substitution-models">
+<h2>Specifying substitution models<a class="headerlink" href="#specifying-substitution-models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="canned-models">
+<h3>Canned models<a class="headerlink" href="#canned-models" title="Permalink to this headline">¶</a></h3>
+<p>Many standard evolutionary models come pre-defined in the <tt class="docutils literal"><span class="pre">cogent.evolve.models</span></tt> module.</p>
+<p>The available nucleotide, codon and protein models are</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">models</span><span class="o">.</span><span class="n">nucleotide_models</span>
+<span class="go">[&#39;JC69&#39;, &#39;K80&#39;, &#39;F81&#39;, &#39;HKY85&#39;, &#39;TN93&#39;, &#39;GTR&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">models</span><span class="o">.</span><span class="n">codon_models</span>
+<span class="go">[&#39;CNFGTR&#39;, &#39;CNFHKY&#39;, &#39;MG94HKY&#39;, &#39;MG94GTR&#39;, &#39;GY94&#39;, &#39;H04G&#39;, &#39;H04GK&#39;, &#39;H04GGK&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">models</span><span class="o">.</span><span class="n">protein_models</span>
+<span class="go">[&#39;DSO78&#39;, &#39;AH96&#39;, &#39;AH96_mtmammals&#39;, &#39;JTT92&#39;, &#39;WG01&#39;]</span>
+</pre></div>
+</div>
+<p>While those values are strings, a function of the same name exists within the module so creating the substitution models requires only calling that function. I demonstrate that for a nucleotide model here.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sub_mod</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We&#8217;ll be using these for the examples below.</p>
+</div>
+<div class="section" id="rate-heterogeneity-models">
+<h3>Rate heterogeneity models<a class="headerlink" href="#rate-heterogeneity-models" title="Permalink to this headline">¶</a></h3>
+<p>We illustrate this for the gamma distributed case using examples of the canned models displayed above. Creating rate heterogeneity variants of the canned models can be done by using optional arguments that get passed to the substitution model class.</p>
+<div class="section" id="for-nucleotide">
+<h4>For nucleotide<a class="headerlink" href="#for-nucleotide" title="Permalink to this headline">¶</a></h4>
+<p>We specify a general time reversible nucleotide model with gamma distributed rate heterogeneity.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">GTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sub_mod</span> <span class="o">=</span> <span class="n">GTR</span><span class="p">(</span><span class="n">with_rate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">sub_mod</span>
+
+<span class="go">Nucleotide ( name = &#39;GTR&#39;; type = &#39;None&#39;; params = [&#39;A/G&#39;, &#39;A/T&#39;, &#39;A/C&#39;, &#39;C/T&#39;, &#39;C/G&#39;]; number of motifs = 4; motifs = [&#39;T&#39;, &#39;C&#39;, &#39;A&#39;, &#39;G&#39;])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-codon">
+<h4>For codon<a class="headerlink" href="#for-codon" title="Permalink to this headline">¶</a></h4>
+<p>We specify a conditional nucleotide frequency codon model with nucleotide general time reversible parameters and a parameter for the ratio of nonsynonymous to synonymous substitutions (omega) with gamma distributed rate heterogeneity.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sub_mod</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">(</span><span class="n">with_rate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">sub_mod</span>
+
+<span class="go">Codon ( name = &#39;CNFGTR&#39;; type = &#39;None&#39;; params = [&#39;A/G&#39;, &#39;A/C&#39;, &#39;C/T&#39;, &#39;A/T&#39;, &#39;C/G&#39;, &#39;omega&#39;]; ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-protein">
+<h4>For protein<a class="headerlink" href="#for-protein" title="Permalink to this headline">¶</a></h4>
+<p>We specify a Jones, Taylor and Thornton 1992 empirical protein substitution model with gamma distributed rate heterogeneity.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">JTT92</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sub_mod</span> <span class="o">=</span> <span class="n">JTT92</span><span class="p">(</span><span class="n">with_rate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">sub_mod</span>
+
+<span class="go">Empirical ( name = &#39;JTT92&#39;; type = &#39;None&#39;; number of motifs = 20; motifs = [&#39;A&#39;, &#39;C&#39;...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="specifying-likelihood-functions">
+<h2>Specifying likelihood functions<a class="headerlink" href="#specifying-likelihood-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="making-a-likelihood-function">
+<h3>Making a likelihood function<a class="headerlink" href="#making-a-likelihood-function" title="Permalink to this headline">¶</a></h3>
+<p>You start by specifying a substitution model and use that to construct a likelihood function for a specific tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sub_mod</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">treestring</span><span class="o">=</span><span class="s">&#39;(a,b,(c,d))&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sub_mod</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="providing-an-alignment-to-a-likelihood-function">
+<h3>Providing an alignment to a likelihood function<a class="headerlink" href="#providing-an-alignment-to-a-likelihood-function" title="Permalink to this headline">¶</a></h3>
+<p>You need to load an alignment and then provide it a likelihood function. I construct very simple trees and alignments for this example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sub_mod</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">treestring</span><span class="o">=</span><span class="s">&#39;(a,b,(c,d))&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sub_mod</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;ACGT&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;AC-T&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;ACGT&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                     <span class="p">(</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;AC-T&#39;</span><span class="p">)])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="scoping-parameters-on-trees">
+<h3>Scoping parameters on trees<a class="headerlink" href="#scoping-parameters-on-trees" title="Permalink to this headline">¶</a></h3>
+<p>For many evolutionary analyses, it&#8217;s desirable to allow different branches on a tree to have different values of a parameter. We show this for a simple codon model case here where we want the great apes (the clade that includes human and orangutan) to have a different value of the ratio of nonsynonymous to synonymous substitutions. This parameter is identified in the precanned <tt class="docutils literal"><span class="pre">CNFGTR</span></tt> model as <tt class="docutils literal"><span class="pre">omega</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">          /-Galago</span>
+<span class="go">         |</span>
+<span class="go">-root----|--HowlerMon</span>
+<span class="go">         |</span>
+<span class="go">         |          /-Rhesus</span>
+<span class="go">          \edge.3--|</span>
+<span class="go">                   |          /-Orangutan</span>
+<span class="go">                    \edge.2--|</span>
+<span class="go">                             |          /-Gorilla</span>
+<span class="go">                              \edge.1--|</span>
+<span class="go">                                       |          /-Human</span>
+<span class="go">                                        \edge.0--|</span>
+<span class="go">                                                  \-Chimpanzee</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;Orangutan&#39;</span><span class="p">],</span> <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Galago&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We&#8217;ve set an <em>initial</em> value for this clade so that the edges affected by this rule are evident below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">====================================</span>
+<span class="go"> A/C     A/G     A/T     C/G     C/T</span>
+<span class="go">------------------------------------</span>
+<span class="go">1.00    1.00    1.00    1.00    1.00</span>
+<span class="go">------------------------------------</span>
+<span class="go">=======================================</span>
+<span class="go">      edge    parent    length    omega</span>
+<span class="go">---------------------------------------</span>
+<span class="go">    Galago      root      1.00     1.00</span>
+<span class="go"> HowlerMon      root      1.00     1.00</span>
+<span class="go">    Rhesus    edge.3      1.00     1.00</span>
+<span class="go"> Orangutan    edge.2      1.00     0.50</span>
+<span class="go">   Gorilla    edge.1      1.00     0.50</span>
+<span class="go">     Human    edge.0      1.00     0.50</span>
+<span class="go">Chimpanzee    edge.0      1.00     0.50</span>
+<span class="go">    edge.0    edge.1      1.00     0.50</span>
+<span class="go">    edge.1    edge.2      1.00     0.50</span>
+<span class="go">    edge.2    edge.3      1.00     1.00</span>
+<span class="go">    edge.3      root      1.00     1.00</span>
+<span class="go">---------------------------------------...</span>
+</pre></div>
+</div>
+<p>A more extensive description of capabilities is in <a class="reference internal" href="../examples/scope_model_params_on_trees.html#scope-params-on-trees"><em>Allowing substitution model parameters to differ between branches</em></a>.</p>
+</div>
+<div class="section" id="specifying-parameter-values">
+<h3>Specifying parameter values<a class="headerlink" href="#specifying-parameter-values" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="specifying-a-parameter-as-constant">
+<h4>Specifying a parameter as constant<a class="headerlink" href="#specifying-a-parameter-as-constant" title="Permalink to this headline">¶</a></h4>
+<p>This means the parameter will not be modified during likelihood maximisation. We show this here by making the <tt class="docutils literal"><span class="pre">omega</span></tt> parameter constant at the value 1 &#8211; essentially the condition of selective neutrality.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="providing-a-starting-value-for-a-parameter">
+<h4>Providing a starting value for a parameter<a class="headerlink" href="#providing-a-starting-value-for-a-parameter" title="Permalink to this headline">¶</a></h4>
+<p>This can be useful to improve performance, the closer you are to the maximum likelihood estimator the quicker optimisation will be.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-bounds-for-optimising-a-function">
+<h4>Setting bounds for optimising a function<a class="headerlink" href="#setting-bounds-for-optimising-a-function" title="Permalink to this headline">¶</a></h4>
+<p>This can be useful for stopping optimisers from getting stuck in a bad part of parameter space.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">20.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="specifying-rate-heterogeneity-functions">
+<h3>Specifying rate heterogeneity functions<a class="headerlink" href="#specifying-rate-heterogeneity-functions" title="Permalink to this headline">¶</a></h3>
+<p>We extend the simple gamma distributed rate heterogeneity case for nucleotides from above to construction of the actual likelihood function. We do this for 4 bins and constraint the bin probabilities to be equal.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">GTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">GTR</span><span class="p">(</span><span class="n">with_rate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;bprobs&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more detailed discussion of defining and using these models see <a class="reference internal" href="../examples/rate_heterogeneity.html#rate-heterogeneity"><em>Analysis of rate heterogeneity</em></a>.</p>
+</div>
+<div class="section" id="specifying-phylo-hmms">
+<h3>Specifying Phylo-HMMs<a class="headerlink" href="#specifying-phylo-hmms" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">GTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">GTR</span><span class="p">(</span><span class="n">with_rate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sites_independent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">... </span>                                <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;bprobs&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more detailed discussion of defining and using these models see <a class="reference internal" href="../examples/hmm_par_heterogeneity.html#rate-heterogeneity-hmm"><em>Evaluate process heterogeneity using a Hidden Markov Model</em></a>.</p>
+</div>
+</div>
+<div class="section" id="fitting-likelihood-functions">
+<h2>Fitting likelihood functions<a class="headerlink" href="#fitting-likelihood-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="choice-of-optimisers">
+<h3>Choice of optimisers<a class="headerlink" href="#choice-of-optimisers" title="Permalink to this headline">¶</a></h3>
+<p>There are 2 types of optimiser: simulated annealing, a <em>global</em> optimiser; and Powell, a <em>local</em> optimiser. The simulated annealing method is slow compared to Powell and in general Powell is an adequate choice. I setup  a simple nucleotide model to illustrate these.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default is to use the simulated annealing optimiser followed by Powell.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can specify just using the local optimiser. To do so, it&#8217;s recommended to set the <tt class="docutils literal"><span class="pre">max_restarts</span></tt> argument since this provides a mechanism for Powell to attempt restarting the optimisation from slightly different sport which can help in overcoming local maxima.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_restarts</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We might want to do crude simulated annealing following by more rigorous Powell.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">global_tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">max_restarts</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkpointing-runs">
+<h3>Checkpointing runs<a class="headerlink" href="#checkpointing-runs" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="checkpointing_long_running.html#checkpointing-optimisation"><em>Checkpointing optimisation runs</em></a>.</p>
+</div>
+<div class="section" id="how-to-check-your-optimisation-was-successful">
+<h3>How to check your optimisation was successful.<a class="headerlink" href="#how-to-check-your-optimisation-was-successful" title="Permalink to this headline">¶</a></h3>
+<p>There is no guarantee that an optimised function has achieved a global maximum. We can, however, be sure that a maximum was achieved by validating that the optimiser stopped because the specified tolerance condition was met, rather than exceeding the maximum number of evaluations. The latter number is set to ensure optimisation doesn&#8217;t proceed endlessly. If the optimiser exited because this limit was exceeded you can be sure that the function <strong>has not</strong> been successfully optimised.</p>
+<p>We can monitor this situation using the <tt class="docutils literal"><span class="pre">limit_action</span></tt> argument to <tt class="docutils literal"><span class="pre">optimise</span></tt>. Providing the value <tt class="docutils literal"><span class="pre">raise</span></tt> causes an exception to be raised if this condition occurs, as shown below. Providing <tt class="docutils literal"><span class="pre">warn</span></tt> (default) instead will cause a warning message to be printed to screen but execution will continue. The value <tt class="docutils literal"><span class="pre">ignore</span></tt> hides any such message.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_evals</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">limit_action</span><span class="o">=</span><span class="s">&#39;raise&#39;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">max_evaluations</span><span class="o">=</span><span class="n">max_evals</span><span class="p">,</span> <span class="n">return_calculator</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">ArithmeticError</span>: <span class="n">FORCED EXIT from optimiser after 10 evaluations</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We recommend using <tt class="docutils literal"><span class="pre">limit_action='raise'</span></tt> and catching the <tt class="docutils literal"><span class="pre">ArithmeticError</span></tt> error explicitly. You really shouldn&#8217;t be using results from such an optimisation run.</p>
+</div>
+</div>
+</div>
+<div class="section" id="getting-statistics-out-of-likelihood-functions">
+<h2>Getting statistics out of likelihood functions<a class="headerlink" href="#getting-statistics-out-of-likelihood-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="model-fit-statistics">
+<h3>Model fit statistics<a class="headerlink" href="#model-fit-statistics" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="log-likelihood-and-number-of-free-parameters">
+<h4>Log likelihood and number of free parameters<a class="headerlink" href="#log-likelihood-and-number-of-free-parameters" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">GTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">GTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We get the log-likelihood and the number of free parameters.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lnL</span>
+<span class="go">-24601.9...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nfp</span>
+<span class="go">16</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The number of free parameters (nfp) refers only to the number of parameters that were modifiable by the optimiser. Typically, the degrees-of-freedom of a likelihood ratio test statistic is computed as the difference in nfp between models. This will not be correct for models in which boundary conditions exist (rate heterogeneity models where a parameter value boundary is set between bins).</p>
+</div>
+</div>
+<div class="section" id="information-theoretic-measures">
+<h4>Information theoretic measures<a class="headerlink" href="#information-theoretic-measures" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="aikake-information-criterion">
+<h5>Aikake Information Criterion<a class="headerlink" href="#aikake-information-criterion" title="Permalink to this headline">¶</a></h5>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this measure only makes sense when the model has been optimised, a step I&#8217;m skipping here in the interests of speed.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">GTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">GTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AIC</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getAic</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AIC</span>
+<span class="go">49235.869...</span>
+</pre></div>
+</div>
+<p>We can also get the second-order AIC.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">AICc</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getAic</span><span class="p">(</span><span class="n">second_order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AICc</span>
+<span class="go">49236.064...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bayesian-information-criterion">
+<h5>Bayesian Information Criterion<a class="headerlink" href="#bayesian-information-criterion" title="Permalink to this headline">¶</a></h5>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this measure only makes sense when the model has been optimised, a step I&#8217;m skipping here in the interests of speed.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">GTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">GTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BIC</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getBic</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BIC</span>
+<span class="go">49330.9475...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-maximum-likelihood-estimates">
+<h3>Getting maximum likelihood estimates<a class="headerlink" href="#getting-maximum-likelihood-estimates" title="Permalink to this headline">¶</a></h3>
+<p>We fit the model defined in the previous section and use that in the following.</p>
+<div class="section" id="one-at-a-time">
+<h4>One at a time<a class="headerlink" href="#one-at-a-time" title="Permalink to this headline">¶</a></h4>
+<p>We get the statistics out individually. We get the <tt class="docutils literal"><span class="pre">length</span></tt> for the Human edge and the exchangeability parameter <tt class="docutils literal"><span class="pre">A/G</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_g</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getParamValue</span><span class="p">(</span><span class="s">&#39;A/G&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a_g</span>
+<span class="go">5.25...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getParamValue</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="s">&#39;Human&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">human</span>
+<span class="go">0.006...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="just-the-motif-probabilities">
+<h4>Just the motif probabilities<a class="headerlink" href="#just-the-motif-probabilities" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mprobs</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getMotifProbs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">mprobs</span>
+<span class="go">====================================</span>
+<span class="go">     T         C         A         G</span>
+<span class="go">------------------------------------</span>
+<span class="go">0.2406    0.1742    0.3757    0.2095</span>
+<span class="go">------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-the-tree-object">
+<h4>On the tree object<a class="headerlink" href="#on-the-tree-object" title="Permalink to this headline">¶</a></h4>
+<p>If written to file in xml format, then model parameters will be saved. This can be useful for later plotting or recreating likelihood functions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">annot_tree</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getAnnotatedTree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">annot_tree</span><span class="o">.</span><span class="n">getXML</span><span class="p">()</span> 
+<span class="go">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="go">&lt;clade&gt;</span>
+<span class="go">  &lt;clade&gt;</span>
+<span class="go">     &lt;name&gt;Galago&lt;/name&gt;</span>
+<span class="go">     &lt;param&gt;&lt;name&gt;A/G&lt;/name&gt;&lt;value&gt;5.25342689214&lt;/value&gt;&lt;/param&gt;</span>
+<span class="go">     &lt;param&gt;&lt;name&gt;A/C&lt;/name&gt;&lt;value&gt;1.23159157151&lt;/value&gt;&lt;/param&gt;</span>
+<span class="go">     &lt;param&gt;&lt;name&gt;C/T&lt;/name&gt;&lt;value&gt;5.97001104267&lt;/value&gt;&lt;/param&gt;</span>
+<span class="go">     &lt;param&gt;&lt;name&gt;length&lt;/name&gt;&lt;value&gt;0.173114172705&lt;/value&gt;&lt;/param&gt;...</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method fails for some rate-heterogeneity models.</p>
+</div>
+</div>
+<div class="section" id="as-tables">
+<h4>As tables<a class="headerlink" href="#as-tables" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tables</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getStatistics</span><span class="p">(</span><span class="n">with_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">with_titles</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s">&#39;global&#39;</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">Title</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="n">table</span>
+<span class="go">global params</span>
+<span class="go">==============================================</span>
+<span class="go">   A/C       A/G       A/T       C/G       C/T</span>
+<span class="go">----------------------------------------------</span>
+<span class="go">1.2316    5.2534    0.9585    2.3159    5.9700</span>
+<span class="go">----------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="testing-hypotheses">
+<h2>Testing hypotheses<a class="headerlink" href="#testing-hypotheses" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-likelihood-ratio-tests">
+<h3>Using likelihood ratio tests<a class="headerlink" href="#using-likelihood-ratio-tests" title="Permalink to this headline">¶</a></h3>
+<p>We test the molecular clock hypothesis for human and chimpanzee lineages. The null has these two branches constrained to be equal.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;Chimpanzee&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Galago&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;Null Hypothesis&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">null_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">null_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Null Hypothesis</span>
+<span class="go">==========================</span>
+<span class="go">      edge  parent  length</span>
+<span class="go">--------------------------</span>
+<span class="go">    Galago    root   0.167</span>
+<span class="go"> HowlerMon    root   0.044</span>
+<span class="go">    Rhesus  edge.3   0.021</span>
+<span class="go"> Orangutan  edge.2   0.008</span>
+<span class="go">   Gorilla  edge.1   0.002</span>
+<span class="go">     Human  edge.0   0.004</span>
+<span class="go">Chimpanzee  edge.0   0.004</span>
+<span class="go">    edge.0  edge.1   0.000...</span>
+</pre></div>
+</div>
+<p>The alternate allows the human and chimpanzee branches to differ by just setting all lengths to be independent.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;Alt Hypothesis&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alt_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alt_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Alt Hypothesis</span>
+<span class="go">==========================</span>
+<span class="go">      edge  parent  length</span>
+<span class="go">--------------------------</span>
+<span class="go">    Galago    root   0.167</span>
+<span class="go"> HowlerMon    root   0.044</span>
+<span class="go">    Rhesus  edge.3   0.021</span>
+<span class="go"> Orangutan  edge.2   0.008</span>
+<span class="go">   Gorilla  edge.1   0.002</span>
+<span class="go">     Human  edge.0   0.006</span>
+<span class="go">Chimpanzee  edge.0   0.003</span>
+<span class="go">    edge.0  edge.1   0.000...</span>
+</pre></div>
+</div>
+<p>We import the function for computing the probability of a chi-square test statistic, compute the likelihood ratio test statistic, degrees of freedom and the corresponding probability.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.stats</span> <span class="kn">import</span> <span class="n">chisqprob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">alt_lnL</span> <span class="o">-</span> <span class="n">null_lnL</span><span class="p">)</span> <span class="c"># the likelihood ratio statistic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">alt_nfp</span> <span class="o">-</span> <span class="n">null_nfp</span><span class="p">)</span> <span class="c"># the test degrees of freedom</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;LR=</span><span class="si">%.4f</span><span class="s"> ; df = </span><span class="si">%d</span><span class="s"> ; p=</span><span class="si">%.4f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="go">LR=3.3294 ; df = 1 ; p=0.0681</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="by-parametric-bootstrapping">
+<h3>By parametric bootstrapping<a class="headerlink" href="#by-parametric-bootstrapping" title="Permalink to this headline">¶</a></h3>
+<p>If we can&#8217;t rely on the asymptotic behaviour of the LRT, e.g. due to small alignment length, we can use a parametric bootstrap. Convenience functions for that are described in more detail here <a class="reference internal" href="../examples/parametric_bootstrap.html#parametric-bootstrap"><em>Performing a parametric bootstrap</em></a>.</p>
+<p>In general, however, this capability derives from the ability of any defined <tt class="docutils literal"><span class="pre">evolve</span></tt> likelihood function to simulate an alignment. This property is provided as <tt class="docutils literal"><span class="pre">simulateAlignment</span></tt> method on likelihood function objects.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;Chimpanzee&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Galago&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;Null Hypothesis&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_aln</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">simulateAlignment</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">sim_aln</span><span class="p">)</span>
+<span class="go">7 x 2814 dna alignment: Gorilla...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="determining-confidence-intervals-on-mles">
+<h2>Determining confidence intervals on MLEs<a class="headerlink" href="#determining-confidence-intervals-on-mles" title="Permalink to this headline">¶</a></h2>
+<p>The profile method is used to calculate a confidence interval for a named parameter. We show it here for a global substitution model exchangeability parameter (<em>kappa</em>, the ratio of transition to transversion rates) and for an edge specific parameter (just the human branch length).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">HKY85</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kappa_lo</span><span class="p">,</span> <span class="n">kappa_mle</span><span class="p">,</span> <span class="n">kappa_hi</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getParamInterval</span><span class="p">(</span><span class="s">&#39;kappa&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;lo=</span><span class="si">%.2f</span><span class="s"> ; mle=</span><span class="si">%.2f</span><span class="s"> ; hi = </span><span class="si">%.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kappa_lo</span><span class="p">,</span> <span class="n">kappa_mle</span><span class="p">,</span> <span class="n">kappa_hi</span><span class="p">)</span>
+<span class="go">lo=3.78 ; mle=4.44 ; hi = 5.22</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human_lo</span><span class="p">,</span> <span class="n">human_mle</span><span class="p">,</span> <span class="n">human_hi</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getParamInterval</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="s">&#39;Human&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;lo=</span><span class="si">%.2f</span><span class="s"> ; mle=</span><span class="si">%.2f</span><span class="s"> ; hi = </span><span class="si">%.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">human_lo</span><span class="p">,</span> <span class="n">human_mle</span><span class="p">,</span> <span class="n">human_hi</span><span class="p">)</span>
+<span class="go">lo=0.00 ; mle=0.01 ; hi = 0.01</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="saving-results">
+<h2>Saving results<a class="headerlink" href="#saving-results" title="Permalink to this headline">¶</a></h2>
+<p>Use either the annotated tree or statistics tables to obtain objects that can easily be written to file.</p>
+</div>
+<div class="section" id="visualising-statistics-on-trees">
+<h2>Visualising statistics on trees<a class="headerlink" href="#visualising-statistics-on-trees" title="Permalink to this headline">¶</a></h2>
+<p>We look at the distribution of <tt class="docutils literal"><span class="pre">omega</span></tt> from the CNF codon model family across different primate lineages. We allow each edge to have an independent value for <tt class="docutils literal"><span class="pre">omega</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">============================</span>
+<span class="go"> A/C   A/G   A/T   C/G   C/T</span>
+<span class="go">----------------------------</span>
+<span class="go">1.07  3.88  0.79  1.96  4.09</span>
+<span class="go">----------------------------</span>
+<span class="go">=================================</span>
+<span class="go">      edge  parent  length  omega</span>
+<span class="go">---------------------------------</span>
+<span class="go">    Galago    root    0.53   0.85</span>
+<span class="go"> HowlerMon    root    0.14   0.71</span>
+<span class="go">    Rhesus  edge.3    0.07   0.58</span>
+<span class="go"> Orangutan  edge.2    0.02   0.49</span>
+<span class="go">   Gorilla  edge.1    0.01   0.43</span>
+<span class="go">     Human  edge.0    0.02   2.44</span>
+<span class="go">Chimpanzee  edge.0    0.01   2.28</span>
+<span class="go">    edge.0  edge.1    0.00   0.01</span>
+<span class="go">    edge.1  edge.2    0.01   0.55</span>
+<span class="go">    edge.2  edge.3    0.04   0.33</span>
+<span class="go">    edge.3    root    0.02   1.10...</span>
+</pre></div>
+</div>
+<p>We need an annotated tree object to do the drawing, we write this out to an XML formatted file so it can be reloaded for later reuse.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">annot_tree</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getAnnotatedTree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">annot_tree</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s">&#39;result_tree.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We first import an unrooted dendrogram and then generate a heat mapped image to file where edges are colored red by the magnitude of <tt class="docutils literal"><span class="pre">omega</span></tt> with maximal saturation when <tt class="docutils literal"><span class="pre">omega=1</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.draw.dendrogram</span> <span class="kn">import</span> <span class="n">ContemporaneousDendrogram</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dend</span> <span class="o">=</span> <span class="n">ContemporaneousDendrogram</span><span class="p">(</span><span class="n">annot_tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">makeFigure</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">shade_param</span><span class="o">=</span><span class="s">&#39;omega&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                     <span class="n">max_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">stroke_width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;omega_heat_map.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reconstructing-ancestral-sequences">
+<h2>Reconstructing ancestral sequences<a class="headerlink" href="#reconstructing-ancestral-sequences" title="Permalink to this headline">¶</a></h2>
+<p>We first fit a likelihood function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">F81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">F81</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We then get the most likely ancestral sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ancestors</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">likelyAncestralSeqs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ancestors</span>
+<span class="go">&gt;root</span>
+<span class="go">TGTGGCACAAATACTCATGCCAGCTCATTACAGCA...</span>
+</pre></div>
+</div>
+<p>Or we can get the posterior probabilities (returned as a <tt class="docutils literal"><span class="pre">DictArray</span></tt>) of sequence states at each node.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ancestral_probs</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">reconstructAncestralSeqs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ancestral_probs</span><span class="p">[</span><span class="s">&#39;root&#39;</span><span class="p">]</span>
+<span class="go">============================================</span>
+<span class="go">             T         C         A         G</span>
+<span class="go">--------------------------------------------</span>
+<span class="go">   0    0.1816    0.0000    0.0000    0.0000</span>
+<span class="go">   1    0.0000    0.0000    0.0000    0.1561</span>
+<span class="go">   2    0.1816    0.0000    0.0000    0.0000</span>
+<span class="go">   3    0.0000    0.0000    0.0000    0.1561...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tips-for-improved-performance">
+<h2>Tips for improved performance<a class="headerlink" href="#tips-for-improved-performance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sequentially-build-the-fitting">
+<h3>Sequentially build the fitting<a class="headerlink" href="#sequentially-build-the-fitting" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s nothing that improves performance quite like being close to the maximum likelihood values. So using the <tt class="docutils literal"><span class="pre">setParamRule</span></tt> method to provide good starting values can be very useful. As this can be difficult to do one easy way is to build simpler models that are nested within the one you&#8217;re interested in. Fitting those models and then relaxing constraints until you’re at the parameterisation of interest can markedly improve optimisation speed.</p>
+<p>Being able to save results to file allows you to do this between sessions.</p>
+</div>
+<div class="section" id="sampling">
+<h3>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re dealing with a very large alignment, another approach is to use a subset of the alignment to fit the model then try fitting the entire alignment. The alignment method does have an method to facilitate this approach. The following samples 99 codons without replacement.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smpl</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">with_replacement</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">motif_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">smpl</span><span class="p">)</span>
+<span class="go">297</span>
+</pre></div>
+</div>
+<p>While this samples 99 nucleotides without replacement.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">smpl</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">with_replacement</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">smpl</span><span class="p">)</span>
+<span class="go">99</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Evolutionary analysis using likelihood</a><ul>
+<li><a class="reference internal" href="#specifying-substitution-models">Specifying substitution models</a><ul>
+<li><a class="reference internal" href="#canned-models">Canned models</a></li>
+<li><a class="reference internal" href="#rate-heterogeneity-models">Rate heterogeneity models</a><ul>
+<li><a class="reference internal" href="#for-nucleotide">For nucleotide</a></li>
+<li><a class="reference internal" href="#for-codon">For codon</a></li>
+<li><a class="reference internal" href="#for-protein">For protein</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#specifying-likelihood-functions">Specifying likelihood functions</a><ul>
+<li><a class="reference internal" href="#making-a-likelihood-function">Making a likelihood function</a></li>
+<li><a class="reference internal" href="#providing-an-alignment-to-a-likelihood-function">Providing an alignment to a likelihood function</a></li>
+<li><a class="reference internal" href="#scoping-parameters-on-trees">Scoping parameters on trees</a></li>
+<li><a class="reference internal" href="#specifying-parameter-values">Specifying parameter values</a><ul>
+<li><a class="reference internal" href="#specifying-a-parameter-as-constant">Specifying a parameter as constant</a></li>
+<li><a class="reference internal" href="#providing-a-starting-value-for-a-parameter">Providing a starting value for a parameter</a></li>
+<li><a class="reference internal" href="#setting-bounds-for-optimising-a-function">Setting bounds for optimising a function</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#specifying-rate-heterogeneity-functions">Specifying rate heterogeneity functions</a></li>
+<li><a class="reference internal" href="#specifying-phylo-hmms">Specifying Phylo-HMMs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fitting-likelihood-functions">Fitting likelihood functions</a><ul>
+<li><a class="reference internal" href="#choice-of-optimisers">Choice of optimisers</a></li>
+<li><a class="reference internal" href="#checkpointing-runs">Checkpointing runs</a></li>
+<li><a class="reference internal" href="#how-to-check-your-optimisation-was-successful">How to check your optimisation was successful.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-statistics-out-of-likelihood-functions">Getting statistics out of likelihood functions</a><ul>
+<li><a class="reference internal" href="#model-fit-statistics">Model fit statistics</a><ul>
+<li><a class="reference internal" href="#log-likelihood-and-number-of-free-parameters">Log likelihood and number of free parameters</a></li>
+<li><a class="reference internal" href="#information-theoretic-measures">Information theoretic measures</a><ul>
+<li><a class="reference internal" href="#aikake-information-criterion">Aikake Information Criterion</a></li>
+<li><a class="reference internal" href="#bayesian-information-criterion">Bayesian Information Criterion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-maximum-likelihood-estimates">Getting maximum likelihood estimates</a><ul>
+<li><a class="reference internal" href="#one-at-a-time">One at a time</a></li>
+<li><a class="reference internal" href="#just-the-motif-probabilities">Just the motif probabilities</a></li>
+<li><a class="reference internal" href="#on-the-tree-object">On the tree object</a></li>
+<li><a class="reference internal" href="#as-tables">As tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-hypotheses">Testing hypotheses</a><ul>
+<li><a class="reference internal" href="#using-likelihood-ratio-tests">Using likelihood ratio tests</a></li>
+<li><a class="reference internal" href="#by-parametric-bootstrapping">By parametric bootstrapping</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#determining-confidence-intervals-on-mles">Determining confidence intervals on MLEs</a></li>
+<li><a class="reference internal" href="#saving-results">Saving results</a></li>
+<li><a class="reference internal" href="#visualising-statistics-on-trees">Visualising statistics on trees</a></li>
+<li><a class="reference internal" href="#reconstructing-ancestral-sequences">Reconstructing ancestral sequences</a></li>
+<li><a class="reference internal" href="#tips-for-improved-performance">Tips for improved performance</a><ul>
+<li><a class="reference internal" href="#sequentially-build-the-fitting">Sequentially build the fitting</a></li>
+<li><a class="reference internal" href="#sampling">Sampling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="building_phylogenies.html"
+                        title="previous chapter">Building phylogenies</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sequence_simulation.html"
+                        title="next chapter">Sequence simulation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/using_likelihood_to_perform_evolutionary_analyses.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sequence_simulation.html" title="Sequence simulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="building_phylogenies.html" title="Building phylogenies"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

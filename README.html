@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Readme &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="index.html" />
+    <link rel="next" title="Coding guidelines" href="coding_guidelines.html" />
+    <link rel="prev" title="Quick installation" href="install.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="coding_guidelines.html" title="Coding guidelines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Quick installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-readme">
+<h1>The Readme<a class="headerlink" href="#the-readme" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://sourceforge.net/projects/pycogent">From sourceforge</a> or follow the <a class="reference internal" href="install.html#quick-install"><em>Quick installation</em></a> instructions.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Registration:</th><td class="field-body">To be informed of bugs, new releases please subscribe to the <a class="reference external" href="http://sourceforge.net/projects/pycogent">mailing lists at sourceforge</a>.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The toolkit requires Python 2.5.1 or greater, and Numpy 1.3 or greater. Aside from these the dependencies below are optional and the code will work as is. A C compiler, however, will allow external C module&#8217;s responsible for the likelihood and matrix exponentiation calculations to be compiled, resulting in significantly improved performance.</p>
+<div class="section" id="required">
+<span id="id1"></span><h3>Required<a class="headerlink" href="#required" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://www.python.org">Python</a>: the language the toolkit is primarily written in, and in which the user writes control scripts.</li>
+<li><a class="reference external" href="http://numpy.scipy.org/">Numpy</a>: This is a python module used for speeding up matrix computations. It is available as source code for *nix.</li>
+<li><a class="reference external" href="http://www.zlib.net/">zlib</a>: This is a compression library which is available for all platforms and comes pre-installed on most too. If, by chance, your platform doesn&#8217;t have this installed then download the source from the <a class="reference external" href="http://www.zlib.net/">zlib</a> site and follow the install instructions, or refer to the instructions for <a class="reference external" href="http://sourceforge.net/projects/pycogent/forums/forum/651121/topic/5635916">compiling matplotlib</a>.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On some linux platforms (like Ubuntu), you must specifically install a <tt class="docutils literal"><span class="pre">python-dev</span></tt> package so that the <a class="reference external" href="http://www.python.org">Python</a> header files required for building some external dependencies are available.</p>
+</div>
+</div>
+<div class="section" id="optional">
+<h3>Optional<a class="headerlink" href="#optional" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>C compiler: This is standard on most *nix platforms. On Macos X this is available for free in the Developer tools which, if you don&#8217;t already have them, can be obtained from <a class="reference external" href="http://www.apple.com">Apple</a>.</li>
+<li><a class="reference external" href="http://matplotlib.sourceforge.net">Matplotlib</a>: used to plot several kinds of graphs related to codon usage. For installation, see these instructions for <a class="reference external" href="http://sourceforge.net/projects/pycogent/forums/forum/651121/topic/5635916">compiling matplotlib</a>.</li>
+<li><a class="reference external" href="http://www.cython.org/">Cython</a>: This module is only necessary if you are a developer who wants to modify the *.pyx files.</li>
+<li><a class="reference external" href="http://code.google.com/p/mpi4py">mpi4py</a>: Message Passing Interface interface, required for parallel computation.</li>
+<li><a class="reference external" href="http://www.sqlalchemy.org">SQLAlchemy</a> and <a class="reference external" href="http://sourceforge.net/projects/mysql-python">MySQL-python</a>: These are required for the Ensembl querying code.</li>
+</ul>
+<p>If you use the <a class="reference internal" href="install.html#quick-install"><em>Quick installation</em></a> approach, these are all specified in the requirements file.</p>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>If you don&#8217;t wish to use the <a class="reference internal" href="install.html#quick-install"><em>Quick installation</em></a> approach then the conventional *nix platform (including MacOS X) python package installation procedure applies. Download the software from <a class="reference external" href="http://sourceforge.net/projects/pycogent">here</a>. Uncompress the archive and change into the <tt class="docutils literal"><span class="pre">PyCogent</span></tt> directory and type:</p>
+<div class="highlight-python"><pre>$ python setup.py build</pre>
+</div>
+<p>This automatically compiles the modules. If you have administrative privileges type:</p>
+<div class="highlight-python"><pre>$ sudo python setup.py install</pre>
+</div>
+<p>This then places the entire package into your python/site-packages folder.</p>
+<p>If you do not have administrator privileges on your machine you can change the build approach to:</p>
+<div class="highlight-python"><pre>$ python setup.py build_ext -if</pre>
+</div>
+<p>which compiles the extensions in place (the <tt class="docutils literal"><span class="pre">i</span></tt> option) forcibly (the <tt class="docutils literal"><span class="pre">f</span></tt> option, ie even if they&#8217;ve already been compiled). Then move the cogent directory to where you want it (or leave it in place) and add this location to your python path using <tt class="docutils literal"><span class="pre">sys.path.insert(0,</span> <span class="pre">&quot;/your/path/to/PyCogent&quot;)</span></tt> in each script, or by setting shell environment variables (e.g. <tt class="docutils literal"><span class="pre">$</span> <span class="pre">export</span> <span class="pre">PYTHONPATH=/your/path/to/PyCogent:$PYTHONPATH</span></tt>)</p>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">PyCogent/tests</span></tt> contains all the tests (currently &gt;3100). You can most readily run the tests using the <tt class="docutils literal"><span class="pre">PyCogent/run_tests</span></tt> shell script. This is done by typing:</p>
+<div class="highlight-guess"><div class="highlight"><pre>$ <span class="n">sh</span> <span class="n">run_tests</span>
+</pre></div>
+</div>
+<p>which will automatically build extensions in place, set up the PYTHONPATH and run <tt class="docutils literal"><span class="pre">PyCogent/tests/alltests.py</span></tt>. Note that if certain optional applications are not installed this will be indicated in the output as &#8220;can&#8217;t find&#8221; or &#8220;not installed&#8221;. A &#8220;<cite>.</cite>&#8221; will be printed to screen for each test and if they all pass, you&#8217;ll see output like:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span class="n">Ran</span> 3299 <span class="n">tests</span> <span class="n">in</span> 58<span class="p">.</span>128<span class="n">s</span>
+
+<span class="n">OK</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tips-for-usage">
+<h2>Tips for usage<a class="headerlink" href="#tips-for-usage" title="Permalink to this headline">¶</a></h2>
+<p>A good IDE can greatly simplify writing control scripts. Features such as code completion and definition look-up are extremely useful. For a complete list of <a class="reference external" href="http://www.python.org/cgi-bin/moinmoin/PythonEditors">editors go here</a>.</p>
+<p>To get help on attributes of an object in python, use</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="n">myalign</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to list the attributes of <tt class="docutils literal"><span class="pre">myalign</span></tt> or</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">myalign</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to figure out how to use the <tt class="docutils literal"><span class="pre">myalign.writeToFile</span></tt> method. Also note that the directory structure of the package is similar to the import statements required to use a module &#8211; to see the contents of <tt class="docutils literal"><span class="pre">alignment.py</span></tt> or <tt class="docutils literal"><span class="pre">sequence.py</span></tt> you need to look in the directory <tt class="docutils literal"><span class="pre">cogent/core</span></tt> path, to use the classes in those files you specify <tt class="docutils literal"><span class="pre">cogent.core</span></tt> for importing.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The Readme</a><ul>
+<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
+<li><a class="reference internal" href="#required">Required</a></li>
+<li><a class="reference internal" href="#optional">Optional</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#tips-for-usage">Tips for usage</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Quick installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="coding_guidelines.html"
+                        title="next chapter">Coding guidelines</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/README.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="coding_guidelines.html" title="Coding guidelines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Quick installation"
+             >previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

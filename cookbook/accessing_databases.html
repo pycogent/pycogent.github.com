@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Accessing databases &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Analysis of sequence composition" href="analysis_of_sequence_composition.html" />
+    <link rel="prev" title="Intramolecular contacts" href="structural_contacts.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="analysis_of_sequence_composition.html" title="Analysis of sequence composition"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structural_contacts.html" title="Intramolecular contacts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="accessing-databases">
+<h1>Accessing databases<a class="headerlink" href="#accessing-databases" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ncbi">
+<h2>NCBI<a class="headerlink" href="#ncbi" title="Permalink to this headline">¶</a></h2>
+<p>EUtils is a web service offered by the NCBI to access the sequence, literature and other databases by a special format of URLs. PyCogent offers an interface to construct the URLs and retrieve the results in text format.</p>
+<div class="section" id="from-pubmed">
+<h3>From Pubmed<a class="headerlink" href="#from-pubmed" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="retrieving-pubmed-records-from-ncbi-by-pubmed-id">
+<h4>Retrieving PubMed records from NCBI by PubMed ID<a class="headerlink" href="#retrieving-pubmed-records-from-ncbi-by-pubmed-id" title="Permalink to this headline">¶</a></h4>
+<p>The process for getting PubMed records by PubMed ID (PMID) is very similar to that for getting sequences. Basically, you just need to pass in the unique id associated with the article. For example, if you want to get the reference to the original PyCogent paper to see how far we&#8217;ve come since then, you can do this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EFetch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;17708774&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;brief&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">&#39;\n1: Knight R et al. PyCogent: a toolkit for makin...[PMID: 17708774] \n&#39;</span>
+</pre></div>
+</div>
+<p>If you want more information, there are other rettypes, e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;17708774&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;citation&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">&quot;\n1: Genome Biol. 2007;8(8):R171. \n\nPyCogent: a toolkit for making sense from sequence.\n\nKnight R, Maxwell P, Birmingham A, Carnes J, Caporaso JG, Easton BC, Eaton M,\nHamady M, Lindsay H, Liu Z, Lozupone C, McDonald D, Robeson M, Sammut R, Smit S,\nWakefield MJ, Widmann J, Wikman S, Wilson S, Ying H, Huttley GA.\n\nDepartment of Chemistry and Biochemistry, University of Colorado, Boulder,\nColorado, USA. rob@spot.colorado.edu\n\nWe have implemented in Python the COmparative GENomic Toolkit, a fully\nintegrated and thoroughly tested framework for novel probabilistic analyses of\nbiological sequences, devising workflows, and generating publication quality\ngraphics. PyCogent includes connectors to remote databases, built-in generalized\nprobabilistic techniques for working with biological sequences, and controllers\nfor third-party applications. The toolkit takes advantage of parallel\narchitectures and runs on a range of hardware and operating systems, and is\navailable under the general public license from\nhttp://sourceforge.net/projects/pycogent.\n\nPublication Types:\n    Evaluation Studies\n    Research Support, N.I.H., Extramural\n    Research Support, Non-U.S. Gov&#39;t\n\nMeSH Terms:\n    Animals\n    BRCA1 Protein/genetics\n    Databases, Genetic\n    Genomics/methods*\n    Humans\n    Phylogeny\n    Protein Conformation\n    Proteobacteria/classification\n    Proteobacteria/genetics\n    Sequence Analysis/methods*\n    Software*\n    von Willebrand Factor/chemistry\n    von Willebrand Factor/genetics\n\nSubstances:\n    BRCA1 Protein\n    von Willebrand Factor\n\nPMID: 17708774 [PubMed - indexed for MEDLINE]\n&quot;</span>
+</pre></div>
+</div>
+<p>Similarly, if you want something more machine-readable (but quite a lot less human-readable), you can specify XML in the retmode:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;17708774&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;citation&#39;</span><span class="p">,</span> <span class="n">retmode</span><span class="o">=</span><span class="s">&#39;xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cite</span> <span class="o">=</span> <span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cite</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">line</span>
+<span class="gp">...</span>
+<span class="go">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="go">&lt;!DOCTYPE PubmedArticleSet PUBLIC &quot;-//NLM//DTD PubMedArticle, 1st January 2011//EN&quot; &quot;http://www.ncbi.nlm.nih.gov/entrez/query/DTD/pubmed_110101.dtd&quot;&gt;</span>
+<span class="go">&lt;PubmedArticleSet&gt;</span>
+<span class="go">&lt;PubmedArticle&gt;</span>
+<span class="go">    &lt;MedlineCitation Owner=&quot;NLM&quot; Status=&quot;MEDLINE&quot;&gt;</span>
+</pre></div>
+</div>
+<p>Only a partial example is shown as there are quite a few lines. As with sequences, you can retrieve multiple accessions at once.</p>
+</div>
+<div class="section" id="searching-for-records-using-eutils">
+<h4>Searching for records using EUtils<a class="headerlink" href="#searching-for-records-using-eutils" title="Permalink to this headline">¶</a></h4>
+<p>Getting records by their primary identifiers is very nice if you actually have the primary identifiers, but what if you don&#8217;t? For example, what if you want to do a search based on a keyword, or have a genbank accession number rather than a gi, or want to get a range of records?</p>
+<p>Fortunately, the more general EUtils class allows this kind of complex workflow with relatively little intervention. For example, if you want to search for articles that mention PyCogent:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eu</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;brief&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">eu</span><span class="p">[</span><span class="s">&#39;PyCogent&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="go">1: Smit S et al. From knotted to nested RNA st...[PMID: 18230758]</span>
+
+<span class="go">2: Knight R et al. PyCogent: a toolkit for makin...[PMID: 17708774]</span>
+</pre></div>
+</div>
+<p>...or perhaps you want only the ones with PyCogent in the title, in which case you can use any qualifier that NCBI supports:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">eu</span><span class="p">[</span><span class="s">&#39;PyCogent[ti]&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="go">1: Knight R et al. PyCogent: a toolkit for makin...[PMID: 17708774]</span>
+</pre></div>
+</div>
+<p>The NCBI-supported list of field qualifiers, and lots of documentation generally on how to do pubmed queries, is <a class="reference external" href="http://www.ncbi.nlm.nih.gov/bookshelf/br.fcgi?book=helppubmed&amp;part=pubmedhelp">here</a>.</p>
+<p>One especially useful feature is the ability to get a list of primary identifiers matching a query. You do this by setting <tt class="docutils literal"><span class="pre">rettype='uilist'</span></tt> (not idlist any more, so again you may need to update old code examples). For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">eu</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;uilist&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">eu</span><span class="p">[</span><span class="s">&#39;PyCogent&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">18230758</span>
+<span class="go">17708774</span>
+</pre></div>
+</div>
+<p>This is especially useful when you want to do a bunch of queries (whether for journal articles, as shown here, or for sequences), combine the results, then download the actual unique records only once. You could of course do this with an incredibly complex single query, but good luck debugging that query...</p>
+</div>
+</div>
+<div class="section" id="for-sequences">
+<h3>For sequences<a class="headerlink" href="#for-sequences" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="fetching-fasta-or-genpept-sequences-from-ncbi-using-efetch-with-gi-s">
+<h4>Fetching FASTA or Genpept sequences from NCBI using EFetch with GI&#8217;s<a class="headerlink" href="#fetching-fasta-or-genpept-sequences-from-ncbi-using-efetch-with-gi-s" title="Permalink to this headline">¶</a></h4>
+<p>If you already have a list of GI&#8217;s (the numeric identifiers that are used by GenBank internally as identifers), your job is very easy: you just need to use <tt class="docutils literal"><span class="pre">EFetch</span></tt> to retrieve the corresponding records. In general, this works for any case where the identifiers you have are the primary keys, e.g. for PubMed you use the PubMed ID (see example below).</p>
+<p>Here is an example of getting the nucleotide record that corresponds to one particular id, in this case id # 459567 (chosen arbitrarily). The record arrives as a file-like object that can be read; in this case, we are looking at each line and printing the first 40 characters.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EFetch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">line</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="go">&gt;gi|459567|dbj|D28543.1|HPCNS5PC Hepatit</span>
+<span class="go">GAGCACGACATCTACCAATGTTGCCAACTGAACCCAGAGG</span>
+<span class="go">GGCTTTACCTTGGTGGTCCCATGTTTAACTCGCGAGGTCA</span>
+<span class="go">CGGGGTTCTTCCAACCAGCATGGGCAATACCCTCACATGT</span>
+<span class="go">GCAGGCCTCACCAATTCTGACATGTTGGTTTGCGGAGATG</span>
+<span class="go">TC</span>
+</pre></div>
+</div>
+<p>Similarly, if your id refers to a protein record, you can get that by setting the <tt class="docutils literal"><span class="pre">rettype</span></tt> to &#8216;gp&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">genpept</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;1234567,459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;gp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You&#8217;ll probably notice that the lines look suspiciously like FASTA-format records. This is in fact true: the <tt class="docutils literal"><span class="pre">rettype</span></tt> parameter controls what type of record you get back. For example, if we do the same search with <tt class="docutils literal"><span class="pre">rettype='brief'</span></tt>, we get.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EFetch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;brief&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">line</span>
+<span class="gp">...</span>
+<span class="go">D28543 Hepatitis C virus... [gi:459567]</span>
+</pre></div>
+</div>
+<p>The current <tt class="docutils literal"><span class="pre">rettypes</span></tt> (as of this writing on 4/14/2010) for the &#8216;core&#8217; NCBI databases are native, fasta, gb, gp, gbwithparts, gbc, gpc, est, gss, seqid, acc, ft. Formerly, but not currently, &#8216;genbank&#8217; was a synonym for &#8216;gb&#8217; and &#8216;genpept&#8217; was a synonym for &#8216;gp&#8217;: however, these synonyms no longer work and need to be fixed if you encounter them in old code. For more information check NCBI&#8217;s <a class="reference external" href="http://www.ncbi.nlm.nih.gov/corehtml/query/static/efetchseq_help.html">format documentation</a>.</p>
+<p>Note that there are two separate concepts: rettype and retmode. rettype controls what kind of data you&#8217;ll get, and retmode controls how the data will be formatted.</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EFetch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;fasta&#39;</span><span class="p">,</span> <span class="n">retmode</span><span class="o">=</span><span class="s">&#39;text&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">line</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="go">&gt;gi|459567|dbj|D28543.1|HPCNS5PC Hepatit</span>
+<span class="go">GAGCACGACATCTACCAATGTTGCCAACTGAACCCAGAGG</span>
+<span class="go">GGCTTTACCTTGGTGGTCCCATGTTTAACTCGCGAGGTCA</span>
+<span class="go">CGGGGTTCTTCCAACCAGCATGGGCAATACCCTCACATGT</span>
+<span class="go">GCAGGCCTCACCAATTCTGACATGTTGGTTTGCGGAGATG</span>
+<span class="go">TC</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;fasta&#39;</span><span class="p">,</span> <span class="n">retmode</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">line</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="go">&gt;gi|459567|dbj|D28543.1|HPCNS5PC Hepatit</span>
+<span class="go">GAGCACGACATCTACCAATGTTGCCAACTGAACCCAGAGG</span>
+<span class="go">GGCTTTACCTTGGTGGTCCCATGTTTAACTCGCGAGGTCA</span>
+<span class="go">CGGGGTTCTTCCAACCAGCATGGGCAATACCCTCACATGT</span>
+<span class="go">GCAGGCCTCACCAATTCTGACATGTTGGTTTGCGGAGATG</span>
+<span class="go">TC</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;fasta&#39;</span><span class="p">,</span> <span class="n">retmode</span><span class="o">=</span><span class="s">&#39;xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">line</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="go">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="go"> &lt;!DOCTYPE TSeqSet PUBLIC &quot;-//NCBI//NCBI</span>
+<span class="go"> &lt;TSeqSet&gt;</span>
+<span class="go">&lt;TSeq&gt;</span>
+<span class="go">  &lt;TSeq_seqtype value=&quot;nucleotide&quot;/&gt;</span>
+<span class="go">  &lt;TSeq_gi&gt;459567&lt;/TSeq_gi&gt;</span>
+<span class="go">  &lt;TSeq_accver&gt;D28543.1&lt;/TSeq_accver&gt;</span>
+<span class="go">  &lt;TSeq_taxid&gt;11103&lt;/TSeq_taxid&gt;</span>
+<span class="go">  &lt;TSeq_orgname&gt;Hepatitis C virus&lt;/TSeq_</span>
+<span class="go">  &lt;TSeq_defline&gt;Hepatitis C virus gene f</span>
+<span class="go">  &lt;TSeq_length&gt;282&lt;/TSeq_length&gt;</span>
+<span class="go">  &lt;TSeq_sequence&gt;GAGCACGACATCTACCAATGTTG</span>
+<span class="go">&lt;/TSeq&gt;</span>
+
+<span class="go">&lt;/TSeqSet&gt;</span>
+</pre></div>
+</div>
+<p>You&#8217;ll notice that the second case is some funny-looking html. Thanks, NCBI! This is not our fault, please don&#8217;t file a bug report. To figure out whether something is actually surprising behavior at NCBI, you can always capture the command-line and run it in a web browser. You can do this by calling str() on the <tt class="docutils literal"><span class="pre">ef</span></tt>, or by printing it. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ef</span>
+<span class="go">http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?retmax=100&amp;retmod...</span>
+</pre></div>
+</div>
+<p>If you paste the resulting string into your web browser and you get the same incorrect result that you get using PyCogent, you know that you should direct your support requests NCBI&#8217;s way. If you want to use your own email address instead of leaving it as the default (the module developer), you can do that just by passing it in as a parameter. For example, in the unlikely event that I want NCBI to contact me instead of Mike if something goes wrong with my script, I can achieve that as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;fasta&#39;</span><span class="p">,</span> <span class="n">retmode</span><span class="o">=</span><span class="s">&#39;xml&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s">&#39;rob@spot.colorado.edu&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ef</span>
+<span class="go">http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?retmax=100&amp;retmod...</span>
+</pre></div>
+</div>
+<p>You can also select multiple ids (pass in as comma-delimited list):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">EFetch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&#39;459567,459568&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;brief&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">&#39;D28543 Hepatitis C virus... [gi:459567]\nBAA05896 NS5 protein [Hepa... [gi:459568]&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-genpept-files-from-ncbi-via-eutils">
+<h4>Retrieving GenPept files from NCBI via Eutils<a class="headerlink" href="#retrieving-genpept-files-from-ncbi-via-eutils" title="Permalink to this headline">¶</a></h4>
+<p>We query for just one accession to illustrate the process. A more general query can be executed by replacing <tt class="docutils literal"><span class="pre">'BAB52044</span></tt> with <tt class="docutils literal"><span class="pre">'&quot;lysyl</span> <span class="pre">tRNA-synthetase&quot;[ti]</span> <span class="pre">AND</span> <span class="pre">bacteria[orgn]'</span></tt> in the snippet below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">numseqs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">&#39;protein&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;gp&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s">&#39;BAB52044&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">LOCUS       BAB52044                 548 aa            linear   BCT 16-MAY-2009</span>
+<span class="go">DEFINITION  lysyl tRNA synthetase [Mesorhizobium loti MAFF303099].</span>
+<span class="go">ACCESSION   BAB52044</span>
+<span class="go">VERSION     BAB52044.1  GI:14025444</span>
+<span class="go">DBSOURCE    accession BA000012.4</span>
+<span class="go">KEYWORDS    .</span>
+<span class="go">SOURCE      Mesorhizobium loti MAFF303099...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-and-parsing-genbank-entries">
+<h4>Retrieving and parsing GenBank entries<a class="headerlink" href="#retrieving-and-parsing-genbank-entries" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.genbank</span> <span class="kn">import</span> <span class="n">RichGenbankParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">numseqs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">&#39;protein&#39;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&#39;gp&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s">&#39;&quot;lysyl tRNA-synthetase&quot;[ti] AND bacteria[orgn]&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">RichGenbankParser</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gb</span> <span class="o">=</span> <span class="p">[(</span><span class="n">accession</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span> <span class="k">for</span> <span class="n">accession</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">parser</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Printing the resulting list (<tt class="docutils literal"><span class="pre">gb</span></tt>) will generate output like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="s">&#39;AAA83071&#39;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">MSEQHAQ</span><span class="o">...</span> <span class="mi">505</span><span class="p">)),</span> <span class="p">(</span><span class="s">&#39;ACS40931&#39;</span><span class="p">,</span> <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parsing-in-more-detail-a-single-genbank-entry">
+<h4>Parsing in more detail:  a single GenBank entry<a class="headerlink" href="#parsing-in-more-detail-a-single-genbank-entry" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.genbank</span> <span class="kn">import</span> <span class="n">RichGenbankParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&quot;nucleotide&quot;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&quot;gb&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">record</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s">&#39;154102&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">RichGenbankParser</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">accession</span><span class="p">,</span> <span class="n">seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">parser</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">accession</span>
+<span class="go">&#39;STYHEMAPRF&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+<span class="go">&lt;class &#39;cogent.core.sequence.DnaSequence&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">gene_and_cds</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;CDS&#39;</span> <span class="ow">and</span> <span class="s">&#39;gene&#39;</span> <span class="ow">in</span> <span class="n">f</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cds_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">seq</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">features</span> <span class="k">if</span> <span class="n">gene_and_cds</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">cds_feature</span> <span class="ow">in</span> <span class="n">cds_features</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">cds_feature</span><span class="p">[</span><span class="s">&#39;gene&#39;</span><span class="p">],</span> <span class="n">cds_feature</span><span class="p">[</span><span class="s">&#39;location&#39;</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="go">[&#39;hemA&#39;] 732..1988</span>
+<span class="go">[&#39;prfA&#39;] 2029..3111</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-a-bacterial-genome-file">
+<h4>Retrieving a bacterial genome file<a class="headerlink" href="#retrieving-a-bacterial-genome-file" title="Permalink to this headline">¶</a></h4>
+<p>To obtain a full bacterial genome, run the following to get the complete <em>Salmonella typhimurium</em> genome sequence (Genbank) file. (For this documentation, we include a partial file for illustration purposes.)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&quot;nucleotide&quot;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&quot;gb&quot;</span><span class="p">)</span>
+<span class="n">outfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/ST.genome.gb&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s">&#39;AE006468&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For larger files, you might want to dump them directly into a file on your hard drive rather than reading them into memory first, e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span><span class="o">.</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;ST.genome.gb&#39;</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s">&#39;AE006468&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>dumps the result into the file directly, and returns you a handle to the open file where you can read the result, get the path, or do any of the other standard file operations. Now do the analysis:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.genbank</span> <span class="kn">import</span> <span class="n">RichGenbankParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">infile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/ST_genome_part.gb&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">RichGenbankParser</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">accession</span><span class="p">,</span> <span class="n">seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">parser</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gene_and_cds</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;CDS&#39;</span> <span class="ow">and</span> <span class="s">&#39;gene&#39;</span> <span class="ow">in</span> <span class="n">f</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gene_name</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;gene&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_cds</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">seq</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">features</span> <span class="k">if</span> <span class="n">gene_and_cds</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">cds</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_cds</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">gene_name</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">cds</span><span class="p">[</span><span class="s">&#39;gene&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">cds</span><span class="p">[</span><span class="s">&#39;protein_id&#39;</span><span class="p">],</span> <span class="n">cds</span><span class="p">[</span><span class="s">&#39;location&#39;</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="go">mog    [&#39;AAL18972.1&#39;] 8729..9319</span>
+<span class="go">talB   [&#39;AAL18971.1&#39;] 7665..8618</span>
+<span class="go">thrA   [&#39;AAL18966.1&#39;] 337..2799</span>
+<span class="go">thrB   [&#39;AAL18967.1&#39;] 2801..3730</span>
+<span class="go">thrC   [&#39;AAL18968.1&#39;] 3734..5020</span>
+<span class="go">thrL   [&#39;AAL18965.1&#39;] 190..255</span>
+<span class="go">yaaA   [&#39;AAL18969.1&#39;] complement(5114..5887)</span>
+<span class="go">yaaH   [&#39;AAL18973.1&#39;] complement(9376..9942)</span>
+<span class="go">yaaJ   [&#39;AAL18970.1&#39;] complement(5966..7396)</span>
+</pre></div>
+</div>
+<p>The EUtils modules are generic, so additional databases like OMIM can be accessed using similar mechanisms.</p>
+</div>
+<div class="section" id="retrieving-pubmed-abstracts-from-ncbi-via-eutils">
+<h4>Retrieving PubMed abstracts from NCBI via EUtils<a class="headerlink" href="#retrieving-pubmed-abstracts-from-ncbi-via-eutils" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span><span class="n">rettype</span><span class="o">=</span><span class="s">&#39;brief&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s">&#39;Simon Easteal AND Von Bing Yap&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span>
+
+<span class="go">1: Yap VB et al. Estimates of the effect of na...[PMID: 19815689]</span>
+
+<span class="go">2: Schranz HW et al. Pathological rate matrices: f...[PMID: 19099591]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-pubmed-abstracts-via-pmid">
+<h4>Retrieving PubMed abstracts via PMID<a class="headerlink" href="#retrieving-pubmed-abstracts-via-pmid" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;pubmed&#39;</span><span class="p">,</span><span class="n">rettype</span><span class="o">=</span><span class="s">&#39;abstract&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s">&#39;14983078&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="kegg">
+<h2>KEGG<a class="headerlink" href="#kegg" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="complete-genomes">
+<h3>Complete genomes<a class="headerlink" href="#complete-genomes" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="orthologs">
+<h3>Orthologs<a class="headerlink" href="#orthologs" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="functional-assignments">
+<h3>Functional assignments<a class="headerlink" href="#functional-assignments" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="pathway-assignments">
+<h3>Pathway assignments<a class="headerlink" href="#pathway-assignments" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+</div>
+<div class="section" id="ensembl">
+<h2>Ensembl<a class="headerlink" href="#ensembl" title="Permalink to this headline">¶</a></h2>
+<p>Note that much more extensive documentation is available in <a class="reference internal" href="../examples/query_ensembl.html#query-ensembl"><em>Querying Ensembl</em></a>.</p>
+<div class="section" id="connecting">
+<h3>Connecting<a class="headerlink" href="#connecting" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://www.ensembl.org">Ensembl</a> provides access to their MySQL databases directly or users can download and run those databases on a local machine. To use the Ensembl&#8217;s UK servers for running queries, nothing special needs to be done as this is the default setting for PyCogent&#8217;s <tt class="docutils literal"><span class="pre">ensembl</span></tt> module. To use a different Ensembl installation, you create an account instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">HostAccount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">HostAccount</span><span class="p">(</span><span class="s">&#39;fastcomputer.topuni.edu&#39;</span><span class="p">,</span> <span class="s">&#39;username&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                      <span class="s">&#39;canthackthis&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To specify a specific port to connect to MySQL on:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">HostAccount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">account</span> <span class="o">=</span> <span class="n">HostAccount</span><span class="p">(</span><span class="s">&#39;anensembl.server.edu&#39;</span><span class="p">,</span> <span class="s">&#39;someuser&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                      <span class="s">&#39;somepass&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">3306</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="species-to-be-queried">
+<h3>Species to be queried<a class="headerlink" href="#species-to-be-queried" title="Permalink to this headline">¶</a></h3>
+<p>To see what existing species are available</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Species</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Species</span>
+<span class="go">================================================================================</span>
+<span class="go">       Common Name                   Species Name              Ensembl Db Prefix</span>
+<span class="go">--------------------------------------------------------------------------------</span>
+<span class="go">         A.aegypti                  Aedes aegypti                  aedes_aegypti</span>
+<span class="go">        A.clavatus           Aspergillus clavatus           aspergillus_clavatus...</span>
+</pre></div>
+</div>
+<p>If Ensembl has added a new species which is not yet included in <tt class="docutils literal"><span class="pre">Species</span></tt>, you can add it yourself.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">amendSpecies</span><span class="p">(</span><span class="s">&#39;A latinname&#39;</span><span class="p">,</span> <span class="s">&#39;a common name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can get the common name for a species</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getCommonName</span><span class="p">(</span><span class="s">&#39;Procavia capensis&#39;</span><span class="p">)</span>
+<span class="go">&#39;Rock hyrax&#39;</span>
+</pre></div>
+</div>
+<p>and the Ensembl database name prefix which will be used for all databases for this species.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getEnsemblDbPrefix</span><span class="p">(</span><span class="s">&#39;Procavia capensis&#39;</span><span class="p">)</span>
+<span class="go">&#39;procavia_capensis&#39;</span>
+</pre></div>
+</div>
+<p>Species common names are used to construct attributes on PyCogent <tt class="docutils literal"><span class="pre">Compara</span></tt> instances). You can get the name that will be using the <tt class="docutils literal"><span class="pre">getComparaName</span></tt> method. For species with a real common name</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getComparaName</span><span class="p">(</span><span class="s">&#39;Procavia capensis&#39;</span><span class="p">)</span>
+<span class="go">&#39;RockHyrax&#39;</span>
+</pre></div>
+</div>
+<p>or with a shortened species name</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getComparaName</span><span class="p">(</span><span class="s">&#39;Caenorhabditis remanei&#39;</span><span class="p">)</span>
+<span class="go">&#39;Cremanei&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-genomic-features">
+<h3>Get genomic features<a class="headerlink" href="#get-genomic-features" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="find-a-gene-by-gene-symbol">
+<h4>Find a gene by gene symbol<a class="headerlink" href="#find-a-gene-by-gene-symbol" title="Permalink to this headline">¶</a></h4>
+<p>We query for the <em>BRCA2</em> gene for humans.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">human</span>
+<span class="go">Genome(Species=&#39;Homo sapiens&#39;; Release=&#39;67&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">Symbol</span><span class="o">=</span><span class="s">&#39;BRCA2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">gene</span><span class="o">.</span><span class="n">Symbol</span> <span class="o">==</span> <span class="s">&#39;BRCA2&#39;</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="n">gene</span>
+<span class="gp">... </span>        <span class="k">break</span>
+<span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;breast cancer 2,...&#39;; StableId=&#39;ENSG00000139618&#39;; Status=&#39;KNOWN&#39;; Symbol=&#39;BRCA2&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="find-a-gene-by-ensembl-stable-id">
+<h4>Find a gene by Ensembl Stable ID<a class="headerlink" href="#find-a-gene-by-ensembl-stable-id" title="Permalink to this headline">¶</a></h4>
+<p>We use the stable ID for <em>BRCA2</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">gene</span>
+<span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;breast cancer 2,...&#39;; StableId=&#39;ENSG00000139618&#39;; Status=&#39;KNOWN&#39;; Symbol=&#39;BRCA2&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="find-genes-matching-a-description">
+<h4>Find genes matching a description<a class="headerlink" href="#find-genes-matching-a-description" title="Permalink to this headline">¶</a></h4>
+<p>We look for breast cancer related genes that are estrogen induced.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">Description</span><span class="o">=</span><span class="s">&#39;breast cancer anti-estrogen&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">gene</span>
+<span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;lincRNA&#39;; Description=&#39;breast cancer anti-estrogen...&#39;; StableId=&#39;ENSG00000262117&#39;; Status=&#39;NOVEL&#39;; Symbol=&#39;BCAR4&#39;)...</span>
+</pre></div>
+</div>
+<p>We can also require that an exact (case insensitive) match to the word(s) occurs within the description by setting <tt class="docutils literal"><span class="pre">like=False</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">Description</span><span class="o">=</span><span class="s">&#39;breast cancer anti-estrogen&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                 <span class="n">like</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">gene</span>
+<span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;lincRNA&#39;; Description=&#39;breast cancer anti-estrogen...&#39;; StableId=&#39;ENSG00000262117&#39;; Status=&#39;NOVEL&#39;; Symbol=&#39;BCAR4&#39;)...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-canonical-transcript-for-a-gene">
+<h4>Get canonical transcript for a gene<a class="headerlink" href="#get-canonical-transcript-for-a-gene" title="Permalink to this headline">¶</a></h4>
+<p>We get the canonical transcripts for <em>BRCA2</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">transcript</span>
+<span class="go">Transcript(Species=&#39;Homo sapiens&#39;; CoordName=&#39;13&#39;; Start=32889610; End=32973347; length=83737; Strand=&#39;+&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-the-cds-for-a-transcript">
+<h4>Get the CDS for a transcript<a class="headerlink" href="#get-the-cds-for-a-transcript" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cds</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Cds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">cds</span><span class="p">)</span>
+<span class="go">&lt;class &#39;cogent.core.sequence.DnaSequence&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cds</span>
+<span class="go">ATGCCTATTGGATCCAAAGAGAGGCCA...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="look-at-all-transcripts-for-a-gene">
+<h4>Look at all transcripts for a gene<a class="headerlink" href="#look-at-all-transcripts-for-a-gene" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Transcripts</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">transcript</span>
+<span class="go">Transcript(Species=&#39;Homo sapiens&#39;; CoordName=&#39;13&#39;; Start=32889610; End=32973347; length=83737; Strand=&#39;+&#39;)</span>
+<span class="go">Transcript(Species=&#39;Homo sapiens&#39;; CoordName=&#39;13&#39;; Start=32889641; End=32907428; length=17787; Strand=&#39;+&#39;)...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-the-first-exon-for-a-transcript">
+<h4>Get the first exon for a transcript<a class="headerlink" href="#get-the-first-exon-for-a-transcript" title="Permalink to this headline">¶</a></h4>
+<p>We show just for the canonical transcript.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Exons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">Exon(StableId=ENSE00001184784, Rank=1)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-the-introns-for-a-transcript">
+<h4>Get the introns for a transcript<a class="headerlink" href="#get-the-introns-for-a-transcript" title="Permalink to this headline">¶</a></h4>
+<p>We show just for the canonical transcript.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">intron</span> <span class="ow">in</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Introns</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">intron</span>
+<span class="go">Intron(TranscriptId=ENST00000380152, Rank=1)</span>
+<span class="go">Intron(TranscriptId=ENST00000380152, Rank=2)</span>
+<span class="go">Intron(TranscriptId=ENST00000380152, Rank=3)...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="inspect-the-genomic-coordinate-for-a-feature">
+<h4>Inspect the genomic coordinate for a feature<a class="headerlink" href="#inspect-the-genomic-coordinate-for-a-feature" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">CoordName</span>
+<span class="go">13</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">Start</span>
+<span class="go">32889610</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">Strand</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-repeat-elements-in-a-genomic-interval">
+<h4>Get repeat elements in a genomic interval<a class="headerlink" href="#get-repeat-elements-in-a-genomic-interval" title="Permalink to this headline">¶</a></h4>
+<p>We query the genome for repeats within a specific coordinate range on chromosome 13.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repeats</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">CoordName</span><span class="o">=</span><span class="s">&#39;13&#39;</span><span class="p">,</span> <span class="n">Start</span><span class="o">=</span><span class="mi">32879610</span><span class="p">,</span> <span class="n">End</span><span class="o">=</span><span class="mi">32889610</span><span class="p">,</span> <span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;repeat&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">repeat</span> <span class="ow">in</span> <span class="n">repeats</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">repeat</span><span class="o">.</span><span class="n">RepeatClass</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">repeat</span>
+<span class="gp">... </span>    <span class="k">break</span>
+<span class="go">SINE/Alu</span>
+<span class="go">Repeat(CoordName=&#39;13&#39;; Start=32879362; End=32879662; length=300; Strand=&#39;-&#39;, Score=2479.0)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-cpg-island-elements-in-a-genomic-interval">
+<h4>Get CpG island elements in a genomic interval<a class="headerlink" href="#get-cpg-island-elements-in-a-genomic-interval" title="Permalink to this headline">¶</a></h4>
+<p>We query the genome for CpG islands within a specific coordinate range on chromosome 11.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islands</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">CoordName</span><span class="o">=</span><span class="s">&#39;11&#39;</span><span class="p">,</span> <span class="n">Start</span><span class="o">=</span><span class="mi">2150341</span><span class="p">,</span> <span class="n">End</span><span class="o">=</span><span class="mi">2170833</span><span class="p">,</span> <span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;cpg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">island</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">island</span>
+<span class="gp">... </span>    <span class="k">break</span>
+<span class="go">CpGisland(CoordName=&#39;11&#39;; Start=2158951; End=2162484; length=3533; Strand=&#39;-&#39;, Score=3254.0)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="get-snps">
+<h3>Get SNPs<a class="headerlink" href="#get-snps" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="for-a-gene">
+<h4>For a gene<a class="headerlink" href="#for-a-gene" title="Permalink to this headline">¶</a></h4>
+<p>We find the genetic variants for the canonical transcript of <em>BRCA2</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The output is significantly truncated!</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Variants</span>
+<span class="go">(&lt;cogent.db.ensembl.region.Variation object at ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Variants</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">variant</span>
+<span class="gp">... </span>    <span class="k">break</span>
+<span class="go">Variation(Symbol=&#39;rs55880202&#39;; Effect=[&#39;2KB_upstream_variant&#39;, &#39;5_prime_UTR_variant&#39;, &#39;5KB_upstream_variant&#39;]; Alleles=&#39;C/T&#39;)...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-a-single-snp">
+<h4>Get a single SNP<a class="headerlink" href="#get-a-single-snp" title="Permalink to this headline">¶</a></h4>
+<p>We get a single SNP and print it&#8217;s allele frequencies.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">snp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">human</span><span class="o">.</span><span class="n">getVariation</span><span class="p">(</span><span class="n">Symbol</span><span class="o">=</span><span class="s">&#39;rs34213141&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">snp</span><span class="o">.</span><span class="n">AlleleFreqs</span>
+<span class="go">=============================</span>
+<span class="go">allele      freq    sample_id</span>
+<span class="go">-----------------------------</span>
+<span class="go">     A    0.0303          933</span>
+<span class="go">     G    0.9697          933</span>
+<span class="go">     G    1.0000        11208</span>
+<span class="go">     G    1.0000        11519</span>
+<span class="go">     A    0.0110       113559</span>
+<span class="go">     G    0.9889       113559...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="what-alignment-types-available">
+<h3>What alignment types available<a class="headerlink" href="#what-alignment-types-available" title="Permalink to this headline">¶</a></h3>
+<p>We create a <tt class="docutils literal"><span class="pre">Compara</span></tt> instance for human, chimpanzee and macaque.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Compara</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="s">&#39;chimp&#39;</span><span class="p">,</span> <span class="s">&#39;macaque&#39;</span><span class="p">],</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compara</span><span class="o">.</span><span class="n">method_species_links</span>
+<span class="go">Align Methods/Clades</span>
+<span class="go">===================================================================================================================</span>
+<span class="go">method_link_species_set_id  method_link_id  species_set_id      align_method                            align_clade</span>
+<span class="go">-------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">                       580              10           34468             PECAN           19 amniota vertebrates Pecan</span>
+<span class="go">                       548              13           34115               EPO                         6 primates EPO</span>
+<span class="go">                       578              13           34466               EPO               12 eutherian mammals EPO</span>
+<span class="go">                       582              14           34697  EPO_LOW_COVERAGE  35 eutherian mammals EPO_LOW_COVERAGE</span>
+<span class="go">-------------------------------------------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-genomic-alignment-for-a-gene-region">
+<h3>Get genomic alignment for a gene region<a class="headerlink" href="#get-genomic-alignment-for-a-gene-region" title="Permalink to this headline">¶</a></h3>
+<p>We first get the syntenic region corresponding to human gene <em>BRCA2</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Compara</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="s">&#39;chimp&#39;</span><span class="p">,</span> <span class="s">&#39;macaque&#39;</span><span class="p">],</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human_brca2</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">Human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regions</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getSyntenicRegions</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">human_brca2</span><span class="p">,</span> <span class="n">align_method</span><span class="o">=</span><span class="s">&#39;EPO&#39;</span><span class="p">,</span> <span class="n">align_clade</span><span class="o">=</span><span class="s">&#39;primates&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">region</span>
+<span class="go">SyntenicRegions:</span>
+<span class="go">  Coordinate(Human,chro...,13,32889610-32973805,1)</span>
+<span class="go">  Coordinate(Macaque,chro...,17,11686607-11778803,1)</span>
+<span class="go">  Coordinate(Chimp,chro...,13,31957346-32040817,1)...</span>
+</pre></div>
+</div>
+<p>We then get a cogent <tt class="docutils literal"><span class="pre">Alignment</span></tt> object, requesting that sequences be annotated for gene spans.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">getAlignment</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;gene&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="go">3 x 98805 dna alignment: Homo sapiens:chromosome:13:3288...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parsing-syntenic-regions">
+<h3>Parsing syntenic regions<a class="headerlink" href="#parsing-syntenic-regions" title="Permalink to this headline">¶</a></h3>
+<p>Not all regions in a given genome have a syntenic alignment, and some have more than one alignment.
+To illustrate these cases, we can consider an alignment between mouse and human, using the <tt class="docutils literal"><span class="pre">PECAN</span></tt>
+alignment method in the vertebrates clade:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;mouse&quot;</span><span class="p">,</span> <span class="s">&quot;human&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clade</span> <span class="o">=</span> <span class="s">&quot;vertebrates&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chrom</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">strand</span> <span class="o">=</span> <span class="s">&quot;X&quot;</span><span class="p">,</span> <span class="mi">165754928</span><span class="p">,</span> <span class="mi">165755079</span><span class="p">,</span> <span class="s">&quot;-&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regions</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getSyntenicRegions</span><span class="p">(</span><span class="n">Species</span><span class="o">=</span><span class="s">&quot;mouse&quot;</span><span class="p">,</span> <span class="n">CoordName</span><span class="o">=</span><span class="n">chrom</span><span class="p">,</span>
+<span class="gp">... </span>                                     <span class="n">Start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">End</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">align_method</span><span class="o">=</span><span class="s">&quot;PECAN&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                                     <span class="n">align_clade</span><span class="o">=</span><span class="n">clade</span><span class="p">,</span> <span class="n">Strand</span><span class="o">=</span><span class="n">strand</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_pairs</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alignment</span> <span class="o">=</span> <span class="n">aligned_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_regions</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">alignment</span><span class="o">.</span><span class="n">Members</span>
+<span class="gp">... </span>                   <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">Region</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_region</span><span class="p">,</span> <span class="n">target_region</span> <span class="o">=</span> <span class="n">aligned_regions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">source_region</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">CoordName</span><span class="p">,</span> <span class="n">source_region</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">Start</span><span class="p">,</span> <span class="n">source_region</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">End</span>
+<span class="go">X 165754928 165755079</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">target_region</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">CoordName</span><span class="p">,</span> <span class="n">target_region</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">Start</span><span class="p">,</span> <span class="n">target_region</span><span class="o">.</span><span class="n">Location</span><span class="o">.</span><span class="n">End</span>
+<span class="go">X 11132954 11133105</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We took the aligned regions from the <tt class="docutils literal"><span class="pre">regions</span></tt> generator and put them in a list for convenience.</p>
+</div>
+<p>If there are no regions returned (i.e. <tt class="docutils literal"><span class="pre">num_pairs</span></tt> is zero), then no alignment could be found. In the case of
+the above region, an exon in the <em>Hccs</em> gene, there is only one alignment. We then accessed the coordinates of the
+alignment using the <tt class="docutils literal"><span class="pre">Members</span></tt> attribute of the region. Each element of <tt class="docutils literal"><span class="pre">aligned_regions</span></tt> is a <tt class="docutils literal"><span class="pre">SyntenicRegion</span></tt>
+instance, whose coordinates can be pulled from the <tt class="docutils literal"><span class="pre">Location</span></tt> attribute.</p>
+<p>This example shows that mouse region <tt class="docutils literal"><span class="pre">X:165754928-165755079</span></tt> aligns only to human region <tt class="docutils literal"><span class="pre">X:11132954-11133105</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Sometimes, the genomic coordinates given to <tt class="docutils literal"><span class="pre">getSyntenicRegions</span></tt> will contain multiple alignments between the pair of genomes, in which case two or more regions will be returned in <tt class="docutils literal"><span class="pre">aligned_pairs</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="getting-related-genes">
+<h3>Getting related genes<a class="headerlink" href="#getting-related-genes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="what-gene-relationships-are-available">
+<h4>What gene relationships are available<a class="headerlink" href="#what-gene-relationships-are-available" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Compara</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="s">&#39;chimp&#39;</span><span class="p">,</span> <span class="s">&#39;macaque&#39;</span><span class="p">],</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compara</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s">&#39;relationship&#39;</span><span class="p">)</span>
+<span class="go">[u&#39;ortholog_one2many&#39;, u&#39;contiguous_gene_split&#39;, u&#39;ortholog_one2one&#39;,...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-one-to-one-orthologs">
+<h4>Get one-to-one orthologs<a class="headerlink" href="#get-one-to-one-orthologs" title="Permalink to this headline">¶</a></h4>
+<p>We get the one-to-one orthologs for <em>BRCA2</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Compara</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="s">&#39;chimp&#39;</span><span class="p">,</span> <span class="s">&#39;macaque&#39;</span><span class="p">],</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">orthologs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="n">Relationship</span><span class="o">=</span><span class="s">&#39;ortholog_one2one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span>
+<span class="go">RelatedGenes:</span>
+<span class="go"> Relationships=ortholog_one2one</span>
+<span class="go">  Gene(Species=&#39;Macaca mulatta&#39;; BioType=&#39;protein_coding&#39;; Description=...</span>
+</pre></div>
+</div>
+<p>We iterate over the related members.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ortholog</span> <span class="ow">in</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">Members</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">ortholog</span>
+<span class="go">Gene(Species=&#39;Macaca mulatta&#39;; BioType=&#39;protein_coding&#39;; Description=...</span>
+</pre></div>
+</div>
+<p>We get statistics on the ortholog CDS lengths.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getMaxCdsLengths</span><span class="p">()</span>
+<span class="go">[10008, 10257, 10257]</span>
+</pre></div>
+</div>
+<p>We get the sequences as a sequence collection, with annotations for gene.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getSeqCollection</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;gene&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-cds-for-all-one-to-one-orthologs">
+<h4>Get CDS for all one-to-one orthologs<a class="headerlink" href="#get-cds-for-all-one-to-one-orthologs" title="Permalink to this headline">¶</a></h4>
+<p>We sample all one-to-one orthologs for a group of species, generating a FASTA formatted string that can be written to file. We check all species have an ortholog and that all are translatable.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alphabet</span> <span class="kn">import</span> <span class="n">AlphabetError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">common_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;mouse&quot;</span><span class="p">,</span> <span class="s">&quot;rat&quot;</span><span class="p">,</span> <span class="s">&quot;human&quot;</span><span class="p">,</span> <span class="s">&quot;opossum&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">latin_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">Species</span><span class="o">.</span><span class="n">getSpeciesName</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">common_names</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">latin_to_common</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">latin_names</span><span class="p">,</span> <span class="n">common_names</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">(</span><span class="n">common_names</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="mi">67</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">compara</span><span class="o">.</span><span class="n">Human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">BioType</span><span class="o">=</span><span class="s">&#39;protein_coding&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">orthologs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span>
+<span class="gp">... </span>                                 <span class="n">Relationship</span><span class="o">=</span><span class="s">&#39;ortholog_one2one&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="c"># make sure all species represented</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">orthologs</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getSpeciesSet</span><span class="p">()</span> <span class="o">!=</span> <span class="n">latin_names</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">continue</span>
+<span class="gp">... </span>    <span class="n">seqs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">Members</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">try</span><span class="p">:</span> <span class="c"># if sequence can&#39;t be translated, we ignore it</span>
+<span class="gp">... </span>            <span class="c"># get the CDS without the ending stop</span>
+<span class="gp">... </span>            <span class="n">seq</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Cds</span><span class="o">.</span><span class="n">withoutTerminalStopCodon</span><span class="p">()</span>
+<span class="gp">... </span>            <span class="c"># make the sequence name</span>
+<span class="gp">... </span>            <span class="n">seq</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+<span class="gp">... </span>        <span class="p">(</span><span class="n">latin_to_common</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">genome</span><span class="o">.</span><span class="n">Species</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">StableId</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Location</span><span class="p">)</span>
+<span class="gp">... </span>            <span class="n">aa</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">()</span>
+<span class="gp">... </span>            <span class="n">seqs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">seq</span><span class="p">]</span>
+<span class="gp">... </span>        <span class="k">except</span> <span class="p">(</span><span class="n">AlphabetError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="n">seqs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c"># exclude this gene</span>
+<span class="gp">... </span>            <span class="k">break</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">common_names</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">fasta</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">toFasta</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">seqs</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">break</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-within-species-paralogs">
+<h4>Get within species paralogs<a class="headerlink" href="#get-within-species-paralogs" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">paralogs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000164032&#39;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">Relationship</span><span class="o">=</span><span class="s">&#39;within_species_paralog&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">paralogs</span>
+<span class="go">RelatedGenes:</span>
+<span class="go"> Relationships=within_species_paralog</span>
+<span class="go">  Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;H2A histone...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="pdb">
+<h2>PDB<a class="headerlink" href="#pdb" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="for-structures">
+<h3>For structures<a class="headerlink" href="#for-structures" title="Permalink to this headline">¶</a></h3>
+<p>The PDB module is very simple and basically gets a pdb coordinates file by accession number. Searches, etc. are not currently implemented because it&#8217;s easier to get the pdb ids from NCBI than to scrape PDB&#8217;s html results format.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.pdb</span> <span class="kn">import</span> <span class="n">Pdb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Pdb</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;3L0U&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>returns a handle to a file containing the PDB coordinates (that you can, for example, pass to the PDB parser in a fashion analogous to how you pass the GenBank record above to the RichGenbankParser). See the pdb parser documentation for more info. To send results directly to a file, you can use the retrieve() method of the Pdb object.</p>
+</div>
+</div>
+<div class="section" id="rfam">
+<h2>Rfam<a class="headerlink" href="#rfam" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="for-rna-secondary-structures-alignments-functions">
+<h3>For RNA secondary structures, alignments, functions<a class="headerlink" href="#for-rna-secondary-structures-alignments-functions" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+</div>
+<div class="section" id="goldenpath-not-yet-implemented">
+<h2>GoldenPath (not yet implemented)<a class="headerlink" href="#goldenpath-not-yet-implemented" title="Permalink to this headline">¶</a></h2>
+<p><em>To be written.</em></p>
+<div class="section" id="whole-genome-alignments-orthologs-annotation-tracks">
+<h3>Whole-genome alignments, orthologs, annotation tracks<a class="headerlink" href="#whole-genome-alignments-orthologs-annotation-tracks" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Accessing databases</a><ul>
+<li><a class="reference internal" href="#ncbi">NCBI</a><ul>
+<li><a class="reference internal" href="#from-pubmed">From Pubmed</a><ul>
+<li><a class="reference internal" href="#retrieving-pubmed-records-from-ncbi-by-pubmed-id">Retrieving PubMed records from NCBI by PubMed ID</a></li>
+<li><a class="reference internal" href="#searching-for-records-using-eutils">Searching for records using EUtils</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#for-sequences">For sequences</a><ul>
+<li><a class="reference internal" href="#fetching-fasta-or-genpept-sequences-from-ncbi-using-efetch-with-gi-s">Fetching FASTA or Genpept sequences from NCBI using EFetch with GI&#8217;s</a></li>
+<li><a class="reference internal" href="#retrieving-genpept-files-from-ncbi-via-eutils">Retrieving GenPept files from NCBI via Eutils</a></li>
+<li><a class="reference internal" href="#retrieving-and-parsing-genbank-entries">Retrieving and parsing GenBank entries</a></li>
+<li><a class="reference internal" href="#parsing-in-more-detail-a-single-genbank-entry">Parsing in more detail:  a single GenBank entry</a></li>
+<li><a class="reference internal" href="#retrieving-a-bacterial-genome-file">Retrieving a bacterial genome file</a></li>
+<li><a class="reference internal" href="#retrieving-pubmed-abstracts-from-ncbi-via-eutils">Retrieving PubMed abstracts from NCBI via EUtils</a></li>
+<li><a class="reference internal" href="#retrieving-pubmed-abstracts-via-pmid">Retrieving PubMed abstracts via PMID</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#kegg">KEGG</a><ul>
+<li><a class="reference internal" href="#complete-genomes">Complete genomes</a></li>
+<li><a class="reference internal" href="#orthologs">Orthologs</a></li>
+<li><a class="reference internal" href="#functional-assignments">Functional assignments</a></li>
+<li><a class="reference internal" href="#pathway-assignments">Pathway assignments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ensembl">Ensembl</a><ul>
+<li><a class="reference internal" href="#connecting">Connecting</a></li>
+<li><a class="reference internal" href="#species-to-be-queried">Species to be queried</a></li>
+<li><a class="reference internal" href="#get-genomic-features">Get genomic features</a><ul>
+<li><a class="reference internal" href="#find-a-gene-by-gene-symbol">Find a gene by gene symbol</a></li>
+<li><a class="reference internal" href="#find-a-gene-by-ensembl-stable-id">Find a gene by Ensembl Stable ID</a></li>
+<li><a class="reference internal" href="#find-genes-matching-a-description">Find genes matching a description</a></li>
+<li><a class="reference internal" href="#get-canonical-transcript-for-a-gene">Get canonical transcript for a gene</a></li>
+<li><a class="reference internal" href="#get-the-cds-for-a-transcript">Get the CDS for a transcript</a></li>
+<li><a class="reference internal" href="#look-at-all-transcripts-for-a-gene">Look at all transcripts for a gene</a></li>
+<li><a class="reference internal" href="#get-the-first-exon-for-a-transcript">Get the first exon for a transcript</a></li>
+<li><a class="reference internal" href="#get-the-introns-for-a-transcript">Get the introns for a transcript</a></li>
+<li><a class="reference internal" href="#inspect-the-genomic-coordinate-for-a-feature">Inspect the genomic coordinate for a feature</a></li>
+<li><a class="reference internal" href="#get-repeat-elements-in-a-genomic-interval">Get repeat elements in a genomic interval</a></li>
+<li><a class="reference internal" href="#get-cpg-island-elements-in-a-genomic-interval">Get CpG island elements in a genomic interval</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#get-snps">Get SNPs</a><ul>
+<li><a class="reference internal" href="#for-a-gene">For a gene</a></li>
+<li><a class="reference internal" href="#get-a-single-snp">Get a single SNP</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#what-alignment-types-available">What alignment types available</a></li>
+<li><a class="reference internal" href="#get-genomic-alignment-for-a-gene-region">Get genomic alignment for a gene region</a></li>
+<li><a class="reference internal" href="#parsing-syntenic-regions">Parsing syntenic regions</a></li>
+<li><a class="reference internal" href="#getting-related-genes">Getting related genes</a><ul>
+<li><a class="reference internal" href="#what-gene-relationships-are-available">What gene relationships are available</a></li>
+<li><a class="reference internal" href="#get-one-to-one-orthologs">Get one-to-one orthologs</a></li>
+<li><a class="reference internal" href="#get-cds-for-all-one-to-one-orthologs">Get CDS for all one-to-one orthologs</a></li>
+<li><a class="reference internal" href="#get-within-species-paralogs">Get within species paralogs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pdb">PDB</a><ul>
+<li><a class="reference internal" href="#for-structures">For structures</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rfam">Rfam</a><ul>
+<li><a class="reference internal" href="#for-rna-secondary-structures-alignments-functions">For RNA secondary structures, alignments, functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#goldenpath-not-yet-implemented">GoldenPath (not yet implemented)</a><ul>
+<li><a class="reference internal" href="#whole-genome-alignments-orthologs-annotation-tracks">Whole-genome alignments, orthologs, annotation tracks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structural_contacts.html"
+                        title="previous chapter">Intramolecular contacts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analysis_of_sequence_composition.html"
+                        title="next chapter">Analysis of sequence composition</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/accessing_databases.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="analysis_of_sequence_composition.html" title="Analysis of sequence composition"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structural_contacts.html" title="Intramolecular contacts"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

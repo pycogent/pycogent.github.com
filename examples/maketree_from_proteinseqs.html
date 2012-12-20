@@ -1,0 +1,172 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Making a phylogenetic tree from a protein sequence alignment &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="PyCogent Cookbook" href="../cookbook/index.html" />
+    <link rel="prev" title="Phylogenetic reconstruction by least squares" href="phylo_by_ls.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../cookbook/index.html" title="PyCogent Cookbook"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="phylo_by_ls.html" title="Phylogenetic reconstruction by least squares"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="making-a-phylogenetic-tree-from-a-protein-sequence-alignment">
+<h1>Making a phylogenetic tree from a protein sequence alignment<a class="headerlink" href="#making-a-phylogenetic-tree-from-a-protein-sequence-alignment" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>In this example we pull together the distance calculation and tree building with the additional twist of using an empirical protein substitution matrix. We will therefore be computing the tree from a protein sequence alignment. We will first do the standard cogent import for <tt class="docutils literal"><span class="pre">LoadSeqs</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span>
+</pre></div>
+</div>
+<p>We will use an empirical protein substitution matrix.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">JTT92</span>
+</pre></div>
+</div>
+<p>The next components we need are for computing the matrix of pairwise sequence distances and then for estimating a neighbour joining tree from those distances.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.phylo</span> <span class="kn">import</span> <span class="n">nj</span><span class="p">,</span> <span class="n">distance</span>
+</pre></div>
+</div>
+<p>Now load our sequence alignment, explicitly setting the alphabet to be protein.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/abglobin_aa.phylip&#39;</span><span class="p">,</span> <span class="n">interleaved</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create an Empirical Protein Matrix Substitution model object. This will take the unscaled empirical matrix and use it and the motif frequencies to create a scaled Q matrix.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">JTT92</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We now use this and the alignment to construct a distance calculator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">EstimateDistances</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">submodel</span> <span class="o">=</span> <span class="n">sm</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The resulting distances are passed to the nj function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mytree</span> <span class="o">=</span> <span class="n">nj</span><span class="o">.</span><span class="n">nj</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">getPairwiseDistances</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The shape of the resulting tree can be readily view by printing <tt class="docutils literal"><span class="pre">mytree.asciiArt()</span></tt>. The result will be equivalent to.</p>
+<div class="highlight-python"><div class="highlight"><pre>          <span class="o">/-</span><span class="n">human</span>
+         <span class="o">|</span>
+         <span class="o">|</span>          <span class="o">/-</span><span class="n">rabbit</span>
+<span class="o">-</span><span class="n">root</span><span class="o">----|-</span><span class="n">edge</span><span class="o">.</span><span class="mi">1</span><span class="o">--|</span>
+         <span class="o">|</span>          \<span class="o">-</span><span class="n">rat</span>
+         <span class="o">|</span>
+         <span class="o">|</span>          <span class="o">/-</span><span class="n">goat</span><span class="o">-</span><span class="n">cow</span>
+          \<span class="n">edge</span><span class="o">.</span><span class="mi">0</span><span class="o">--|</span>
+                    \<span class="o">-</span><span class="n">marsupial</span>
+</pre></div>
+</div>
+<p>This tree can be saved to file, the <tt class="docutils literal"><span class="pre">with_distances</span></tt> argument specifies that branch lengths are to be included in the newick formatted output.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mytree</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s">&#39;test_nj.tree&#39;</span><span class="p">,</span> <span class="n">with_distances</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="phylo_by_ls.html"
+                        title="previous chapter">Phylogenetic reconstruction by least squares</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../cookbook/index.html"
+                        title="next chapter">PyCogent Cookbook</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/maketree_from_proteinseqs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../cookbook/index.html" title="PyCogent Cookbook"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="phylo_by_ls.html" title="Phylogenetic reconstruction by least squares"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

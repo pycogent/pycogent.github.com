@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using phylogeny application controllers to construct phylogenetic trees from alignments &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Generating application commandlines" href="generating_app_commandlines.html" />
+    <link rel="prev" title="Using alignment application controllers to align unaligned sequences" href="alignment_app_controllers.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generating_app_commandlines.html" title="Generating application commandlines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="alignment_app_controllers.html" title="Using alignment application controllers to align unaligned sequences"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-phylogeny-application-controllers-to-construct-phylogenetic-trees-from-alignments">
+<span id="appcontroller-phylogeny"></span><h1>Using phylogeny application controllers to construct phylogenetic trees from alignments<a class="headerlink" href="#using-phylogeny-application-controllers-to-construct-phylogenetic-trees-from-alignments" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Daniel McDonald</em></p>
+<p>This document provides a few use case examples of how to use the phylogeny application controllers available in PyCogent. Each phylogeny application controller provides the support method <tt class="docutils literal"><span class="pre">build_tree_from_alignment</span></tt>. This method takes as input an <tt class="docutils literal"><span class="pre">Alignment</span></tt> object, a <tt class="docutils literal"><span class="pre">SequenceColleciton</span></tt> object or a dict mapping sequence IDs to sequences. The <tt class="docutils literal"><span class="pre">MolType</span></tt> must also be specified. Optionally, you can indicate if you would like the &#8220;best_tree$&#8221;, as well as any additional application parameters. These methods return a <tt class="docutils literal"><span class="pre">PhyloNode</span></tt> object.</p>
+<p>To start, lets import all of our <tt class="docutils literal"><span class="pre">build_tree_from_alignment</span></tt> methods and our <tt class="docutils literal"><span class="pre">MolType</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.moltype</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.clearcut</span> <span class="kn">import</span> <span class="n">build_tree_from_alignment</span> <span class="k">as</span> <span class="n">clearcut_build_tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.clustalw</span> <span class="kn">import</span> <span class="n">build_tree_from_alignment</span> <span class="k">as</span> <span class="n">clustalw_build_tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.fasttree</span> <span class="kn">import</span> <span class="n">build_tree_from_alignment</span> <span class="k">as</span> <span class="n">fasttree_build_tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.muscle</span> <span class="kn">import</span> <span class="n">build_tree_from_alignment</span> <span class="k">as</span> <span class="n">muscle_build_tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.raxml</span> <span class="kn">import</span> <span class="n">build_tree_from_alignment</span> <span class="k">as</span> <span class="n">raxml_build_tree</span>
+</pre></div>
+</div>
+<p>Next, we&#8217;ll load up a test set of sequences and construct an <tt class="docutils literal"><span class="pre">Alignment</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.muscle</span> <span class="kn">import</span> <span class="n">align_unaligned_seqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unaligned</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;data/test2.fasta&#39;</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">align_unaligned_seqs</span><span class="p">(</span><span class="n">unaligned</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, let&#8217;s construct some trees with default parameters!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We are explicitly seeding Clearcut and RAxML to ensure reproducible results, and FastTree&#8217;s output depends slightly on which version of FastTree is installed</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">clearcut_tree</span> <span class="o">=</span> <span class="n">clearcut_build_tree</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;-s&#39;</span><span class="p">:</span><span class="mi">42</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_tree</span> <span class="o">=</span> <span class="n">clustalw_build_tree</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fasttree_tree</span> <span class="o">=</span> <span class="n">fasttree_build_tree</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">muscle_tree</span> <span class="o">=</span> <span class="n">muscle_build_tree</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raxml_tree</span> <span class="o">=</span> <span class="n">raxml_build_tree</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;-p&#39;</span><span class="p">:</span><span class="mi">42</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clearcut_tree</span>
+<span class="go">Tree(&quot;(Mouse,(((HowlerMon,Human),DogFaced),NineBande));&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_tree</span>
+<span class="go">Tree(&quot;((DogFaced,(HowlerMon,Human)),Mouse,NineBande);&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">muscle_tree</span>
+<span class="go">Tree(&quot;(Mouse,(DogFaced,(Human,(HowlerMon,NineBande))));&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raxml_tree</span>
+<span class="go">Tree(&quot;((HowlerMon,Human),(DogFaced,Mouse),NineBande);&quot;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fasttree_tree</span>
+<span class="go">Tree(&quot;(Mouse,NineBande,(DogFaced,(HowlerMon,Human)0.752)0.508);&quot;)</span>
+</pre></div>
+</div>
+<p>These methods allow the programmer to specify any of the applications parameters. Let&#8217;s look at an example where we tell Clearcut to use traditional neighbor-joining, shuffle the distance matrix, use Kimura distance correction and explicitly seed the random number generator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">clearcut_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;-N&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span><span class="s">&#39;-k&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span><span class="s">&#39;-S&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span><span class="s">&#39;-s&#39;</span><span class="p">:</span><span class="mi">42</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clearcut_tree</span> <span class="o">=</span> <span class="n">clearcut_build_tree</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">clearcut_params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clearcut_tree</span>
+<span class="go">Tree(&quot;(((HowlerMon,Human),(NineBande,Mouse)),DogFaced);&quot;)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="alignment_app_controllers.html"
+                        title="previous chapter">Using alignment application controllers to align unaligned sequences</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generating_app_commandlines.html"
+                        title="next chapter">Generating application commandlines</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/phylogeny_app_controllers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generating_app_commandlines.html" title="Generating application commandlines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="alignment_app_controllers.html" title="Using alignment application controllers to align unaligned sequences"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

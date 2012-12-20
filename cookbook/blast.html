@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Controlling BLAST &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Building alignments" href="building_alignments.html" />
+    <link rel="prev" title="Controlling third party applications" href="controlling_third_party_applications.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="building_alignments.html" title="Building alignments"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="controlling_third_party_applications.html" title="Controlling third party applications"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="controlling-blast">
+<span id="blast-usage"></span><h1>Controlling BLAST<a class="headerlink" href="#controlling-blast" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="preliminaries">
+<h2>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h2>
+<p>In order to run BLAST locally (from a program running on your computer) you will need to do three things:</p>
+<ul class="simple">
+<li>Download the BLAST &#8220;executables&#8221; from NCBI</li>
+<li>Make sure these programs are available on your <tt class="docutils literal"><span class="pre">PATH</span></tt></li>
+<li>Construct and format a database to search against</li>
+<li>Tested on version 2.2.13</li>
+</ul>
+<p>NCBI has recently changed the BLAST programs, and as yet PyCogent does not support the new versions. The &#8220;legacy&#8221; versions are available from <a class="reference external" href="http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&amp;PAGE_TYPE=BlastDocs&amp;DOC_TYPE=Download">here</a> (login as guest).</p>
+<p>Detailed installation instructions are beyond the scope of this example, but are available at <a class="reference external" href="http://www.ncbi.nlm.nih.gov/staff/tao/URLAPI/unix_setup.html">NCBI&#8217;s website</a> .
+After downloading the programs and setting up your <tt class="docutils literal"><span class="pre">PATH</span></tt>, you should test BLAST by doing this from the command line:</p>
+<div class="highlight-python"><pre>$ blastall --help</pre>
+</div>
+<p>Which should give this:</p>
+<div class="highlight-python"><pre>blastall 2.2.22   arguments:
+
+  -p  Program Name [String]
+  -d  Database [String]
+    default = nr...</pre>
+</div>
+<p>The file <tt class="docutils literal"><span class="pre">refseqs.fasta</span></tt> contains some short sequences for use in the following examples.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/refseqs.fasta&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span><span class="o">.</span><span class="n">Seqs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">seq</span>
+<span class="gp">...</span>
+<span class="go">CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC</span>
+<span class="go">TGCAGCTTGAGCCACAGGAGAGAGAGAGCTTC</span>
+<span class="go">TGCAGCTTGAGCCACAGGAGAGAGCCTTC</span>
+<span class="go">TGCAGCTTGAGCCACAGGAGAGAGAGAGCTTC</span>
+<span class="go">ACCGATGAGATATTAGCACAGGGGAATTAGAACCA</span>
+<span class="go">TGTCGAGAGTGAGATGAGATGAGAACA</span>
+<span class="go">ACGTATTTTAATTTGGCATGGT</span>
+<span class="go">TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="go">CCAGAGCGAGTGAGATAGACACCCAC</span>
+</pre></div>
+</div>
+<p>These sequences can be formatted as a database by running the <tt class="docutils literal"><span class="pre">formatdb</span></tt> program contained in the NCBI download (this assumes that <tt class="docutils literal"><span class="pre">formatdb</span></tt> is on your <tt class="docutils literal"><span class="pre">PATH</span></tt>)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.formatdb</span> <span class="kn">import</span> <span class="n">build_blast_db_from_fasta_path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">build_blast_db_from_fasta_path</span><span class="p">(</span><span class="s">&#39;data/refseqs.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&#39;data/refseqs.fasta&#39;...</span>
+</pre></div>
+</div>
+<p>The function <tt class="docutils literal"><span class="pre">build_blast_db_from_fasta_path()</span></tt> returns a tuple containing the path to the database, and a list of paths for all the new files written by <tt class="docutils literal"><span class="pre">formatdb</span></tt>.</p>
+<p>The final requirement is to know the path to the <tt class="docutils literal"><span class="pre">data</span></tt> directory that comes with your BLAST download.  This directory contains substitution matrices and other files.</p>
+</div>
+<div class="section" id="blast-with-text-output">
+<h2>BLAST with text output<a class="headerlink" href="#blast-with-text-output" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we load a DNA sequence from a file in the data directory and BLAST against our formatted database. The parameters dictionary contains two flagged arguments: -p for the program to use, and -m for the type of output we want. &#8216;-m&#8217;:&#8216;9&#8217; requests &#8220;tabular with comment lines.&#8221; See <tt class="docutils literal"><span class="pre">blastall</span> <span class="pre">--help</span></tt> for more details.</p>
+<p>Also, the application controller is set up to require a path to the data directory even though we don&#8217;t use a substitution matrix for DNA. Here we can just pass any string.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.blast</span> <span class="kn">import</span> <span class="n">blast_seqs</span><span class="p">,</span> <span class="n">Blastall</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/inseqs.fasta&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">seqs</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;s2_like_seq&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span>
+<span class="go">DnaSequence(TGCAGCT... 28)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;-p&#39;</span><span class="p">:</span><span class="s">&#39;blastn&#39;</span><span class="p">,</span><span class="s">&#39;-m&#39;</span><span class="p">:</span><span class="s">&#39;9&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">blast_seqs</span><span class="p">([</span><span class="n">seq</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">Blastall</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">blast_db</span> <span class="o">=</span> <span class="s">&#39;data/refseqs.fasta&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">blast_mat_root</span> <span class="o">=</span> <span class="s">&#39;xxx&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;StdOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)[:</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">[&#39;# BLASTN 2.2...</span>
+</pre></div>
+</div>
+<p>We save the results for further processing</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_test.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The simplest way to organize the results is to use a parser. The BLAST parsers operate on a file object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.blast</span> <span class="kn">import</span> <span class="n">MinimalBlastParser9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blastfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_test.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_results</span> <span class="o">=</span> <span class="n">MinimalBlastParser9</span><span class="p">(</span><span class="n">blastfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">blast_results</span><span class="p">)</span>
+<span class="go">&lt;type &#39;generator&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">blast_results</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">result</span>
+<span class="gp">...</span>
+<span class="go">({&#39;QUERY&#39;: &#39;1&#39;, &#39;FIELDS&#39;: &#39;Query id...</span>
+</pre></div>
+</div>
+<p>The results include one item for each query sequence. Each result consists of a tuple whose first item is a dictionary of metadata. The second item is a list of hits. For example, you might do this</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.blast</span> <span class="kn">import</span> <span class="n">MinimalBlastParser9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blastfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_test.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_results</span> <span class="o">=</span> <span class="n">MinimalBlastParser9</span><span class="p">(</span><span class="n">blastfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">blast_results</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">meta_data</span><span class="p">,</span> <span class="n">hit_list</span> <span class="o">=</span> <span class="n">result</span>
+<span class="gp">... </span>    <span class="n">fields</span> <span class="o">=</span> <span class="n">meta_data</span><span class="p">[</span><span class="s">&#39;FIELDS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">hit_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">value</span>
+<span class="go">Query id             1</span>
+<span class="go">Subject id           s2</span>
+<span class="go">% identity           89.66</span>
+<span class="go">alignment length     29</span>
+<span class="go">mismatches           2</span>
+<span class="go">gap openings         1</span>
+<span class="go">q. start             1</span>
+<span class="go">q. end               28</span>
+<span class="go">s. start             1</span>
+<span class="go">s. end               29</span>
+<span class="go">e-value              6e-05</span>
+<span class="go">bit score            26.3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="blast-with-xml-output">
+<h2>BLAST with XML output<a class="headerlink" href="#blast-with-xml-output" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we load a DNA sequence from a file in the data directory and BLAST against our formatted database as above.</p>
+<p>NCBI recommends that you use XML as the output for BLAST. (They reserve the right to change the format for other output types). XML is the output when we pass &#8216;-m&#8217;:&#8216;7&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.blast</span> <span class="kn">import</span> <span class="n">blast_seqs</span><span class="p">,</span> <span class="n">Blastall</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/inseqs.fasta&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">seqs</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;s2_like_seq&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;-p&#39;</span><span class="p">:</span><span class="s">&#39;blastn&#39;</span><span class="p">,</span><span class="s">&#39;-m&#39;</span><span class="p">:</span><span class="s">&#39;7&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">blast_seqs</span><span class="p">([</span><span class="n">seq</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">Blastall</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">blast_db</span> <span class="o">=</span> <span class="s">&#39;data/refseqs.fasta&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">blast_mat_root</span> <span class="o">=</span> <span class="s">&#39;xxx&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;StdOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_test.xml&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>One nice thing about this format is that it includes the alignment. The organization of the results from this parser is slightly different. Each result is still a tuple, but the first item of the tuple is metadata about the BLAST settings (<tt class="docutils literal"><span class="pre">meta_meta_data</span></tt>). The keys for the fields in the output are contained as the first element in the list that is the second item in the result tuple.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.blast_xml</span> <span class="kn">import</span> <span class="n">MinimalBlastParser7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blastfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_test.xml&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_results</span> <span class="o">=</span> <span class="n">MinimalBlastParser7</span><span class="p">(</span><span class="n">blastfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">blast_results</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">meta_meta_data</span><span class="p">,</span> <span class="n">hit_list</span> <span class="o">=</span> <span class="n">result</span>
+<span class="gp">... </span>    <span class="n">key_list</span> <span class="o">=</span> <span class="n">hit_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">key_list</span><span class="p">,</span> <span class="n">hit_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="s">&#39;ALIGN&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">continue</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">value</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">SUBJECT_ID           lcl|s2</span>
+<span class="go">HIT_DEF              No definition line found</span>
+<span class="go">HIT_ACCESSION        s2</span>
+<span class="go">HIT_LENGTH           29</span>
+<span class="go">PERCENT_IDENTITY     26</span>
+<span class="go">MISMATCHES           0</span>
+<span class="go">GAP_OPENINGS         1</span>
+<span class="go">QUERY_START          1</span>
+<span class="go">QUERY_END            28</span>
+<span class="go">SUBJECT_START        1</span>
+<span class="go">SUBJECT_END          29</span>
+<span class="go">E_VALUE              6.00825e-05</span>
+<span class="go">BIT_SCORE            26.2635</span>
+<span class="go">SCORE                13</span>
+<span class="go">POSITIVE             26</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.blast_xml</span> <span class="kn">import</span> <span class="n">MinimalBlastParser7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blastfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_test.xml&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_results</span> <span class="o">=</span> <span class="n">MinimalBlastParser7</span><span class="p">(</span><span class="n">blastfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">blast_results</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">meta_meta_data</span><span class="p">,</span> <span class="n">hit_list</span> <span class="o">=</span> <span class="n">result</span>
+<span class="gp">... </span>    <span class="n">key_list</span> <span class="o">=</span> <span class="n">hit_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;QUERY_ALIGN&#39;</span><span class="p">,</span><span class="s">&#39;MIDLINE_ALIGN&#39;</span><span class="p">,</span><span class="s">&#39;SUBJECT_ALIGN&#39;</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">i</span> <span class="o">=</span> <span class="n">key_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="n">hit_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">][:</span><span class="mi">40</span><span class="p">]</span>
+<span class="go">TGCAGCTTGAG-CACAGGTTAGAGCCTTC</span>
+<span class="go">||||||||||| ||||||  |||||||||</span>
+<span class="go">TGCAGCTTGAGCCACAGGAGAGAGCCTTC</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="blast-with-protein-sequences">
+<h2>BLAST with protein sequences<a class="headerlink" href="#blast-with-protein-sequences" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we load a protein sequence from a file in the data directory and BLAST against a new protein database we will create.  Since we want to BLAST protein sequences instead of DNA, we will have to construct a new BLAST database.</p>
+<p>The file <tt class="docutils literal"><span class="pre">refseqs_protein.fasta</span></tt> contains some short sequences for use in the following examples.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.formatdb</span> <span class="kn">import</span> <span class="n">build_blast_db_from_fasta_path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">build_blast_db_from_fasta_path</span><span class="p">(</span><span class="s">&#39;data/refseqs_protein.fasta&#39;</span><span class="p">,</span> <span class="n">is_protein</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&#39;data/refseqs_protein.fasta&#39;...</span>
+</pre></div>
+</div>
+<p>Notice that we set the parameter <tt class="docutils literal"><span class="pre">is_protein</span></tt> to <tt class="docutils literal"><span class="pre">True</span></tt> since our database consists of protein sequences this time.  This was not necessary in the previous example, because <tt class="docutils literal"><span class="pre">is_protein</span></tt> is set to <tt class="docutils literal"><span class="pre">False</span></tt> by default.</p>
+<p>Now that we have built our protein BLAST database, we can load our sequence and BLAST against this database.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.blast</span> <span class="kn">import</span> <span class="n">blast_seqs</span><span class="p">,</span> <span class="n">Blastall</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/inseqs_protein.fasta&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">seqs</span><span class="o">.</span><span class="n">getSeq</span><span class="p">(</span><span class="s">&#39;1091044_fragment&#39;</span><span class="p">)</span>
+<span class="go">    &gt;&gt;&gt; seq</span>
+<span class="go">    ProteinSequence(IPLDFDK... 26)</span>
+</pre></div>
+</div>
+<p>Notice we need to use &#8216;-p&#8217;:&#8217;blastp&#8217; in the parameters dictionary, since <tt class="docutils literal"><span class="pre">blastp</span></tt> is used for protein.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;-p&#39;</span><span class="p">:</span><span class="s">&#39;blastp&#39;</span><span class="p">,</span><span class="s">&#39;-m&#39;</span><span class="p">:</span><span class="s">&#39;9&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">blast_seqs</span><span class="p">([</span><span class="n">seq</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">Blastall</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">blast_db</span> <span class="o">=</span> <span class="s">&#39;data/refseqs_protein.fasta&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;StdOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)[:</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">[&#39;# BLASTP 2.2...</span>
+</pre></div>
+</div>
+<p>We save the results for further processing</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_protein_test.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now we will explore some of the convenience methods of the <tt class="docutils literal"><span class="pre">BlastResult</span></tt> object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.blast</span> <span class="kn">import</span> <span class="n">BlastResult</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_results</span> <span class="o">=</span> <span class="n">BlastResult</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/blast_protein_test.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Suppose we want to filter our results based on various criteria.  In many cases you may want to only keep the top &#8216;3&#8217; matches with the longest &#8216;ALIGNMENT LENGTH&#8217; for the query sequence to the target.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">best_hits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">blast_results</span><span class="o">.</span><span class="n">bestHitsByQuery</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s">&#39;ALIGNMENT LENGTH&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query_1_best_hits</span> <span class="o">=</span> <span class="n">best_hits</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">query_1_best_hits</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">hit</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>            <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">value</span>
+<span class="gp">... </span>    <span class="k">print</span>
+<span class="gp">...</span>
+<span class="go">MISMATCHES           0</span>
+<span class="go">ALIGNMENT LENGTH     26</span>
+<span class="go">Q. END               26</span>
+<span class="go">BIT SCORE            56.2</span>
+<span class="go">% IDENTITY           100.00</span>
+<span class="go">Q. START             1</span>
+<span class="go">S. START             30</span>
+<span class="go">S. END               55</span>
+<span class="go">GAP OPENINGS         0</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">E-VALUE              5e-12</span>
+<span class="go">SUBJECT ID           1091044</span>
+
+<span class="go">MISMATCHES           10</span>
+<span class="go">ALIGNMENT LENGTH     27</span>
+<span class="go">Q. END               25</span>
+<span class="go">BIT SCORE            33.5</span>
+<span class="go">% IDENTITY           55.56</span>
+<span class="go">Q. START             1</span>
+<span class="go">S. START             32</span>
+<span class="go">S. END               58</span>
+<span class="go">GAP OPENINGS         1</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">E-VALUE              3e-05</span>
+<span class="go">SUBJECT ID           5326864</span>
+
+<span class="go">MISMATCHES           16</span>
+<span class="go">ALIGNMENT LENGTH     24</span>
+<span class="go">Q. END               25</span>
+<span class="go">BIT SCORE            22.3</span>
+<span class="go">% IDENTITY           33.33</span>
+<span class="go">Q. START             2</span>
+<span class="go">S. START             19</span>
+<span class="go">S. END               42</span>
+<span class="go">GAP OPENINGS         0</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">E-VALUE              0.077</span>
+<span class="go">SUBJECT ID           14286173</span>
+</pre></div>
+</div>
+<p>The fist of the top 3 hits for alignment length has 0 MISMATCHES and a % IDENTITY of 100.00.  The next 2 hits have many MISMATCHES and a much lower % IDENTITY.  Lets filter the results again, but by E-VALUE this time:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">best_hits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">blast_results</span><span class="o">.</span><span class="n">bestHitsByQuery</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s">&#39;E-VALUE&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query_1_best_hits</span> <span class="o">=</span> <span class="n">best_hits</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">query_1_best_hits</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">hit</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>            <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">value</span>
+<span class="gp">... </span>    <span class="k">print</span>
+<span class="gp">...</span>
+<span class="go">MISMATCHES           0</span>
+<span class="go">ALIGNMENT LENGTH     26</span>
+<span class="go">Q. END               26</span>
+<span class="go">BIT SCORE            56.2</span>
+<span class="go">% IDENTITY           100.00</span>
+<span class="go">Q. START             1</span>
+<span class="go">S. START             30</span>
+<span class="go">S. END               55</span>
+<span class="go">GAP OPENINGS         0</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">E-VALUE              5e-12</span>
+<span class="go">SUBJECT ID           1091044</span>
+
+<span class="go">MISMATCHES           10</span>
+<span class="go">ALIGNMENT LENGTH     27</span>
+<span class="go">Q. END               25</span>
+<span class="go">BIT SCORE            33.5</span>
+<span class="go">% IDENTITY           55.56</span>
+<span class="go">Q. START             1</span>
+<span class="go">S. START             32</span>
+<span class="go">S. END               58</span>
+<span class="go">GAP OPENINGS         1</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">E-VALUE              3e-05</span>
+<span class="go">SUBJECT ID           5326864</span>
+
+<span class="go">MISMATCHES           6</span>
+<span class="go">ALIGNMENT LENGTH     18</span>
+<span class="go">Q. END               26</span>
+<span class="go">BIT SCORE            30.4</span>
+<span class="go">% IDENTITY           66.67</span>
+<span class="go">Q. START             9</span>
+<span class="go">S. START             31</span>
+<span class="go">S. END               48</span>
+<span class="go">GAP OPENINGS         0</span>
+<span class="go">QUERY ID             1</span>
+<span class="go">E-VALUE              3e-04</span>
+<span class="go">SUBJECT ID           15964668</span>
+</pre></div>
+</div>
+<p>You can filter the BLAST results by any of the fields you like.  You can also use the <tt class="docutils literal"><span class="pre">BlastResult</span></tt> object to do a quick assessment of your BLAST results looking only at the fields you like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;SUBJECT ID&#39;</span><span class="p">,</span> <span class="s">&#39;BIT SCORE&#39;</span><span class="p">,</span> <span class="s">&#39;E-VALUE&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">blast_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+<span class="gp">... </span>            <span class="k">print</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,[</span><span class="n">result</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">]))</span>
+<span class="go">SUBJECT ID          BIT SCORE           E-VALUE</span>
+<span class="go">1091044             56.2                5e-12</span>
+<span class="go">5326864             33.5                3e-05</span>
+<span class="go">15964668            30.4                3e-04</span>
+<span class="go">17229033            29.6                5e-04</span>
+<span class="go">21112072            28.1                0.001</span>
+<span class="go">4704732             25.8                0.007</span>
+<span class="go">13541117            24.6                0.016</span>
+<span class="go">15826629            24.3                0.020</span>
+<span class="go">14286173            22.3                0.077</span>
+<span class="go">6323138             21.9                0.10</span>
+<span class="go">18313548            20.8                0.22</span>
+<span class="go">21674812            20.0                0.38</span>
+<span class="go">14600438            20.0                0.38</span>
+<span class="go">4996210             18.5                1.1</span>
+<span class="go">15605963            17.3                2.5</span>
+<span class="go">15615431            16.5                4.2</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Controlling BLAST</a><ul>
+<li><a class="reference internal" href="#preliminaries">Preliminaries</a></li>
+<li><a class="reference internal" href="#blast-with-text-output">BLAST with text output</a></li>
+<li><a class="reference internal" href="#blast-with-xml-output">BLAST with XML output</a></li>
+<li><a class="reference internal" href="#blast-with-protein-sequences">BLAST with protein sequences</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="controlling_third_party_applications.html"
+                        title="previous chapter">Controlling third party applications</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="building_alignments.html"
+                        title="next chapter">Building alignments</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/blast.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="building_alignments.html" title="Building alignments"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="controlling_third_party_applications.html" title="Controlling third party applications"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

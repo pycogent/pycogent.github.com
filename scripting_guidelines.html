@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Scripting guidelines &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="index.html" />
+    <link rel="next" title="Licenses and disclaimer" href="licenses.html" />
+    <link rel="prev" title="For Developers" href="developer_notes.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="licenses.html" title="Licenses and disclaimer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="developer_notes.html" title="For Developers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="scripting-guidelines">
+<h1>Scripting guidelines<a class="headerlink" href="#scripting-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>Developing command line interfaces for your scripts is a convenient way to create easily reproducible analyses with PyCogent. This document covers the support for developing standardized interfaces in PyCogent. In addition to making your code easier to distribute (or to return to months after it was originally written), several GUI generators that are currently in development make use of the PyCogent <tt class="docutils literal"><span class="pre">option_parsing</span></tt> module &#8211; this means that defining your interfaces with PyCogent&#8217;s <tt class="docutils literal"><span class="pre">option_parsing</span></tt> module will allow your code to be easily wrapped in graphical interfaces.</p>
+<p>PyCogent command line interfaces are based on the <tt class="docutils literal"><span class="pre">optparse</span></tt> module in the Python Standard Library, using <tt class="docutils literal"><span class="pre">cogent.util.option_parsing.parse_command_line_parameters</span></tt> as a convenience wrapper for defining interfaces based on certain information provided by the script developer. A fully functional <a class="reference external" href="./scripting_guidelines.html#countseqs">example script</a> and a <a class="reference external" href="./scripting_guidelines.html#scripttemplate">script template</a> are provided below.</p>
+<p>This page will help you develop your command line interfaces after you&#8217;ve familiarized yourself with <tt class="docutils literal"><span class="pre">optparse</span></tt>, but will not be a replacement to a general understanding of how to interact with <tt class="docutils literal"><span class="pre">optparse</span></tt>. You should therefore refer both to the <a class="reference external" href="http://docs.python.org/library/optparse.html">optparse documentation</a> as well as the <a class="reference external" href="./scripting_guidelines.html">PyCogent Scripting Guidelines</a>. As support for optparse will not continue into Python 3.0, we will be switching to <tt class="docutils literal"><span class="pre">argparse</span></tt> when we transition PyCogent to Python 3. We&#8217;ll do our best to minimize the work in transitioning from <tt class="docutils literal"><span class="pre">optparse</span></tt> to <tt class="docutils literal"><span class="pre">argparse</span></tt> for PyCogent scripts by changing the interface to <tt class="docutils literal"><span class="pre">cogent.util.option_parsing.parse_command_line_parameters</span></tt> as little as possible.</p>
+<p>This document starts with a basic example of creating a script. It then covers guidelines for defining scripts which all PyCogent developers must adhere to, and which we suggest all PyCogent script developers adhere to. Finally it covers some details of the <tt class="docutils literal"><span class="pre">script_info</span></tt> object and custom command line option types defined in PyCogent.</p>
+<p>You should also review the PyCogent <a class="reference external" href="./coding_guidelines.html">coding guidelines</a>. The scripting guidelines presented here are an extension of those.</p>
+<div class="section" id="quickstart-how-to-create-your-first-pycogent-script-in-5-minutes">
+<h2>Quickstart : how to create your first PyCogent script in 5 minutes<a class="headerlink" href="#quickstart-how-to-create-your-first-pycogent-script-in-5-minutes" title="Permalink to this headline">¶</a></h2>
+<p>These steps show you how to quickly create a working PyCogent script from the PyCogent script template. Some very basic familiarity with python will help here (e.g., identifying the <tt class="docutils literal"><span class="pre">main()</span></tt> function and adding to it with the correct indentation).</p>
+<ol class="arabic">
+<li><p class="first">Copy and paste the <a class="reference external" href="./scripting_guidelines.html#scripttemplate">script template</a> to a new file on your system. The next steps will assume that you&#8217;re saving that file as <tt class="docutils literal"><span class="pre">/path/to/home/pycogent_user/pycogent_script_template.py</span></tt>.</p>
+</li>
+<li><p class="first">Open a command terminal and enter the following command:</p>
+<div class="highlight-python"><pre>chmod 755 /path/to/home/pycogent_user/pycogent_script_template.py</pre>
+</div>
+</li>
+<li><p class="first">Open <tt class="docutils literal"><span class="pre">pycogent_script_template.py</span></tt> with a text editor (such as emacs, pico, or TextWrangler) and add the following to the bottom of the main() function (be sure you have proper indentation):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Hello World!&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Next, after the line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">script_info</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">__version__</span>
+</pre></div>
+</div>
+<p>add the following line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">script_info</span><span class="p">[</span><span class="s">&#39;help_on_no_arguments&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<ol class="arabic" start="4">
+<li><p class="first">Run and print help text:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">python</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">pycogent_user</span><span class="o">/</span><span class="n">pycogent_script_template</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run script &#8211; <tt class="docutils literal"><span class="pre">Hello</span> <span class="pre">World!</span></tt> will be printed to the terminal:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">python</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">pycogent_user</span><span class="o">/</span><span class="n">pycogent_script_template</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>You&#8217;ve now got a working PyCogent script. You can continue working with this script to add the functionality you&#8217;re interested in. See the <a class="reference external" href="http://docs.python.org/library/optparse.html">optparse documentation</a> documentation for discussion of how to create options, as well as the <a class="reference external" href="./scripting_guidelines.html#countseqs">example script</a> provided below.</p>
+</div>
+<div class="section" id="general-notes-on-designing-command-line-interfaces">
+<h2>General notes on designing command line interfaces<a class="headerlink" href="#general-notes-on-designing-command-line-interfaces" title="Permalink to this headline">¶</a></h2>
+<p><strong>Design convenient command line interfaces.</strong> The goal of your interface is to make things easy for the user (who is often you). This section covers some guidelines for how to do that.</p>
+<p><strong>Have people who are better programmers than you interact with your command line interface and give you feedback on it.</strong> If your script is difficult to work with, or has requirements that are not intuitive for users who frequently work with command line applications, people won&#8217;t use your code.</p>
+<p><strong>If there are tasks that are automatable, automate them.</strong> For example, if you can make a good guess at what an output file should be named from an input file and a parameter choice, do that and use it as the default output path (but allow the user to overwrite it with a command line option).</p>
+<p><strong>Define sensible default values for your command line options.</strong> If most of the time that a script is used it will require a parameter to be set to a certain value, make that value the default to simplify the interface.</p>
+<p><strong>Have the user specify named options rather than positional arguments.</strong> The latter are more difficult to work with as users need to remember the order that they need to be passed. PyCogent scripts do not allow positional arguments by default, but if you must use them you can override this behavior by setting <tt class="docutils literal"><span class="pre">script_info['disallow_positional_arguments']</span> <span class="pre">=</span> <span class="pre">False</span></tt>. Note that this contradicts what the <tt class="docutils literal"><span class="pre">optparse</span></tt> docs say - we disagree with their comment that all required options should be passed as positional arguments.</p>
+<p><strong>Avoid making assumptions about how a script will be run.</strong> Perhaps most importantly, don&#8217;t assume that the script will be run from the same directory that the script lives in. Users often want to copy executables into a centralized directory on their system (e.g., <tt class="docutils literal"><span class="pre">/usr/local/bin</span></tt>). Facilitate that by not requiring that the script is run from a specific location. If you rely on data files, you have other options such as having users set an environment variable that defines where data files live on the system. Test your script from multiple locations on the file system!</p>
+</div>
+<div class="section" id="designing-pycogent-command-line-interfaces">
+<h2>Designing PyCogent command line interfaces<a class="headerlink" href="#designing-pycogent-command-line-interfaces" title="Permalink to this headline">¶</a></h2>
+<p>This section covers guidelines for how to build PyCogent command line interfaces using the <tt class="docutils literal"><span class="pre">script_info</span></tt> dictionary and the <tt class="docutils literal"><span class="pre">cogent.util.option_parsing.parse_command_line_parameters</span></tt> function. Some of this is general to <tt class="docutils literal"><span class="pre">optparse</span></tt> and some is specific to PyCogent.</p>
+<div class="section" id="flag-options">
+<h3>Flag options<a class="headerlink" href="#flag-options" title="Permalink to this headline">¶</a></h3>
+<p>Flags are boolean options to your script. <tt class="docutils literal"><span class="pre">optparse</span></tt> supports these directly, so you should never have to define an option that explicitly takes <tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt> on the command line.</p>
+<p>Flags to your script should always be either <tt class="docutils literal"><span class="pre">action='store_true'</span></tt> or <tt class="docutils literal"><span class="pre">action='store_false'</span></tt>, and do not need to define a type. The names of these options should suggest whether the option enables something (e.g., <tt class="docutils literal"><span class="pre">--print_to_stdout</span></tt>) which would be defined with <tt class="docutils literal"><span class="pre">action='store_true'</span></tt> (i.e., default is False), or whether the option disables something (e.g., <tt class="docutils literal"><span class="pre">--suppress_stdout</span></tt>) which would be defined with <tt class="docutils literal"><span class="pre">action='store_false'</span></tt> (i.e., the default is True). A bad name for a flag is <tt class="docutils literal"><span class="pre">--stdout</span></tt> as it&#8217;s not clear what this option does.</p>
+<p>Always define <tt class="docutils literal"><span class="pre">default</span></tt> for boolean options to set the default option for your script. If <tt class="docutils literal"><span class="pre">action='store_true'</span></tt> you should <em>always</em> pass <tt class="docutils literal"><span class="pre">default=False</span></tt>. If <tt class="docutils literal"><span class="pre">action='store_false'</span></tt> you should <em>always</em> pass <tt class="docutils literal"><span class="pre">default=True</span></tt>.</p>
+</div>
+<div class="section" id="choice-options">
+<h3>Choice options<a class="headerlink" href="#choice-options" title="Permalink to this headline">¶</a></h3>
+<p>Use <tt class="docutils literal"><span class="pre">type=choice</span></tt> when an option is passed as a string and can be one of several acceptable values. This saves you from having to check that the user passed an acceptable value. This is done by <tt class="docutils literal"><span class="pre">optparse</span></tt>, so saves you lines of code that you&#8217;d need to test, and standardizes how errors are handled. The acceptable choices are defined with <tt class="docutils literal"><span class="pre">choices=</span></tt>. An example choice option definition is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">alignment_method_choices</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pynast&#39;</span><span class="p">,</span><span class="s">&#39;mafft&#39;</span><span class="p">,</span><span class="s">&#39;muscle&#39;</span><span class="p">]</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">make_option</span><span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span><span class="s">&#39;--alignment_method&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;choice&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&#39;Method for aligning sequences. Valid choices are: &#39;</span><span class="o">+</span>\
+                <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">alignment_method_choices</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; [default: </span><span class="si">%d</span><span class="s">efault]&#39;</span><span class="p">,</span>
+                <span class="n">choices</span><span class="o">=</span><span class="n">alignment_method_choices</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;pynast&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the help text here includes the list of acceptable options. This is generally a good idea as it&#8217;s convenient for the user. It&#8217;s not a good idea however if this is a big list (say, more than 5 or so options). If the user passes something invalid (such as <tt class="docutils literal"><span class="pre">raxml</span></tt> in this example) the list of acceptable options will be included in the error text.</p>
+</div>
+<div class="section" id="defining-where-output-will-be-stored">
+<h3>Defining where output will be stored<a class="headerlink" href="#defining-where-output-will-be-stored" title="Permalink to this headline">¶</a></h3>
+<p>If a single file is created, allow the user to define that file name. If multiple files are created, allow the user to define a directory name and store all of the output files in that directory. Use the <tt class="docutils literal"><span class="pre">new_filepath</span></tt> and <tt class="docutils literal"><span class="pre">new_dirpath</span></tt>, respectively, to define these output types. These will raise errors if the file or directory already exists, which is generally good as it avoids overwriting results that may have taken a long time to generate.</p>
+</div>
+</div>
+<div class="section" id="defining-options">
+<h2>Defining options<a class="headerlink" href="#defining-options" title="Permalink to this headline">¶</a></h2>
+<p>Use <tt class="docutils literal"><span class="pre">make_option</span></tt> (<a class="reference external" href="http://docs.python.org/library/optparse.html#populating-the-parser">described here</a>) to create options. As in that example, you&#8217;ll define these in lists that get set as <tt class="docutils literal"><span class="pre">script_info['required_options']</span></tt> and <tt class="docutils literal"><span class="pre">script_info['optional_options']</span></tt>.</p>
+<p>Use the PyCogent custom option types when specifying input file or directory paths. These standardize error handling in the case of input files which don&#8217;t exist or aren&#8217;t readable and output files which already exist.</p>
+<p>Don&#8217;t define <tt class="docutils literal"><span class="pre">dest=</span></tt>. By default this gets set to the long-form parameter option (e.g. <tt class="docutils literal"><span class="pre">dest='input_fp'</span></tt> is implied if your option is <tt class="docutils literal"><span class="pre">--input_fp</span></tt>). Defining this as something else will confuse other people who may end up doing maintenance work on your scripts in the future.</p>
+<p>Always define <tt class="docutils literal"><span class="pre">default=</span></tt> for optional options, and never define <tt class="docutils literal"><span class="pre">default=</span></tt> for required options. The default value for all options is <tt class="docutils literal"><span class="pre">None</span></tt>, but it&#8217;s convenient to explicitly define that for readability.</p>
+<p>Always define <tt class="docutils literal"><span class="pre">help=</span></tt>, and provide useful information in this string. Include <tt class="docutils literal"><span class="pre">[default:</span> <span class="pre">%default]</span></tt> for optional options, but not for required options (as there can be no default for a required option, or it&#8217;d be optional). The <tt class="docutils literal"><span class="pre">%default</span></tt> gets replaced with the value provided for <tt class="docutils literal"><span class="pre">default=</span></tt>. It sometimes makes sense to include additional information in the <tt class="docutils literal"><span class="pre">[default:%default]</span></tt> text if the option on it&#8217;s own is not informative. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">make_option</span><span class="p">(</span><span class="s">&quot;--output_fp&quot;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&quot;output filepath [default:</span><span class="si">%d</span><span class="s">efault; print to stdout]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">action=store</span></tt> and <tt class="docutils literal"><span class="pre">type=string</span></tt> are defaults, and therefore do not need to be included. Leave these values out to keep your code cleaner.</p>
+<p>If you need to pass multiple paths or strings to a single option, do this by passing a comma-separated string. The <tt class="docutils literal"><span class="pre">existing_filepaths</span></tt> option type expects strings in this format and takes care of splitting them on commas and returning a list, so if you&#8217;re passing multiple input filepaths set <tt class="docutils literal"><span class="pre">type='existing_filepaths'</span></tt>.</p>
+</div>
+<div class="section" id="naming-options">
+<h2>Naming options<a class="headerlink" href="#naming-options" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">optparse</span></tt> allows for users to define short-form (e.g., <tt class="docutils literal"><span class="pre">-i</span></tt>) and long-form (<tt class="docutils literal"><span class="pre">--input_fp</span></tt>) option names. For options that are commonly used, define both a long-form and a short-form parameter name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">make_option</span><span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span><span class="s">&#39;--input_dir&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s">&quot;existing_filepath&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&#39;the input directory&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For options that are infrequently used define only a long-form parameter name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">make_option</span><span class="p">(</span><span class="s">&#39;--output_file_type&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&#39;the file type for graphical output&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">&#39;pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This helps with reducing clutter and saving convenient short-form parameter names for future options that may be added.</p>
+<p>Make paths to files end with <tt class="docutils literal"><span class="pre">_fp</span></tt> and paths to directories end with <tt class="docutils literal"><span class="pre">_dir</span></tt>. This helps users understand exactly what must be passed to a script.</p>
+<p>Some standard names for common options are listed below. You should use these whenever possible.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Description</th>
+<th class="head">Option name</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>path to an input file</td>
+<td><tt class="docutils literal"><span class="pre">-i</span></tt>, <tt class="docutils literal"><span class="pre">--input_fp</span></tt></td>
+</tr>
+<tr class="row-odd"><td>path to an output file</td>
+<td><tt class="docutils literal"><span class="pre">-o</span></tt>, <tt class="docutils literal"><span class="pre">--output_fp</span></tt></td>
+</tr>
+<tr class="row-even"><td>path to an input directory</td>
+<td><tt class="docutils literal"><span class="pre">-i</span></tt>, <tt class="docutils literal"><span class="pre">--input_dir</span></tt></td>
+</tr>
+<tr class="row-odd"><td>path to an output dir</td>
+<td><tt class="docutils literal"><span class="pre">-o</span></tt>, <tt class="docutils literal"><span class="pre">--output_dir</span></tt></td>
+</tr>
+<tr class="row-even"><td>path to a log file</td>
+<td><tt class="docutils literal"><span class="pre">-l</span></tt>, <tt class="docutils literal"><span class="pre">--log_fp</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="what-documentation-should-be-included-in-my-scripts">
+<h2>What documentation should be included in my scripts?<a class="headerlink" href="#what-documentation-should-be-included-in-my-scripts" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">script_documentation</span></tt> entry in <tt class="docutils literal"><span class="pre">script_info</span></tt> should describe the basic functionality of your script. This entry is typically one to several sentences. Be sure not to add line breaks yourself - <tt class="docutils literal"><span class="pre">optparse</span></tt> will take care of this for you, and the formatting will look better than if you try to do it yourself.</p>
+<p>The <tt class="docutils literal"><span class="pre">usage_examples</span></tt> entry in <tt class="docutils literal"><span class="pre">script_info</span></tt> should list one or more examples of commands that need to be run to execute your script. These should be actual calls to commands. A user should be able to copy this and paste it on the command line and have the script run (provided they put the right input files in place). See the <a class="reference external" href="./scripting_guidelines.html#countseqs">example script</a> for instances of what good usage examples look like. <tt class="docutils literal"><span class="pre">script_info['usage_examples']</span></tt> must be a list of tuples with three string entries each where the first entry is a concise title for the example, the second entry is a description of the example and why certain parameter settings are being made, and the third entry should be the exact command that needs to be run. Start these examples with <tt class="docutils literal"><span class="pre">%prog</span></tt> - this gets replaced with the name of your script and is convenient so you don&#8217;t have to remember to update the usage examples if the name of your script changes.</p>
+<p>The <tt class="docutils literal"><span class="pre">output_description</span></tt> entry in <tt class="docutils literal"><span class="pre">script_info</span></tt> should describe the output generated by the script. This entry is typically one to several sentences. Again, don&#8217;t add line breaks yourself.</p>
+</div>
+<div class="section" id="the-script-info-dictionary">
+<h2>The script_info dictionary<a class="headerlink" href="#the-script-info-dictionary" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">script_info</span></tt> dictionary is the central piece of information required to define a cogent script. <tt class="docutils literal"><span class="pre">script_info</span></tt> is passed to <tt class="docutils literal"><span class="pre">parse_command_line_parameters</span></tt> to define the command line interface for your script. Additionally several tools have been developed to import and use this object to define other types of interfaces (e.g., script form in the PyCogent beta GUI) or to auto-generate script documentation (e.g., for the QIIME project). This section covers the values that can be defined in your <tt class="docutils literal"><span class="pre">script_info</span></tt> dictionaries, what they do, and their default values.</p>
+<div class="section" id="core-values-defined-in-pycogent-command-line-interfaces">
+<h3>Core values defined in PyCogent command line interfaces<a class="headerlink" href="#core-values-defined-in-pycogent-command-line-interfaces" title="Permalink to this headline">¶</a></h3>
+<p>These are the core values defined in the <tt class="docutils literal"><span class="pre">script_info</span></tt> dictionary used by the PyCogent <tt class="docutils literal"><span class="pre">option_parsing</span></tt> module.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="69%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">key</th>
+<th class="head">Description</th>
+<th class="head">Default</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>script_description</td>
+<td>a paragraph description of the script&#8217;s functionality</td>
+<td>REQUIRED</td>
+</tr>
+<tr class="row-odd"><td>script_usage</td>
+<td>a list of tuples illustrating example usages of the script</td>
+<td>[]</td>
+</tr>
+<tr class="row-even"><td>output_description</td>
+<td>a paragraph description of the script&#8217;s output</td>
+<td>&#8220;&#8221;</td>
+</tr>
+<tr class="row-odd"><td>version</td>
+<td>a version number for the script</td>
+<td>REQUIRED</td>
+</tr>
+<tr class="row-even"><td>required_options</td>
+<td>a list of optparse Option objects that are required for the script to run</td>
+<td>[]</td>
+</tr>
+<tr class="row-odd"><td>optional_options</td>
+<td>a list of optparse Option objects that are optional for the script to run</td>
+<td>[]</td>
+</tr>
+<tr class="row-even"><td>disallow_positional_arguments</td>
+<td>do not allow positional arguments to be passed to the script</td>
+<td>True</td>
+</tr>
+<tr class="row-odd"><td>help_on_no_arguments</td>
+<td>print help text if the script is called with no options or arguments</td>
+<td>True</td>
+</tr>
+<tr class="row-even"><td>suppress_verbose</td>
+<td>do not auto-generate a verbose option for the script</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="values-known-to-be-used-by-the-tools-outside-of-the-pycogent-codebase">
+<h3>Values known to be used by the tools outside of the PyCogent codebase<a class="headerlink" href="#values-known-to-be-used-by-the-tools-outside-of-the-pycogent-codebase" title="Permalink to this headline">¶</a></h3>
+<p>These values are known to be used by tools outside of the PyCogent code base in <tt class="docutils literal"><span class="pre">script_info</span></tt> objects. It&#8217;s best to not name new values with these names to avoid conflicts.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="70%" />
+<col width="9%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">key</th>
+<th class="head">Description</th>
+<th class="head">Used by</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>brief_description</td>
+<td>a one-sentence description of the script, used by some document generators</td>
+<td>Q,T</td>
+</tr>
+<tr class="row-odd"><td>script_type</td>
+<td>a definition of the type of script, used by some graphical interfaces</td>
+<td>Q,PG</td>
+</tr>
+<tr class="row-even"><td>optional_options_groups</td>
+<td>a list grouping related options under a heading [[&#8216;section heading string&#8217;, section_option_list], ...]</td>
+<td>PG</td>
+</tr>
+<tr class="row-odd"><td>authors</td>
+<td>string of author names</td>
+<td>PG</td>
+</tr>
+<tr class="row-even"><td>script_name</td>
+<td>a brief &#8220;human readable&#8221; name for the script, used in some graphical interfaces</td>
+<td>Q,PG</td>
+</tr>
+<tr class="row-odd"><td>output_type</td>
+<td>a list of tuples noting the type (in a controlled vocabulary) of each possible output</td>
+<td>Q</td>
+</tr>
+<tr class="row-even"><td>option_label</td>
+<td>a dictionary matching option names to &#8220;human readable&#8221; names, used in some graphical interfaces</td>
+<td>Q</td>
+</tr>
+<tr class="row-odd"><td>script_usage_output_to_remove</td>
+<td>a list of output dirs/files that must be cleaned up if running script_usage examples multiple times</td>
+<td>Q</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>&#8220;Used by&#8221; key : Q: <a class="reference external" href="http://www.qiime.org">QIIME</a>; PG: PyCogent beta GUI; T: tax2tree.</li>
+</ul>
+</div>
+<div class="section" id="setting-values-in-script-info">
+<h3>Setting values in script_info<a class="headerlink" href="#setting-values-in-script-info" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">script_info</span></tt> object is simply a dict, so the standard method for setting and working with dict entries applies. Some examples are:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">script_info</span><span class="p">[</span><span class="s">&#39;brief_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Count sequences in one or more fasta files.&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;required_options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="n">make_option</span><span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span><span class="s">&#39;--input_fps&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s">&#39;the input filepaths (comma-separated)&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="custom-command-line-option-types">
+<h2>Custom command line option types<a class="headerlink" href="#custom-command-line-option-types" title="Permalink to this headline">¶</a></h2>
+<p>Several custom option types are defined in PyCogent. These are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">existing_path</span></tt> : Specify a path to a directory or file. Path must exist or an error is raised.</li>
+<li><tt class="docutils literal"><span class="pre">new_path</span></tt> : Specify a path to a directory or file. Path must not exist or an error is raised.</li>
+<li><tt class="docutils literal"><span class="pre">existing_filepath</span></tt> : Specify a path to a file.  Path must exist or an error is raised.</li>
+<li><tt class="docutils literal"><span class="pre">existing_filepaths</span></tt> : Specify a comma-separated list of file paths. All paths must exist or an error is raised. These are returned as a list split on commas.</li>
+<li><tt class="docutils literal"><span class="pre">new_filepath</span></tt> :  Specify a path to a file.  Path must not exist or an error is raised.</li>
+<li><tt class="docutils literal"><span class="pre">existing_dirpath</span></tt> :  Specify a path to a directory.  Path must exist or an error is raised.</li>
+<li><tt class="docutils literal"><span class="pre">new_dirpath</span></tt> :  Specify a path to a directory.  Path must not exist or an error is raised.</li>
+</ul>
+</div>
+<div class="section" id="template-for-a-new-pycogent-script">
+<span id="scripttemplate"></span><h2>Template for a new PyCogent script<a class="headerlink" href="#template-for-a-new-pycogent-script" title="Permalink to this headline">¶</a></h2>
+<p>The following is a template for a PyCogent script. You can download this from <a class="reference download internal" href="_downloads/pycogent_script_template.py"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a> to form the basis of your new script. This script is also embedded here for documentation purposes. This template forms a fully functional PyCogent script, so on copying this you should be able to run the script to confirm that it is working:</p>
+<div class="highlight-python"><pre>python pycogent_script_template.py</pre>
+</div>
+<p>This will print help text and exit.</p>
+<p>You can rename this script and use it define your new PyCogent script.</p>
+<p>PyCogent script template:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c"># File created on 15 Jul 2011</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;AUTHOR_NAME&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;COPYRIGHT_INFORMATION&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;AUTHOR_NAME&quot;</span><span class="p">]</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;GPL&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;1.6.0dev&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s">&quot;AUTHOR_NAME&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;AUTHOR_EMAIL&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s">&quot;Development&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">cogent.util.option_parsing</span> <span class="kn">import</span> <span class="n">parse_command_line_parameters</span><span class="p">,</span> <span class="n">make_option</span>
+
+<span class="n">script_info</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;brief_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;script_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;script_usage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">)]</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;output_description&#39;</span><span class="p">]</span><span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;required_options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>\
+ <span class="c"># Example required option</span>
+ <span class="c">#make_option(&#39;-i&#39;,&#39;--input_dir&#39;,type=&quot;existing_filepath&quot;,help=&#39;the input directory&#39;),\</span>
+<span class="p">]</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;optional_options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>\
+ <span class="c"># Example optional option</span>
+ <span class="c">#make_option(&#39;-o&#39;,&#39;--output_dir&#39;,type=&quot;new_dirpath&quot;,help=&#39;the output directory [default: %default]&#39;),\</span>
+<span class="p">]</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">__version__</span>
+
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">option_parser</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span>\
+       <span class="n">parse_command_line_parameters</span><span class="p">(</span><span class="o">**</span><span class="n">script_info</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-of-a-simple-pycogent-script">
+<span id="countseqs"></span><h2>Example of a simple PyCogent script<a class="headerlink" href="#example-of-a-simple-pycogent-script" title="Permalink to this headline">¶</a></h2>
+<p>You can download an example PyCogent script for counting the number of sequences in one or more fasta files <a class="reference download internal" href="_downloads/count_seqs.py"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>. This script is also embedded here for documentation purposes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Greg Caporaso&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright 2011, The PyCogent project&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Greg Caporaso&quot;</span><span class="p">]</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;GPL&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;1.6.0dev&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s">&quot;Greg Caporaso&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;gregcaporaso@gmail.com&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s">&quot;Development&quot;</span>
+
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">cogent.util.option_parsing</span> <span class="kn">import</span> <span class="p">(</span>
+ <span class="n">parse_command_line_parameters</span><span class="p">,</span>
+ <span class="n">make_option</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cogent.parse.fasta</span> <span class="kn">import</span> <span class="n">MinimalFastaParser</span>
+
+<span class="n">script_info</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;brief_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Count sequences in one or more fasta files.&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;script_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;This script counts the number of sequences in one or more fasta files and prints the results to stdout.&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;script_usage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>\
+ <span class="p">(</span><span class="s">&quot;Count sequences in one file&quot;</span><span class="p">,</span>
+  <span class="s">&quot;Count the sequences in a fasta file and write results to stdout.&quot;</span><span class="p">,</span>
+  <span class="s">&quot;%prog -i in.fasta&quot;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s">&quot;Count sequences in two file&quot;</span><span class="p">,</span>
+  <span class="s">&quot;Count the sequences in two fasta files and write results to stdout.&quot;</span><span class="p">,</span>
+  <span class="s">&quot;%prog -i in1.fasta,in2.fasta&quot;</span><span class="p">),</span>
+  <span class="p">(</span><span class="s">&quot;Count the sequences in many fasta files&quot;</span><span class="p">,</span>
+   <span class="s">&quot;Count the sequences all .fasta files in current directory and write results to stdout. Note that -i option must be quoted.&quot;</span><span class="p">,</span>
+   <span class="s">&quot;%prog -i </span><span class="se">\&quot;</span><span class="s">*.fasta</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">)]</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;output_description&#39;</span><span class="p">]</span><span class="o">=</span> <span class="s">&quot;Tabular data is written to stdout.&quot;</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;required_options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="n">make_option</span><span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span><span class="s">&#39;--input_fps&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s">&#39;the input filepaths (comma-separated)&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;optional_options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="n">make_option</span><span class="p">(</span><span class="s">&#39;--suppress_errors&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>\
+        <span class="n">help</span><span class="o">=</span><span class="s">&#39;Suppress warnings about missing files [default: </span><span class="si">%d</span><span class="s">efault]&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">script_info</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">__version__</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">option_parser</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span>\
+       <span class="n">parse_command_line_parameters</span><span class="p">(</span><span class="o">**</span><span class="n">script_info</span><span class="p">)</span>
+    <span class="n">suppress_errors</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">suppress_errors</span>
+
+    <span class="n">input_fps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">input_fp</span> <span class="ow">in</span> <span class="n">opts</span><span class="o">.</span><span class="n">input_fps</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
+        <span class="n">input_fps</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">input_fp</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">input_fp</span> <span class="ow">in</span> <span class="n">input_fps</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">input_f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_fp</span><span class="p">,</span><span class="s">&#39;U&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">,</span><span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">suppress_errors</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">input_fp</span><span class="p">,</span> <span class="n">e</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">input_f</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">print</span> <span class="n">input_fp</span><span class="p">,</span> <span class="n">i</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Scripting guidelines</a><ul>
+<li><a class="reference internal" href="#quickstart-how-to-create-your-first-pycogent-script-in-5-minutes">Quickstart : how to create your first PyCogent script in 5 minutes</a></li>
+<li><a class="reference internal" href="#general-notes-on-designing-command-line-interfaces">General notes on designing command line interfaces</a></li>
+<li><a class="reference internal" href="#designing-pycogent-command-line-interfaces">Designing PyCogent command line interfaces</a><ul>
+<li><a class="reference internal" href="#flag-options">Flag options</a></li>
+<li><a class="reference internal" href="#choice-options">Choice options</a></li>
+<li><a class="reference internal" href="#defining-where-output-will-be-stored">Defining where output will be stored</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-options">Defining options</a></li>
+<li><a class="reference internal" href="#naming-options">Naming options</a></li>
+<li><a class="reference internal" href="#what-documentation-should-be-included-in-my-scripts">What documentation should be included in my scripts?</a></li>
+<li><a class="reference internal" href="#the-script-info-dictionary">The script_info dictionary</a><ul>
+<li><a class="reference internal" href="#core-values-defined-in-pycogent-command-line-interfaces">Core values defined in PyCogent command line interfaces</a></li>
+<li><a class="reference internal" href="#values-known-to-be-used-by-the-tools-outside-of-the-pycogent-codebase">Values known to be used by the tools outside of the PyCogent codebase</a></li>
+<li><a class="reference internal" href="#setting-values-in-script-info">Setting values in script_info</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#custom-command-line-option-types">Custom command line option types</a></li>
+<li><a class="reference internal" href="#template-for-a-new-pycogent-script">Template for a new PyCogent script</a></li>
+<li><a class="reference internal" href="#example-of-a-simple-pycogent-script">Example of a simple PyCogent script</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="developer_notes.html"
+                        title="previous chapter">For Developers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="licenses.html"
+                        title="next chapter">Licenses and disclaimer</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/scripting_guidelines.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="licenses.html" title="Licenses and disclaimer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="developer_notes.html" title="For Developers"
+             >previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

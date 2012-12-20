@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating and manipulating alignment profiles &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex" href="genetic_code_aa_index.html" />
+    <link rel="prev" title="Map protein alignment gaps to DNA alignment gaps" href="align_codons_to_protein.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="genetic_code_aa_index.html" title="Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="align_codons_to_protein.html" title="Map protein alignment gaps to DNA alignment gaps"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="creating-and-manipulating-alignment-profiles">
+<h1>Creating and manipulating alignment profiles<a class="headerlink" href="#creating-and-manipulating-alignment-profiles" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Sandra Smit</em></p>
+<p>This is an example of how to create a profile from an alignment and how to do particular tricks with it. First, import the necessary stuff.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.profile</span> <span class="kn">import</span> <span class="n">Profile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">RNA</span>
+</pre></div>
+</div>
+<p>Then load an example alignment of 20 phe-tRNA sequences which we will use to create the profile</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/trna_profile.fasta&quot;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">RNA</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Examine the number of sequences in the alignment and the alignment length</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">Seqs</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="go">77</span>
+</pre></div>
+</div>
+<p>Create a profile containing the counts of each base at each alignment position</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">getPosFreqs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">prettyPrint</span><span class="p">(</span><span class="n">include_header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">column_limit</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">col_sep</span><span class="o">=</span><span class="s">&#39;   &#39;</span><span class="p">)</span>
+<span class="go"> U    C    A    G    -   B</span>
+<span class="go"> 0    0    0   20    0   0</span>
+<span class="go"> 0   12    0    8    0   0</span>
+<span class="go"> 1   18    0    1    0   0</span>
+<span class="go"> 7    9    0    4    0   0...</span>
+</pre></div>
+</div>
+<p>Normalize the positions to get the relative frequencies at each position</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span><span class="o">.</span><span class="n">normalizePositions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">prettyPrint</span><span class="p">(</span><span class="n">include_header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">column_limit</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">col_sep</span><span class="o">=</span><span class="s">&#39;   &#39;</span><span class="p">)</span>
+<span class="go">     U        C        A        G        -        B</span>
+<span class="go">0.0000   0.0000   0.0000   1.0000   0.0000   0.0000</span>
+<span class="go">0.0000   0.6000   0.0000   0.4000   0.0000   0.0000</span>
+<span class="go">0.0500   0.9000   0.0000   0.0500   0.0000   0.0000</span>
+<span class="go">0.3500   0.4500   0.0000   0.2000   0.0000   0.0000...</span>
+</pre></div>
+</div>
+<p>Make sure the data in the profile is valid. The method isValid checks whether all rows add up to one and whether the profile has a valid Alphabet and CharacterOrder.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>A profile can be used to calculate consensus sequences from the alignment. To illustrate the different options for consensus calculation, let&#8217;s examine the frequency data at the fifth position of the alignment (index=4)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%.3f</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">f</span><span class="p">)</span> <span class="ow">in</span>\
+<span class="gp">... </span>    <span class="nb">zip</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">CharOrder</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">dataAt</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="k">if</span> <span class="n">f</span><span class="o">!=</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">U: 0.050</span>
+<span class="go">C: 0.400</span>
+<span class="go">A: 0.250</span>
+<span class="go">G: 0.300</span>
+</pre></div>
+</div>
+<p>The easiest consensus calculation will simply take the most frequent character at each position.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">toConsensus</span><span class="p">(</span><span class="n">fully_degenerate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">GCCCCGGUAGCUCAGU--GGUAGAGCAGGGGACUGAAAAUCCCCGUGUCGGCGGUUCGAUUCCGUCCCGGGGCACCA</span>
+</pre></div>
+</div>
+<p>You can also specify to use the degenerate character needed to cover all symbols occurring at a certain alignment position (fully_degenerate=True). At index 4 in the alignment U, C, A, and G occur, thus the fully degenerate symbol needed is &#8216;N&#8217;. Alternatively, using the cutoff value, you can ask for the degenerate symbol needed to cover a certain frequency. At a cutoff of 0.8, we need both C, G, and A at index 4 to cover this value, which results in the degenerate character &#8216;V&#8217;. For the lower cutoff of 0.6, C and G suffice, and thus the character in the consensus sequence is &#8216;S&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">=</span><span class="n">RNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">toConsensus</span><span class="p">(</span><span class="n">fully_degenerate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">GSBBNNDUAGCUCAGH??GGKAGAGCRBNVGRYUGAARAYCBNVNKGUCVBBDGWUCRAWHCHSNBHNNNVSC?CHM</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">toConsensus</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="go">GSCYVBRUAGCUCAGU??GGUAGAGCASVSGAYUGAAAAUCYBSRUGUCSSYGGUUCGAUUCCGBSYSBRGSCACCA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pf</span><span class="o">.</span><span class="n">toConsensus</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="go">GCCYSGRUAGCUCAGU??GGUAGAGCAGRGGACUGAAAAUCCYCGUGUCGGYGGUUCGAUUCCGYCYCKRGGCACCA</span>
+</pre></div>
+</div>
+<p>A profile could also function as the description of a certain motif. As an example, let&#8217;s create a profile description for the T-pseudouridine-C-loop which starts at index 54 and ends at index 59 (based on the reference structure matching the alignment).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">loop_profile</span> <span class="o">=</span> <span class="n">Profile</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Data</span><span class="p">[</span><span class="mi">54</span><span class="p">:</span><span class="mi">60</span><span class="p">,:],</span> <span class="n">Alphabet</span><span class="o">=</span><span class="n">RNA</span><span class="p">,</span> <span class="n">CharOrder</span><span class="o">=</span><span class="n">pf</span><span class="o">.</span><span class="n">CharOrder</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">loop_profile</span><span class="o">.</span><span class="n">prettyPrint</span><span class="p">(</span><span class="n">include_header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">column_limit</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">col_sep</span><span class="o">=</span><span class="s">&#39;   &#39;</span><span class="p">)</span>
+<span class="go">     U        C        A        G        -        B</span>
+<span class="go">0.9500   0.0000   0.0500   0.0000   0.0000   0.0000</span>
+<span class="go">1.0000   0.0000   0.0000   0.0000   0.0000   0.0000</span>
+<span class="go">0.0000   1.0000   0.0000   0.0000   0.0000   0.0000</span>
+<span class="go">0.0000   0.0000   0.0500   0.9500   0.0000   0.0000</span>
+<span class="go">0.0000   0.0000   1.0000   0.0000   0.0000   0.0000</span>
+<span class="go">0.8500   0.0000   0.1500   0.0000   0.0000   0.0000</span>
+</pre></div>
+</div>
+<p>We can calculate how well this profile matches in a certain sequence (or profile) by using the score method. As an example we see where the loop profile best fits into the yeast phe-tRNA sequence. As expected, we find the best hit at index 54 (with a score of 5.75).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">yeast</span> <span class="o">=</span> <span class="n">RNA</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span>\
+<span class="gp">... </span>    <span class="s">&#39;GCGGAUUUAGCUCAGUU-GGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">loop_profile</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">yeast</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">scores</span>
+<span class="go">[ 2.8   0.9   0.85  0.15  2.05  2.    3.75  0.95  1.2   1.    2.9   2.75</span>
+<span class="go">  0.    0.05  1.    2.9   2.05  1.95  0.2   1.95  0.05  1.    0.    2.</span>
+<span class="go">  0.15  2.    1.2   1.95  0.9   0.05  1.15  2.15  2.05  1.15  2.8   0.1</span>
+<span class="go">  0.9   0.    2.05  2.05  2.95  1.    1.8   0.95  0.05  0.85  2.    2.8</span>
+<span class="go">  0.95  1.85  2.75  1.    0.95  1.15  5.75  1.    0.    0.15  3.05  2.15</span>
+<span class="go">  1.    1.2   2.15  1.9   0.95  0.    0.05  1.05  4.05  1.95  1.05  0.15]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="go">5.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">scores</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+<span class="go">54</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="align_codons_to_protein.html"
+                        title="previous chapter">Map protein alignment gaps to DNA alignment gaps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="genetic_code_aa_index.html"
+                        title="next chapter">Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/aln_profile.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="genetic_code_aa_index.html" title="Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="align_codons_to_protein.html" title="Map protein alignment gaps to DNA alignment gaps"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

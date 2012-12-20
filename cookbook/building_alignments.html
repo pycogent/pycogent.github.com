@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Building alignments &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Building a tree of life" href="building_a_tree_of_life.html" />
+    <link rel="prev" title="Controlling BLAST" href="blast.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="building_a_tree_of_life.html" title="Building a tree of life"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="blast.html" title="Controlling BLAST"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="building-alignments">
+<h1>Building alignments<a class="headerlink" href="#building-alignments" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-the-cogent-aligners">
+<h2>Using the cogent aligners<a class="headerlink" href="#using-the-cogent-aligners" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="running-a-pairwise-needleman-wunsch-alignment">
+<h3>Running a pairwise Needleman-Wunsch-Alignment<a class="headerlink" href="#running-a-pairwise-needleman-wunsch-alignment" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.align.algorithm</span> <span class="kn">import</span> <span class="n">nw_align</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq1</span> <span class="o">=</span> <span class="s">&#39;AKSAMITNY&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq2</span> <span class="o">=</span> <span class="s">&#39;AKHSAMMIT&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nw_align</span><span class="p">(</span><span class="n">seq1</span><span class="p">,</span><span class="n">seq2</span><span class="p">)</span>
+<span class="go">(&#39;AK-SAM-ITNY&#39;, &#39;AKHSAMMIT--&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-a-progressive-aligner">
+<h3>Running a progressive aligner<a class="headerlink" href="#running-a-progressive-aligner" title="Permalink to this headline">¶</a></h3>
+<p>We import useful functions and then load the sequences to be aligned.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/test2.fasta&#39;</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="for-nucleotides">
+<h4>For nucleotides<a class="headerlink" href="#for-nucleotides" title="Permalink to this headline">¶</a></h4>
+<p>We load a canned nucleotide substitution model and the progressive aligner <tt class="docutils literal"><span class="pre">TreeAlign</span></tt> function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.align.progressive</span> <span class="kn">import</span> <span class="n">TreeAlign</span>
+</pre></div>
+</div>
+<p>We first align without providing a guide tree. The <tt class="docutils literal"><span class="pre">TreeAlign</span></tt> algorithm builds pairwise alignments and estimates the substitution model parameters and pairwise distances. The distances are used to build a neighbour joining tree and the median value of substitution model parameters are provided to the substitution model for the progressive alignment step.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">TreeAlign</span><span class="p">(</span><span class="n">HKY85</span><span class="p">(),</span> <span class="n">seqs</span><span class="p">)</span>
+<span class="go">Param Estimate Summary Stats: kappa</span>
+<span class="go">==============================</span>
+<span class="go">        Statistic        Value</span>
+<span class="go">------------------------------</span>
+<span class="go">            Count           10</span>
+<span class="go">              Sum        1e+06</span>
+<span class="go">           Median        4.256</span>
+<span class="go">             Mean        1e+05</span>
+<span class="go">StandardDeviation    3.162e+05</span>
+<span class="go">         Variance        1e+11</span>
+<span class="go">------------------------------</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span>
+<span class="go">5 x 60 text alignment: NineBande[-C-----GCCA...], Mouse[GCAGTGAGCCA...], DogFaced[GCAAGGAGCCA...], ...</span>
+</pre></div>
+</div>
+<p>We then align using a guide tree (pre-estimated) and specifying the ratio of transitions to transversions (kappa).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">treestring</span><span class="o">=</span><span class="s">&#39;(((NineBande:0.0128202449453,Mouse:0.184732725695):0.0289459522137,DogFaced:0.0456427810916):0.0271363715538,Human:0.0341320714654,HowlerMon:0.0188456837006)root;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;kappa&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">TreeAlign</span><span class="p">(</span><span class="n">HKY85</span><span class="p">(),</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span class="n">tree</span><span class="p">,</span> <span class="n">param_vals</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span>
+<span class="go">5 x 60 text alignment: NineBande[-C-----GCCA...], Mouse[GCAGTGAGCCA...], DogFaced[GCAAGGAGCCA...], ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-codons">
+<h4>For codons<a class="headerlink" href="#for-codons" title="Permalink to this headline">¶</a></h4>
+<p>We load a canned codon substitution model and use a pre-defined tree and parameter estimates.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">MG94HKY</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">treestring</span><span class="o">=</span><span class="s">&#39;((NineBande:0.0575781680031,Mouse:0.594704139406):0.078919659556,DogFaced:0.142151930069,(HowlerMon:0.0619991555435,Human:0.10343006422):0.0792423439112)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;kappa&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span><span class="p">:</span> <span class="mf">1.3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">TreeAlign</span><span class="p">(</span><span class="n">MG94HKY</span><span class="p">(),</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span class="n">tree</span><span class="p">,</span> <span class="n">param_vals</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span>
+<span class="go">5 x 60 text alignment: NineBande[------CGCCA...], Mouse[GCAGTGAGCCA...], DogFaced[GCAAGGAGCCA...], ...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="building-alignments-with-3rd-party-apps-such-as-muscle-or-clustalw">
+<h2>Building alignments with 3rd-party apps such as muscle or clustalw<a class="headerlink" href="#building-alignments-with-3rd-party-apps-such-as-muscle-or-clustalw" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference internal" href="../examples/alignment_app_controllers.html#alignment-controllers"><em>Using alignment application controllers to align unaligned sequences</em></a>.</p>
+</div>
+<div class="section" id="converting-gaps-from-aa-seq-alignment-to-nuc-seq-alignment">
+<h2>Converting gaps from aa-seq alignment to nuc seq alignment<a class="headerlink" href="#converting-gaps-from-aa-seq-alignment-to-nuc-seq-alignment" title="Permalink to this headline">¶</a></h2>
+<p>We load some unaligned DNA sequences and show their translation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">PROTEIN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;hum&#39;</span><span class="p">,</span> <span class="s">&#39;AAGCAGATCCAGGAAAGCAGCGAGAATGGCAGCCTGGCCGCGCGCCAGGAGAGGCAGGCCCAGGTCAACCTCACT&#39;</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="p">(</span><span class="s">&#39;mus&#39;</span><span class="p">,</span> <span class="s">&#39;AAGCAGATCCAGGAGAGCGGCGAGAGCGGCAGCCTGGCCGCGCGGCAGGAGAGGCAGGCCCAAGTCAACCTCACG&#39;</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="p">(</span><span class="s">&#39;rat&#39;</span><span class="p">,</span> <span class="s">&#39;CTGAACAAGCAGCCACTTTCAAACAAGAAA&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unaligned_DNA</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">seqs</span><span class="p">,</span> <span class="n">moltype</span> <span class="o">=</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">aligned</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">unaligned_DNA</span><span class="o">.</span><span class="n">toFasta</span><span class="p">()</span>
+<span class="go">&gt;hum</span>
+<span class="go">AAGCAGATCCAGGAAAGCAGCGAGAATGGCAGCCTGGCCGCGCGCCAGGAGAGGCAGGCCCAGGTCAACCTCACT</span>
+<span class="go">&gt;mus</span>
+<span class="go">AAGCAGATCCAGGAGAGCGGCGAGAGCGGCAGCCTGGCCGCGCGGCAGGAGAGGCAGGCCCAAGTCAACCTCACG</span>
+<span class="go">&gt;rat</span>
+<span class="go">CTGAACAAGCAGCCACTTTCAAACAAGAAA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">unaligned_DNA</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">()</span>
+<span class="go">&gt;hum</span>
+<span class="go">KQIQESSENGSLAARQERQAQVNLT</span>
+<span class="go">&gt;mus</span>
+<span class="go">KQIQESGESGSLAARQERQAQVNLT</span>
+<span class="go">&gt;rat</span>
+<span class="go">LNKQPLSNKK</span>
+</pre></div>
+</div>
+<p>We load an alignment of these protein sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_aa_seqs</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;hum&#39;</span><span class="p">,</span> <span class="s">&#39;KQIQESSENGSLAARQERQAQVNLT&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span><span class="s">&#39;mus&#39;</span><span class="p">,</span> <span class="s">&#39;KQIQESGESGSLAARQERQAQVNLT&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                   <span class="p">(</span><span class="s">&#39;rat&#39;</span><span class="p">,</span> <span class="s">&#39;LNKQ------PLS---------NKK&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_aa</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">aligned_aa_seqs</span><span class="p">,</span> <span class="n">moltype</span> <span class="o">=</span> <span class="n">PROTEIN</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We then obtain an alignment of the DNA sequences from the alignment of their translation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_DNA</span> <span class="o">=</span> <span class="n">aligned_aa</span><span class="o">.</span><span class="n">replaceSeqs</span><span class="p">(</span><span class="n">unaligned_DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aligned_DNA</span>
+<span class="go">&gt;hum</span>
+<span class="go">AAGCAGATCCAGGAAAGCAGCGAGAATGGCAGCCTGGCCGCGCGCCAGGAGAGGCAGGCCCAGGTCAACCTCACT</span>
+<span class="go">&gt;mus</span>
+<span class="go">AAGCAGATCCAGGAGAGCGGCGAGAGCGGCAGCCTGGCCGCGCGGCAGGAGAGGCAGGCCCAAGTCAACCTCACG</span>
+<span class="go">&gt;rat</span>
+<span class="go">CTGAACAAGCAG------------------CCACTTTCA---------------------------AACAAGAAA</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Building alignments</a><ul>
+<li><a class="reference internal" href="#using-the-cogent-aligners">Using the cogent aligners</a><ul>
+<li><a class="reference internal" href="#running-a-pairwise-needleman-wunsch-alignment">Running a pairwise Needleman-Wunsch-Alignment</a></li>
+<li><a class="reference internal" href="#running-a-progressive-aligner">Running a progressive aligner</a><ul>
+<li><a class="reference internal" href="#for-nucleotides">For nucleotides</a></li>
+<li><a class="reference internal" href="#for-codons">For codons</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-alignments-with-3rd-party-apps-such-as-muscle-or-clustalw">Building alignments with 3rd-party apps such as muscle or clustalw</a></li>
+<li><a class="reference internal" href="#converting-gaps-from-aa-seq-alignment-to-nuc-seq-alignment">Converting gaps from aa-seq alignment to nuc seq alignment</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="blast.html"
+                        title="previous chapter">Controlling BLAST</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="building_a_tree_of_life.html"
+                        title="next chapter">Building a tree of life</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/building_alignments.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="building_a_tree_of_life.html" title="Building a tree of life"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="blast.html" title="Controlling BLAST"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

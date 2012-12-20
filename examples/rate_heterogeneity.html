@@ -1,0 +1,173 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Analysis of rate heterogeneity &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Evaluate process heterogeneity using a Hidden Markov Model" href="hmm_par_heterogeneity.html" />
+    <link rel="prev" title="Perform a coevolutionary analysis on biological sequence alignments" href="coevolution.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="hmm_par_heterogeneity.html" title="Evaluate process heterogeneity using a Hidden Markov Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="coevolution.html" title="Perform a coevolutionary analysis on biological sequence alignments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="analysis-of-rate-heterogeneity">
+<span id="rate-heterogeneity"></span><h1>Analysis of rate heterogeneity<a class="headerlink" href="#analysis-of-rate-heterogeneity" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>A simple example for analyses involving rate heterogeneity among sites. In this case we will simulate an alignment with two rate categories and then try to recover the rates from the alignment.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.substitution_model</span> <span class="kn">import</span> <span class="n">Nucleotide</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+</pre></div>
+</div>
+<p>Make an alignment with equal split between rates 0.6 and 0.2, and then concatenate them to create a new alignment.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Nucleotide</span><span class="p">(</span><span class="n">equal_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&quot;data/test.tree&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln1</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">simulateAlignment</span><span class="p">(</span><span class="n">sequence_length</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln2</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">simulateAlignment</span><span class="p">(</span><span class="n">sequence_length</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln3</span> <span class="o">=</span> <span class="n">aln1</span> <span class="o">+</span> <span class="n">aln2</span>
+</pre></div>
+</div>
+<p>Start from scratch, optimising only rates and the rate probability ratio.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Nucleotide</span><span class="p">(</span><span class="n">equal_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ordered_param</span><span class="o">=</span><span class="s">&quot;rate&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">distribution</span><span class="o">=</span><span class="s">&quot;free&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_restarts</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We want to know the bin probabilities and the posterior probabilities.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bprobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">lf</span><span class="o">.</span><span class="n">getStatistics</span><span class="p">()</span> <span class="k">if</span> <span class="s">&#39;bin&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Print the <tt class="docutils literal"><span class="pre">bprobs</span></tt> sorted by <tt class="docutils literal"><span class="pre">'rate'</span></tt> will generate a table like</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">bin</span> <span class="n">params</span>
+<span class="o">====================</span>
+ <span class="nb">bin</span>   <span class="n">bprobs</span>   <span class="n">rate</span>
+<span class="o">--------------------</span>
+<span class="n">bin0</span>     <span class="mf">0.49</span>   <span class="mf">0.49</span>
+<span class="n">bin1</span>     <span class="mf">0.51</span>   <span class="mf">1.48</span>
+<span class="o">--------------------</span>
+</pre></div>
+</div>
+<p>We&#8217;ll now use a gamma distribution on the sample alignment, specifying the number of bins as 4. We specify that the bins have equal density using the <tt class="docutils literal"><span class="pre">lf.setParamRule('bprobs',</span> <span class="pre">is_constant=True)</span></tt> command.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Nucleotide</span><span class="p">(</span><span class="n">equal_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ordered_param</span><span class="o">=</span><span class="s">&quot;rate&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">distribution</span><span class="o">=</span><span class="s">&quot;gamma&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;bprobs&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_restarts</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="coevolution.html"
+                        title="previous chapter">Perform a coevolutionary analysis on biological sequence alignments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hmm_par_heterogeneity.html"
+                        title="next chapter">Evaluate process heterogeneity using a Hidden Markov Model</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/rate_heterogeneity.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="hmm_par_heterogeneity.html" title="Evaluate process heterogeneity using a Hidden Markov Model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="coevolution.html" title="Perform a coevolutionary analysis on biological sequence alignments"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

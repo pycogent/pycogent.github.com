@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Community analysis &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Dealing with HTS data" href="dealing_with_hts_data.html" />
+    <link rel="prev" title="Multivariate data analysis" href="multivariate_data_analysis.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dealing_with_hts_data.html" title="Dealing with HTS data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="multivariate_data_analysis.html" title="Multivariate data analysis"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="community-analysis">
+<h1>Community analysis<a class="headerlink" href="#community-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="alpha-diversity">
+<h2>alpha diversity<a class="headerlink" href="#alpha-diversity" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="phylogenetic-diversity-pd">
+<h3>Phylogenetic Diversity (PD)<a class="headerlink" href="#phylogenetic-diversity-pd" title="Permalink to this headline">¶</a></h3>
+<p>For each environment (i.e. sample), calculates the amount of branch length in a phylogenetic tree that lead to its sequences.</p>
+<p>First we will load in a Newick formatted tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.tree</span> <span class="kn">import</span> <span class="n">DndParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_tree</span> <span class="kn">import</span> <span class="n">UniFracTreeNode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_example_tree_newick.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">DndParser</span><span class="p">(</span><span class="n">tree_in</span><span class="p">,</span> <span class="n">UniFracTreeNode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next we will load information on which sequences in the tree come from which environment.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">count_envs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_et_al_example_env_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs</span> <span class="o">=</span> <span class="n">count_envs</span><span class="p">(</span><span class="n">envs_in</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, we can calculate the PD values for each environment in the tree</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">PD_whole_tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs</span><span class="p">,</span> <span class="n">PD_values</span> <span class="o">=</span> <span class="n">PD_whole_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">envs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">envs</span>
+<span class="go">[&#39;E_FL&#39;, &#39;E_PA&#39;, &#39;O_FL&#39;, &#39;O_UN&#39;, &#39;R_FL&#39;, &#39;R_PA&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">PD_values</span>
+<span class="go">[ 5.85389  7.60352  2.19215  2.81821  3.93728  3.7534 ]</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">PD_vals</span></tt> is a <tt class="docutils literal"><span class="pre">numpy</span></tt> <tt class="docutils literal"><span class="pre">array</span></tt> with the values representing each environment in envs.</p>
+</div>
+<div class="section" id="rarefaction">
+<h3>Rarefaction<a class="headerlink" href="#rarefaction" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="parametric-methods">
+<h3>Parametric methods<a class="headerlink" href="#parametric-methods" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="nonparametric-methods">
+<h3>Nonparametric methods<a class="headerlink" href="#nonparametric-methods" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+</div>
+<div class="section" id="beta-diversity">
+<h2>beta diversity<a class="headerlink" href="#beta-diversity" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="unifrac">
+<h3>Unifrac<a class="headerlink" href="#unifrac" title="Permalink to this headline">¶</a></h3>
+<p>The Fast UniFrac implementation in PyCogent is the source code for the <a class="reference external" href="http://bmf2.colorado.edu/fastunifrac">Fast UniFrac web tool</a> and the <a class="reference external" href="http://qiime.sourceforge.net">QIIME pipeline</a> for Microbial community analysis.</p>
+</div>
+<div class="section" id="calculate-a-unifrac-distance-matrix-and-apply-pcoa-and-upgma">
+<h3>Calculate a UniFrac Distance Matrix and apply PCoA and UPGMA<a class="headerlink" href="#calculate-a-unifrac-distance-matrix-and-apply-pcoa-and-upgma" title="Permalink to this headline">¶</a></h3>
+<p>The UniFrac analysis is run on open tree and environment file objects. The resulting dictionary has a distance matrix of pairwise UniFrac values (&#8216;distance_matrix&#8217;), a Newick string representing the results of performing UPGMA clustering on this distance matrix (&#8216;cluster_envs&#8217;) and the results of running Principal Coordinates Analysis on the distance matrix (&#8216;pcoa&#8217;). One can specify weighted UniFrac with <tt class="docutils literal"><span class="pre">weighted=True</span></tt>. Here we run an unweighted analysis.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">fast_unifrac_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_example_tree_newick.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_et_al_example_env_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fast_unifrac_file</span><span class="p">(</span><span class="n">tree_in</span><span class="p">,</span> <span class="n">envs_in</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;cluster_envs&#39;</span><span class="p">]</span>
+<span class="go">(((((&#39;E_FL&#39;:0.339607103063,&#39;R_FL&#39;:0.339607103063):0.0279991540511,&#39;R_PA&#39;:0.367606257114):0.0103026524101,&#39;E_PA&#39;:0.377908909524):0.0223322024492,&#39;O_UN&#39;:0.400241111973):0.00976759866402,&#39;O_FL&#39;:0.410008710637);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;pcoa&#39;</span><span class="p">]</span>
+<span class="go">=================================================================================================</span>
+<span class="go">        Type              Label  vec_num-0  vec_num-1  vec_num-2  vec_num-3  vec_num-4  vec_num-5</span>
+<span class="go">-------------------------------------------------------------------------------------------------</span>
+<span class="go">Eigenvectors               E_FL       0.05       0.22      -0.09      -0.26      -0.29      -0.00</span>
+<span class="go">Eigenvectors               E_PA      -0.36       0.24       0.21      -0.08       0.18      -0.00</span>
+<span class="go">Eigenvectors               O_FL       0.32      -0.26       0.30      -0.13       0.05      -0.00</span>
+<span class="go">Eigenvectors               O_UN      -0.28      -0.40      -0.24      -0.04       0.01      -0.00</span>
+<span class="go">Eigenvectors               R_FL       0.29       0.18      -0.28       0.09       0.22      -0.00</span>
+<span class="go">Eigenvectors               R_PA      -0.02       0.02       0.11       0.42      -0.17      -0.00</span>
+<span class="go"> Eigenvalues        eigenvalues       0.40       0.36       0.29       0.27       0.19      -0.00</span>
+<span class="go"> Eigenvalues  var explained (%)      26.34      23.84      19.06      18.02      12.74      -0.00</span>
+<span class="go">-------------------------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="perform-pairwise-tests-of-whether-samples-are-significantly-different-with-unifrac">
+<h3>Perform pairwise tests of whether samples are significantly different with UniFrac<a class="headerlink" href="#perform-pairwise-tests-of-whether-samples-are-significantly-different-with-unifrac" title="Permalink to this headline">¶</a></h3>
+<p>The analysis is run on open tree and environment file objects. In this example, we use unweighted unifrac (<tt class="docutils literal"><span class="pre">weighted=False</span></tt>), we permute the environment assignments on the tree 50 times (<tt class="docutils literal"><span class="pre">num_iters=50</span></tt>) and we perform UniFrac on all pairs of environments (<tt class="docutils literal"><span class="pre">test_on=&quot;Pairwise&quot;</span></tt>). A list is returned with a tuple for each pairwise comparison with items: 0 - the first environment, 1 - the second environment, 2- the uncorrected p-value and 3 - the p-value after correcting for multiple comparisons with the Bonferroni correction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">fast_unifrac_permutations_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_example_tree_newick.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_et_al_example_env_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fast_unifrac_permutations_file</span><span class="p">(</span><span class="n">tree_in</span><span class="p">,</span> <span class="n">envs_in</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">num_iters</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">test_on</span><span class="o">=</span><span class="s">&quot;Pairwise&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;E_FL&#39;, &#39;E_PA&#39;, 0.17999999999999999, 1.0)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="perform-a-single-unifrac-significance-test-on-the-whole-tree">
+<h3>Perform a single UniFrac significance test on the whole tree<a class="headerlink" href="#perform-a-single-unifrac-significance-test-on-the-whole-tree" title="Permalink to this headline">¶</a></h3>
+<p>The analysis is run on open tree and environment file objects. In this example, we use weighted unifrac (<tt class="docutils literal"><span class="pre">weighted=True</span></tt>), we permute the environment assignments on the tree 50 times (<tt class="docutils literal"><span class="pre">num_iters=50</span></tt>) and we perform a unifrac significance test on the whole tree (<tt class="docutils literal"><span class="pre">test_on=&quot;Tree&quot;</span></tt>). The resulting list has only one item since a single test was performed. It is a 3 item tuple where the second and third values are the p-value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">fast_unifrac_permutations_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_example_tree_newick.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_et_al_example_env_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fast_unifrac_permutations_file</span><span class="p">(</span><span class="n">tree_in</span><span class="p">,</span> <span class="n">envs_in</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">num_iters</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">test_on</span><span class="o">=</span><span class="s">&quot;Tree&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span>
+<span class="go">[(&#39;whole tree&#39;, 0.56000000000000005, 0.56000000000000005)]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="p-test">
+<h3>P-test<a class="headerlink" href="#p-test" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="perform-pairwise-tests-of-whether-samples-are-significantly-different-with-the-p-test-martin-2002">
+<h3>Perform pairwise tests of whether samples are significantly different with the P-test (Martin, 2002)<a class="headerlink" href="#perform-pairwise-tests-of-whether-samples-are-significantly-different-with-the-p-test-martin-2002" title="Permalink to this headline">¶</a></h3>
+<p>The analysis is run on open tree and environment file objects. In this example, we permute the environment assignments on the tree 50 times (<tt class="docutils literal"><span class="pre">num_iters=50</span></tt>) and perform the p test for all pairs of environments (<tt class="docutils literal"><span class="pre">test_on=&quot;Pairwise&quot;</span></tt>). A list is returned with a tuple for each pairwise comparison with items: 0 - the first environment, 1 - the second environment, 2- the uncorrected p-value and 3 - the p-value after correcting for multiple comparisons with the Bonferroni correction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">fast_p_test_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_example_tree_newick.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">envs_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;data/Crump_et_al_example_env_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fast_p_test_file</span><span class="p">(</span><span class="n">tree_in</span><span class="p">,</span> <span class="n">envs_in</span><span class="p">,</span> <span class="n">num_iters</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">test_on</span><span class="o">=</span><span class="s">&quot;Pairwise&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;E_FL&#39;, &#39;E_PA&#39;, 0.040000000000000001, 0.59999999999999998)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="taxon-based">
+<h3>Taxon-based<a class="headerlink" href="#taxon-based" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="computing-a-distance-matrix-between-samples">
+<h4>Computing a distance matrix between samples<a class="headerlink" href="#computing-a-distance-matrix-between-samples" title="Permalink to this headline">¶</a></h4>
+<p>PyCogent provides many different ways to compute pairwise distances between objects. <tt class="docutils literal"><span class="pre">cogent/maths/distance_transform.py</span></tt> provides a set of functions to calculate dissimilarities/distances between samples, given an abundance matrix. Here is one example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.distance_transform</span> <span class="kn">import</span> <span class="n">dist_euclidean</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">abundance_data</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">22</span><span class="p">]],</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see <tt class="docutils literal"><span class="pre">distance_transform.py</span></tt> for other metrics than euclidean</p>
+</div>
+<p>We now have 3 samples, and the abundance of each column (e.g.: species) in that sample.  The first sample has 1 individual of species 1, 3 individuals of species 2.  We now compute the relatedness between these samples, using euclidean distance between the rows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dists</span> <span class="o">=</span> <span class="n">dist_euclidean</span><span class="p">(</span><span class="n">abundance_data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">dists</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> 
+<span class="go">[[  0.        ,   4.12,  19.02]</span>
+<span class="go">[  4.12,   0.        ,  20.59 ]</span>
+<span class="go">[ 19.02,  20.59 ,   0.        ]]</span>
+</pre></div>
+</div>
+<p>this distance matrix can be visualized via multivariate reduction techniques such as <a class="reference internal" href="multivariate_data_analysis.html#multivariate-analysis"><em>Multivariate data analysis</em></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="taxonomy">
+<h2>Taxonomy<a class="headerlink" href="#taxonomy" title="Permalink to this headline">¶</a></h2>
+<p><em>To be written.</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Community analysis</a><ul>
+<li><a class="reference internal" href="#alpha-diversity">alpha diversity</a><ul>
+<li><a class="reference internal" href="#phylogenetic-diversity-pd">Phylogenetic Diversity (PD)</a></li>
+<li><a class="reference internal" href="#rarefaction">Rarefaction</a></li>
+<li><a class="reference internal" href="#parametric-methods">Parametric methods</a></li>
+<li><a class="reference internal" href="#nonparametric-methods">Nonparametric methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#beta-diversity">beta diversity</a><ul>
+<li><a class="reference internal" href="#unifrac">Unifrac</a></li>
+<li><a class="reference internal" href="#calculate-a-unifrac-distance-matrix-and-apply-pcoa-and-upgma">Calculate a UniFrac Distance Matrix and apply PCoA and UPGMA</a></li>
+<li><a class="reference internal" href="#perform-pairwise-tests-of-whether-samples-are-significantly-different-with-unifrac">Perform pairwise tests of whether samples are significantly different with UniFrac</a></li>
+<li><a class="reference internal" href="#perform-a-single-unifrac-significance-test-on-the-whole-tree">Perform a single UniFrac significance test on the whole tree</a></li>
+<li><a class="reference internal" href="#p-test">P-test</a></li>
+<li><a class="reference internal" href="#perform-pairwise-tests-of-whether-samples-are-significantly-different-with-the-p-test-martin-2002">Perform pairwise tests of whether samples are significantly different with the P-test (Martin, 2002)</a></li>
+<li><a class="reference internal" href="#taxon-based">Taxon-based</a><ul>
+<li><a class="reference internal" href="#computing-a-distance-matrix-between-samples">Computing a distance matrix between samples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#taxonomy">Taxonomy</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="multivariate_data_analysis.html"
+                        title="previous chapter">Multivariate data analysis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dealing_with_hts_data.html"
+                        title="next chapter">Dealing with HTS data</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/community_analysis.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dealing_with_hts_data.html" title="Dealing with HTS data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="multivariate_data_analysis.html" title="Multivariate data analysis"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

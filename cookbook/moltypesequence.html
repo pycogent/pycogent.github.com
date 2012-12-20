@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using the MolType and Sequence objects &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
+    <link rel="next" title="Alphabets" href="alphabet.html" />
+    <link rel="prev" title="Loading nucleotide, protein sequences" href="loading_sequences.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="alphabet.html" title="Alphabets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="loading_sequences.html" title="Loading nucleotide, protein sequences"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-the-moltype-and-sequence-objects">
+<h1>Using the <tt class="docutils literal"><span class="pre">MolType</span></tt> and <tt class="docutils literal"><span class="pre">Sequence</span></tt> objects<a class="headerlink" href="#using-the-moltype-and-sequence-objects" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="moltype">
+<h2>MolType<a class="headerlink" href="#moltype" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">MolType</span></tt> provides services for resolving ambiguities, or providing the correct ambiguity for recoding. It also maintains the mappings between different kinds of alphabets, sequences and alignments.</p>
+<p>One issue with <tt class="docutils literal"><span class="pre">MolType</span></tt>&#8216;s is that they need to know about <tt class="docutils literal"><span class="pre">Sequence</span></tt>, <tt class="docutils literal"><span class="pre">Alphabet</span></tt>, and other objects, but, at the same time, those objects need to know about the <tt class="docutils literal"><span class="pre">MolType</span></tt>. It is thus essential that the connection between these other types and the <tt class="docutils literal"><span class="pre">MolType</span></tt> can be made after the objects are created.</p>
+<div class="section" id="setting-up-a-moltype-object-with-an-rna-sequence">
+<h3>Setting up a <tt class="docutils literal"><span class="pre">MolType</span></tt> object with an RNA sequence<a class="headerlink" href="#setting-up-a-moltype-object-with-an-rna-sequence" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.moltype</span> <span class="kn">import</span> <span class="n">MolType</span><span class="p">,</span> <span class="n">IUPAC_RNA_chars</span><span class="p">,</span>\
+<span class="gp">... </span>  <span class="n">IUPAC_RNA_ambiguities</span><span class="p">,</span> <span class="n">RnaStandardPairs</span><span class="p">,</span> <span class="n">RnaMW</span><span class="p">,</span>\
+<span class="gp">... </span>  <span class="n">IUPAC_RNA_ambiguities_complements</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.sequence</span> <span class="kn">import</span> <span class="n">NucleicAcidSequence</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">testrnaseq</span> <span class="o">=</span> <span class="s">&#39;ACGUACGUACGUACGU&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RnaMolType</span> <span class="o">=</span> <span class="n">MolType</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Sequence</span> <span class="o">=</span> <span class="n">NucleicAcidSequence</span><span class="p">(</span><span class="n">testrnaseq</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">motifset</span> <span class="o">=</span> <span class="n">IUPAC_RNA_chars</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Ambiguities</span> <span class="o">=</span> <span class="n">IUPAC_RNA_ambiguities</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">label</span> <span class="o">=</span> <span class="s">&quot;rna_with_lowercase&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">MWCalculator</span> <span class="o">=</span> <span class="n">RnaMW</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Complements</span> <span class="o">=</span> <span class="n">IUPAC_RNA_ambiguities_complements</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Pairs</span> <span class="o">=</span> <span class="n">RnaStandardPairs</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">add_lower</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">preserve_existing_moltypes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">make_alphabet_group</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-a-moltype-object-with-a-dna-sequence">
+<h3>Setting up a <tt class="docutils literal"><span class="pre">MolType</span></tt> object with a DNA sequence<a class="headerlink" href="#setting-up-a-moltype-object-with-a-dna-sequence" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><pre> &gt;&gt;&gt; from cogent.core.moltype import MolType, IUPAC_DNA_chars,\
+ ...   IUPAC_DNA_ambiguities, DnaMW, IUPAC_DNA_ambiguities_complements,\
+ ...   DnaStandardPairs
+&gt;&gt;&gt; testdnaseq = 'ACGTACGTACGUACGT'
+&gt;&gt;&gt; DnaMolType = MolType(
+...     Sequence = NucleicAcidSequence(testdnaseq),
+...     motifset = IUPAC_DNA_chars,
+...     Ambiguities = IUPAC_DNA_ambiguities,
+...     label = "dna_with_lowercase",
+...     MWCalculator = DnaMW,
+...     Complements = IUPAC_DNA_ambiguities_complements,
+...     Pairs = DnaStandardPairs,
+...     add_lower=True,
+...     preserve_existing_moltypes=True,
+...     make_alphabet_group=True,
+...     )</pre>
+</div>
+</div>
+<div class="section" id="setting-up-a-moltype-object-with-a-protein-sequence">
+<h3>Setting up a <tt class="docutils literal"><span class="pre">MolType</span></tt> object with a protein sequence<a class="headerlink" href="#setting-up-a-moltype-object-with-a-protein-sequence" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><pre> &gt;&gt;&gt; from cogent.core.moltype import MolType, IUPAC_PROTEIN_chars,\
+ ...   IUPAC_PROTEIN_ambiguities, ProteinMW
+&gt;&gt;&gt; from cogent.core.sequence import ProteinSequence, ModelProteinSequence
+&gt;&gt;&gt; protstr = 'TEST'
+&gt;&gt;&gt; ProteinMolType = MolType(
+...     Sequence = ProteinSequence(protstr),
+...     motifset = IUPAC_PROTEIN_chars,
+...     Ambiguities = IUPAC_PROTEIN_ambiguities,
+...     MWCalculator = ProteinMW,
+...     make_alphabet_group=True,
+...     ModelSeq = ModelProteinSequence,
+...     label = "protein")
+&gt;&gt;&gt; protseq = ProteinMolType.Sequence</pre>
+</div>
+</div>
+<div class="section" id="verify-sequences">
+<h3>Verify sequences<a class="headerlink" href="#verify-sequences" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rnastr</span> <span class="o">=</span> <span class="s">&#39;ACGUACGUACGUACGU&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dnastr</span> <span class="o">=</span> <span class="s">&#39;ACGTACGTACGTACGT&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RnaMolType</span><span class="o">.</span><span class="n">isValid</span><span class="p">(</span><span class="n">rnastr</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RnaMolType</span><span class="o">.</span><span class="n">isValid</span><span class="p">(</span><span class="n">dnastr</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RnaMolType</span><span class="o">.</span><span class="n">isValid</span><span class="p">(</span><span class="n">NucleicAcidSequence</span><span class="p">(</span><span class="n">dnastr</span><span class="p">)</span><span class="o">.</span><span class="n">toRna</span><span class="p">())</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="sequence">
+<h2><tt class="docutils literal"><span class="pre">Sequence</span></tt><a class="headerlink" href="#sequence" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">Sequence</span></tt> object contains classes that represent biological sequence data. These provide generic biological sequence manipulation functions, plus functions that are critical for the <tt class="docutils literal"><span class="pre">evolve</span></tt> module calculations.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not import sequence classes directly! It is expected that you will access them through <tt class="docutils literal"><span class="pre">MolType</span></tt> objects. The most common molecular types <tt class="docutils literal"><span class="pre">DNA</span></tt>, <tt class="docutils literal"><span class="pre">RNA</span></tt>, <tt class="docutils literal"><span class="pre">PROTEIN</span></tt> are provided as top level imports in cogent (e.g. <tt class="docutils literal"><span class="pre">cogent.DNA</span></tt>). Sequence classes depend on information from the <tt class="docutils literal"><span class="pre">MolType</span></tt> that is <strong>only</strong> available after <tt class="docutils literal"><span class="pre">MolType</span></tt> has been imported. Sequences are intended to be immutable. This is not enforced by the code for performance reasons, but don&#8217;t alter the <tt class="docutils literal"><span class="pre">MolType</span></tt> or the sequence data after creation.</p>
+</div>
+<p>More detailed usage of sequence objects can be found in <a class="reference internal" href="DNA_and_RNA_sequences.html#dna-rna-seqs"><em>DNA and RNA sequences</em></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using the <tt class="docutils literal"><span class="pre">MolType</span></tt> and <tt class="docutils literal"><span class="pre">Sequence</span></tt> objects</a><ul>
+<li><a class="reference internal" href="#moltype">MolType</a><ul>
+<li><a class="reference internal" href="#setting-up-a-moltype-object-with-an-rna-sequence">Setting up a <tt class="docutils literal"><span class="pre">MolType</span></tt> object with an RNA sequence</a></li>
+<li><a class="reference internal" href="#setting-up-a-moltype-object-with-a-dna-sequence">Setting up a <tt class="docutils literal"><span class="pre">MolType</span></tt> object with a DNA sequence</a></li>
+<li><a class="reference internal" href="#setting-up-a-moltype-object-with-a-protein-sequence">Setting up a <tt class="docutils literal"><span class="pre">MolType</span></tt> object with a protein sequence</a></li>
+<li><a class="reference internal" href="#verify-sequences">Verify sequences</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sequence"><tt class="docutils literal"><span class="pre">Sequence</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="loading_sequences.html"
+                        title="previous chapter">Loading nucleotide, protein sequences</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="alphabet.html"
+                        title="next chapter">Alphabets</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/moltypesequence.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="alphabet.html" title="Alphabets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="loading_sequences.html" title="Loading nucleotide, protein sequences"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

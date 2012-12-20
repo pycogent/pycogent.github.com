@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Performing a relative rate test &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="A test of the neutral theory" href="neutral_test.html" />
+    <link rel="prev" title="The simplest script" href="simple.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="neutral_test.html" title="A test of the neutral theory"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simple.html" title="The simplest script"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="performing-a-relative-rate-test">
+<h1>Performing a relative rate test<a class="headerlink" href="#performing-a-relative-rate-test" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>From cogent import all the components we need</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths</span> <span class="kn">import</span> <span class="n">stats</span>
+</pre></div>
+</div>
+<p>Get your alignment and tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;data/test.tree&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a HKY85 model.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">HKY85</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Make the controller object and limit the display precision (to decrease the chance that small differences in estimates cause tests of the documentation to fail).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Set the local clock for humans &amp; Howler Monkey. This method is just a special interface to the more general <tt class="docutils literal"><span class="pre">setParamRules</span></tt> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setLocalClock</span><span class="p">(</span><span class="s">&quot;Human&quot;</span><span class="p">,</span> <span class="s">&quot;HowlerMon&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get the likelihood function object this object performs the actual likelihood calculation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Optimise the function capturing the return optimised lnL, and parameter value vector.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>View the resulting maximum-likelihood parameter values.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&quot;clock&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">clock</span>
+<span class="go">=====</span>
+<span class="go">kappa</span>
+<span class="go">-----</span>
+<span class="go"> 4.10</span>
+<span class="go">-----</span>
+<span class="go">===========================</span>
+<span class="go">     edge   parent   length</span>
+<span class="go">---------------------------</span>
+<span class="go">    Human   edge.0     0.04</span>
+<span class="go">HowlerMon   edge.0     0.04</span>
+<span class="go">   edge.0   edge.1     0.04</span>
+<span class="go">    Mouse   edge.1     0.28</span>
+<span class="go">   edge.1     root     0.02</span>
+<span class="go">NineBande     root     0.09</span>
+<span class="go"> DogFaced     root     0.11</span>
+<span class="go">---------------------------</span>
+<span class="go">==============</span>
+<span class="go">motif   mprobs</span>
+<span class="go">--------------</span>
+<span class="go">    T     0.23</span>
+<span class="go">    C     0.19</span>
+<span class="go">    A     0.37</span>
+<span class="go">    G     0.21</span>
+<span class="go">--------------</span>
+</pre></div>
+</div>
+<p>We extract the log-likelihood and number of free parameters for later use.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">null_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">null_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Clear the local clock constraint, freeing up the branch lengths.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run the optimiser capturing the return optimised lnL, and parameter value vector.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>View the resulting maximum-likelihood parameter values.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&quot;non clock&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">non clock</span>
+<span class="go">=====</span>
+<span class="go">kappa</span>
+<span class="go">-----</span>
+<span class="go"> 4.10</span>
+<span class="go">-----</span>
+<span class="go">===========================</span>
+<span class="go">     edge   parent   length</span>
+<span class="go">---------------------------</span>
+<span class="go">    Human   edge.0     0.03</span>
+<span class="go">HowlerMon   edge.0     0.04</span>
+<span class="go">   edge.0   edge.1     0.04</span>
+<span class="go">    Mouse   edge.1     0.28</span>
+<span class="go">   edge.1     root     0.02</span>
+<span class="go">NineBande     root     0.09</span>
+<span class="go"> DogFaced     root     0.11</span>
+<span class="go">---------------------------</span>
+<span class="go">==============</span>
+<span class="go">motif   mprobs</span>
+<span class="go">--------------</span>
+<span class="go">    T     0.23</span>
+<span class="go">    C     0.19</span>
+<span class="go">    A     0.37</span>
+<span class="go">    G     0.21</span>
+<span class="go">--------------</span>
+</pre></div>
+</div>
+<p>These two lnL&#8217;s are now used to calculate the likelihood ratio statistic it&#8217;s degrees-of-freedom and the probability of observing the LR.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span> <span class="o">-</span> <span class="n">null_lnL</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span> <span class="o">-</span> <span class="n">null_nfp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Print this and look up a <img class="math" src="../_images/math/8ca4fbdf12f33a45b1316a86635b8648bdc227f3.png" alt="$\chi^2$"/> with number of edges - 1 degrees of freedom.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Likelihood ratio statistic = &quot;</span><span class="p">,</span> <span class="n">LR</span>
+<span class="go">Likelihood ratio statistic =  2.7...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;degrees-of-freedom = &quot;</span><span class="p">,</span> <span class="n">df</span>
+<span class="go">degrees-of-freedom =  1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;probability = &quot;</span><span class="p">,</span> <span class="n">P</span>
+<span class="go">probability =  0.09...</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simple.html"
+                        title="previous chapter">The simplest script</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="neutral_test.html"
+                        title="next chapter">A test of the neutral theory</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/relative_rate.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="neutral_test.html" title="A test of the neutral theory"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simple.html" title="The simplest script"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,181 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Seqsim Alignment Simulation Example with Non-standard alphabet &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Seqsim Simple Tree Simulation" href="seqsim_tree_sim.html" />
+    <link rel="prev" title="Seqsim Simple Alignment Simulation Example" href="seqsim_alignment_simulation.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="seqsim_tree_sim.html" title="Seqsim Simple Tree Simulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="seqsim_alignment_simulation.html" title="Seqsim Simple Alignment Simulation Example"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="seqsim-alignment-simulation-example-with-non-standard-alphabet">
+<h1>Seqsim Alignment Simulation Example with Non-standard alphabet<a class="headerlink" href="#seqsim-alignment-simulation-example-with-non-standard-alphabet" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Julia Goodrich</em></p>
+<p>This is an example of how to use PyCogent&#8217;s <tt class="docutils literal"><span class="pre">seqsim</span></tt> module to simulate an
+alignment where the alphabet is defined by the user for a simple tree starting
+with a random sequence and a random substitution rate matrix.</p>
+<p>First we will perform the necessary imports.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.seqsim.usage</span> <span class="kn">import</span> <span class="n">Rates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alignment</span> <span class="kn">import</span> <span class="n">DenseAlignment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.seqsim.tree</span> <span class="kn">import</span> <span class="n">RangeNode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.tree</span> <span class="kn">import</span> <span class="n">DndParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alphabet</span> <span class="kn">import</span> <span class="n">CharAlphabet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.seqsim.usage</span> <span class="kn">import</span> <span class="n">Usage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.sequence</span> <span class="kn">import</span> <span class="n">ModelSequence</span>
+</pre></div>
+</div>
+<p>Now, lets specify a 4 taxon tree:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">DndParser</span><span class="p">(</span><span class="s">&#39;(a:0.4,b:0.3,(c:0.15,d:0.2)edge.0:0.1);&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">constructor</span> <span class="o">=</span> <span class="n">RangeNode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create the alphabet by passing in the characters to <tt class="docutils literal"><span class="pre">CharAlphabet</span></tt> then create
+tuples of all the possible pairs using ** operator</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Bases</span> <span class="o">=</span> <span class="n">CharAlphabet</span><span class="p">(</span><span class="s">&#39;ABCD&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pairs</span> <span class="o">=</span> <span class="n">Bases</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Generate a random sequence with the new alphabet and a random rate matrix,
+<tt class="docutils literal"><span class="pre">Usage</span></tt> is being used to define character frequencies for the random
+sequence. Then we create a random sequence of length five.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">Usage</span><span class="p">({</span><span class="s">&#39;A&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s">&#39;C&#39;</span><span class="p">:</span><span class="mf">0.15</span><span class="p">,</span><span class="s">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.25</span><span class="p">},</span> <span class="n">Alphabet</span> <span class="o">=</span> <span class="n">Bases</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">ModelSequence</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">randomIndices</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">Rates</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">Pairs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Set q at the base of the tree and propagate it to all nodes in the tree,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">q</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">propagateAttr</span><span class="p">(</span><span class="s">&#39;Q&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Set a P matrix from every Q matrix on each node,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">assignP</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Use <tt class="docutils literal"><span class="pre">evolve</span></tt> to evolve sequences for each tip, Note: must evolve sequence
+data, not sequence object itself (for speed)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Build alignment,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">tips</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">seqs</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelSequence</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">Sequence</span><span class="p">,</span><span class="n">Bases</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">DenseAlignment</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span><span class="n">Alphabet</span><span class="o">=</span><span class="n">Bases</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a Cogent <tt class="docutils literal"><span class="pre">Alignment</span></tt> object, which can be used the same way as
+any other alignment object.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="seqsim_alignment_simulation.html"
+                        title="previous chapter">Seqsim Simple Alignment Simulation Example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="seqsim_tree_sim.html"
+                        title="next chapter">Seqsim Simple Tree Simulation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/seqsim_aln_sim_user_alphabet.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="seqsim_tree_sim.html" title="Seqsim Simple Tree Simulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="seqsim_alignment_simulation.html" title="Seqsim Simple Alignment Simulation Example"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

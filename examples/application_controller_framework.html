@@ -1,0 +1,1270 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Application Controller Documentation &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Building and using a new application controller" href="building_and_using_an_application_controller.html" />
+    <link rel="prev" title="Manipulation of Tree Node Objects" href="manipulating_tree_nodes.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="building_and_using_an_application_controller.html" title="Building and using a new application controller"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manipulating_tree_nodes.html" title="Manipulation of Tree Node Objects"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="application-controller-documentation">
+<h1>Application Controller Documentation<a class="headerlink" href="#application-controller-documentation" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Greg Caporaso, Sandra Smit</em></p>
+<div class="section" id="about-this-document">
+<h2>About this document<a class="headerlink" href="#about-this-document" title="Permalink to this headline">¶</a></h2>
+<p>The purpose of this document is
+to serve as a guideline for new users who want to implement application
+controllers. It should also be helpful as a reference document for more
+experienced coders. To meet the different needs of these people, this document
+is split up into multiple sections that discuss the framework in different
+levels of detail. We first provide a summary, then documentation for application
+controller users, then documentation for application controller developers, and
+finally a developer&#8217;s reference detailing the underlying objects.</p>
+<p>An addition example of building and applying a new application controller is provided <a class="reference external" href="./building_and_using_an_application_controller.html">here</a>.</p>
+<p>Feedback from users of this document will help us to improve it, so please don&#8217;t
+hesitate to contact us: <a class="reference external" href="mailto:gregcaporaso&#37;&#52;&#48;gmail&#46;com">gregcaporaso<span>&#64;</span>gmail<span>&#46;</span>com</a> or sandra_smit at users.sourceforge.net.</p>
+</div>
+<div class="section" id="the-application-controller-framework-brief-overview">
+<h2>The application controller framework: brief overview<a class="headerlink" href="#the-application-controller-framework-brief-overview" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<p>An application performs a certain task. It uses parameters to give the user
+control over the possible settings. In general an application requires some
+input data and produces some output. To run RNAfold on (i.e. predict an RNA
+secondary structure for) the sequence in seqs.txt, using some settings for
+temperature and GU pairs), and to save the output in the file result.txt, the
+following command would have to be executed:</p>
+<div class="highlight-python"><pre>RNAfold -T 25 -noGU &lt;seqs.txt &gt;result.txt</pre>
+</div>
+<p>Suppose you want to fold the sequences at two different temperatures (25 and 37
+degrees Celcius) and investigate the difference between the structures. This
+would require a lot of manual work (run RNA fold twice, store all the files, use
+python to read in the files, parse the output, and calculate the difference).
+This task becomes a lot easier if we can control the application RNAfold from
+within the python environment. The following example folds two sequences at two
+different temperatures and reports the symmetric difference between the
+resulting structures. It works by creating a single application controller, and
+running  it with different settings on the same input. The output is parsed and
+compared. The code snippet doesn&#8217;t leave any files on the system.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;GCCCGGAUAGCUCAGUUAAAAUCCCCGUGUCGGUGGUUCAAUUCCGCCUCCGGGCCCA&#39;</span><span class="p">,</span>\
+<span class="s">&#39;CCCCUGGUGGCCAUAGCGGGGAUUAACCCGGCCUGUGCCGGCAGCGGCACGGGAGGUCGCUGCCAGGGG&#39;</span><span class="p">]</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">RNAfold</span><span class="p">(</span><span class="n">WorkingDir</span><span class="o">=</span><span class="s">&quot;/tmp&quot;</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-T&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;COMMAND AT 25C:&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">BaseCommand</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+<span class="n">fold_25</span> <span class="o">=</span> <span class="n">just_seqs_parser</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;StdOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="n">res</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-T&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">37</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;COMMAND AT 37C:&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">BaseCommand</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+<span class="n">fold_37</span> <span class="o">=</span> <span class="n">just_seqs_parser</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s">&#39;StdOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="n">res</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">seq_25</span><span class="p">,</span> <span class="n">struct_25</span> <span class="ow">in</span> <span class="n">fold_25</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">seq_37</span><span class="p">,</span> <span class="n">struct_37</span> <span class="ow">in</span> <span class="n">fold_37</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">seq_25</span> <span class="o">==</span> <span class="n">seq_37</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;SEQ:&#39;</span><span class="p">,</span> <span class="n">seq_25</span>
+            <span class="k">print</span> <span class="s">&#39;25C:&#39;</span><span class="p">,</span> <span class="n">struct_25</span>
+            <span class="k">print</span> <span class="s">&#39;37C:&#39;</span><span class="p">,</span> <span class="n">struct_37</span>
+            <span class="k">print</span> <span class="s">&#39;BASE PAIR SIMILARITY: </span><span class="si">%.3f</span><span class="s">&#39;</span><span class="o">%</span>\
+                <span class="p">(</span><span class="n">compare_pairs</span><span class="p">(</span><span class="n">struct_25</span><span class="o">.</span><span class="n">toPairs</span><span class="p">(),</span> <span class="n">struct_37</span><span class="o">.</span><span class="n">toPairs</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Running the script results in the following output:</p>
+<div class="highlight-python"><pre>COMMAND AT 25C: cd "/tmp/"; RNAfold -d1 -T 25 -S 1.07
+COMMAND AT 37C: cd "/tmp/"; RNAfold -d1 -T 37 -S 1.07
+SEQ: GCCCGGAUAGCUCAGUUAAAAUCCCCGUGUCGGUGGUUCAAUUCCGCCUCCGGGCCCA
+25C: (((((((..((..((((.....(((((...))).))...))))..)).)))))))... (-26.25)
+37C: ((((((.((((...)))).............(((((.......))))).))))))... (-19.6)
+BASE PAIR SIMILARITY: 0.222
+SEQ: CCCCUGGUGGCCAUAGCGGGGAUUAACCCGGCCUGUGCCGGCAGCGGCACGGGAGGUCGCUGCCAGGGG
+25C: (((((((((((.((..((((......)))).(((((((((....)))))))))..)).))))))))))) (-55.52)
+37C: (((((((..((.....((((......)))).(((((((((....))))))))).....))..))))))) (-46.3)
+BASE PAIR SIMILARITY: 0.846</pre>
+</div>
+<p>It has tremendous benefits to have the capability to run an application in an
+integrative fashion from the Python environment, using Python object as input,
+catching and directly using the output in a downstream analysis. It is
+timesaving and allows for the full automation of an analysis (prevents manual
+intervention). This is extremely convenient, for example, if you wish to perform
+a comparison of a large variety of parameters passed to a single application.
+Rather than manually running the application many times from the command line,
+you can script the runs and automatically process the output. A piece of python
+code that handles this is called an application controller (APPC). The purpose
+of the application controller framework is to support various application
+controllers in general. The framework is generic and supports actions that all
+applications have in common. Each application requires a specific APPC that
+defines all the variables and methods for that unique application.</p>
+<p>At the moment the framework supports only one type of application: the command
+line application. In the (near) future we want to support web applications as
+well.</p>
+<p>This section addresses the different components of an application and how these
+components are represented in the framework. The framework is set up in two
+files: cogent/app/util.py and cogent/app/parameters.py</p>
+</div>
+<div class="section" id="command-line-applications">
+<h3>Command line applications<a class="headerlink" href="#command-line-applications" title="Permalink to this headline">¶</a></h3>
+<p>Every application requires a base command (such as RNAfold, muscle, or clustalw)
+and some parameters. These two properties are stored in the high level class
+Application.</p>
+<p>The class CommandlineApplication inherits from Application and has additional
+features. It deals with the working directory, input, and output. The central
+method is the __call__ method in which the full command-to-execute is built up
+and executed. The result of running the application controller is returned to
+the user.</p>
+<p>The util.py file contains one other class: ApplicationError. This class is used
+to raise exceptions for application controllers.</p>
+</div>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<p>Most applications allow you to specify a certain set of parameters to control
+how the program runs. Parameters can control many different features of an
+application, such as the temperature at which RNA is folded, the number of gaps
+allowed in an alignment, or the name of an output file. They come in many forms
+as well, some are simply flags, some always require a value, some can have
+optional values.</p>
+<p>The application controller framework supports three types of parameters, which
+will be discussed below. Subclassing to specify new types of parameters or to
+make certain attributes fixed, is very easy.</p>
+<p>The abstract Parameter class defines the basic functionality of a parameter: it
+initializes all the Parameter attributes and it defines a Parameter ID which is
+a unique identifier for each parameter. In general a parameter has a prefix
+(usually a dash) and a name. Some parameters have values. The Parameter object
+is discussed in more detail in section <a class="reference internal" href="#sec-build"><em>Designing and implementing a new type of application controller</em></a>.</p>
+<p>There are three subclasses from the class Parameter. FlagParameter is used for
+parameters that don&#8217;t have values (e.g. allow GU pairs or not). ValuedParameters
+are used for paramaters that specify some value (e.g. the temperature or some
+input file). MixedParameters are parameters that might or might not have a value
+(e.g. the -d parameter in RNAfold). All parameters of an application are grouped
+in a Paramters object. The class Parameters is a special type of dictionary that
+allows lookups by parameter ID or synonyms.</p>
+<p>The parameters.py file contains two more classes. ParameterError is used to
+raise exceptions in the parameter framework. The class FilePath defines paths on
+a system, it can print itself in a special way and add other parts of a path.</p>
+</div>
+<div class="section" id="input">
+<h3>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
+<p>Input can be very diverse between applications. Most often it requires a file or
+some data directly from the command line. Application input is handled by &#8220;input
+handlers&#8221;. There are a few generic input handlers in CommandLineApplication
+object. Specific APPCs can use these methods directly or overwrite them. The
+methods process the input data for the application. They might for example write
+a certain Python object to a temporary file, and change some application
+parameters to use this file.</p>
+</div>
+<div class="section" id="output">
+<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<p>All applications produce some form of output. It can be limited to information
+on &#8220;standard output&#8221; (stdout) and &#8220;standard error&#8221; (stderr). Many applications
+produce additional output files. Most (unfortunately not all) applications
+report a meaningful exit status that inform the user on whether the execution of
+the program was succesful. The class CommandLineAppResult handles all aspects of
+application output: stdout, stderr, exit status, and the additional output
+files. Access to all the available files is handles by the class ResultPath.
+More technical aspect of these classes is discussed in section <a class="reference internal" href="#sec-build"><em>Designing and implementing a new type of application controller</em></a>.</p>
+</div>
+</div>
+<div class="section" id="using-an-application-controller">
+<h2>Using an application controller<a class="headerlink" href="#using-an-application-controller" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Summary<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Create an instance of some app controller</li>
+<li>Turn parameters on and off</li>
+<li>Optionally change the working directory</li>
+<li>Optionally check the base command which is built-up from the above
+information</li>
+<li>Set the input handler</li>
+<li>Possibly redirect StdOut and StdErr</li>
+<li>Apply the instance to the input data, store the results</li>
+<li>Use the results as you like</li>
+<li>Possibly clean up files created by the program and the APPC</li>
+</ol>
+</div>
+<div class="section" id="creating-an-instance-with-basic-settings-parameters-working-directory">
+<h3>Creating an instance with basic settings (parameters, working directory)<a class="headerlink" href="#creating-an-instance-with-basic-settings-parameters-working-directory" title="Permalink to this headline">¶</a></h3>
+<p>The first step toward running an application is creating an instance of the
+APPC. Two basic settings are the parameters and the working directory. Below are
+some examples on how to do this. Note that the working directory must be an
+absolute path.</p>
+<p>All parameters have the methods isOn and isOff to check whether the parameter is
+active or not. Parameters can be turned on and off (with or without a value)
+with the  on() and off() methods. The values can also be set during
+initialization of the APPC. When specifying the parameters upon initialization
+the __init__ parameter params should be a dictionary of parameters that should
+be turned on, keyed by either the Parameter ID or a synonym. The values in
+params should be the values to turn the parameters on with for Valued or Mixed
+Parameters, or None for Flag or Mixed Parameters.</p>
+<p>It is useful to check the BaseCommand to see if all the parameters have the
+correct settings and if the working directory is correct. During debugging it is
+useful to check whether the command runs on the normal command line.</p>
+<div class="highlight-python"><pre>Initialization without params, only defaults are on.
+&gt;&gt;&gt; from cogent.app.vienna_package import RNAfold
+&gt;&gt;&gt; r = RNAfold()
+
+Initialization with params, set new values for this instance
+&gt;&gt;&gt; r = RNAfold(params={'-T':25,'-d':None,'-4':None,'-S':1.2})
+
+Initialization changing the Working directory (must be absolute path!)
+&gt;&gt;&gt; r = RNAfold(WorkingDir='/tmp')
+&gt;&gt;&gt; print r.BaseCommand
+cd "/tmp/"; RNAfold -d1 -T 37 -S 1.07
+
+Changing the working directory after initialization (must be absolute path!)
+&gt;&gt;&gt; r = RNAfold()
+&gt;&gt;&gt; r.WorkingDir = '/tmp'
+&gt;&gt;&gt; print r.BaseCommand
+cd "/tmp/"; RNAfold -d1 -T 37 -S 1.07
+
+Checking the parameters
+&gt;&gt;&gt; r = RNAfold()
+&gt;&gt;&gt; print r.Parameters['-P'].isOn()
+False
+&gt;&gt;&gt; print r.Parameters['-P']
+&lt;BLANKLINE&gt;
+&gt;&gt;&gt; print r.Parameters['-T'].isOn()
+True
+&gt;&gt;&gt; print r.Parameters['-T']
+-T 37</pre>
+</div>
+</div>
+<div class="section" id="other-settings-on-initialization">
+<h3>Other settings on initialization<a class="headerlink" href="#other-settings-on-initialization" title="Permalink to this headline">¶</a></h3>
+<p>The input handler could be set (if not, the default is used)</p>
+<div class="highlight-python"><pre>On initialization
+&gt;&gt;&gt; r = RNAfold(InputHandler="_input_as_string")
+&gt;&gt;&gt; print r.InputHandler
+_input_as_string
+
+After initialization
+&gt;&gt;&gt; r = RNAfold()
+&gt;&gt;&gt; print r.InputHandler # default
+_input_as_lines
+&gt;&gt;&gt; r.InputHandler = "_input_as_path"
+&gt;&gt;&gt; print r.InputHandler
+_input_as_path</pre>
+</div>
+<p>Standard out and standard error can be suppressed. If SuppressStderr or
+SuppressStdout are set to True, stdout and stderr will be routed to /dev/null.
+The default is to store these results in a temporary file. Redirecting StdErr
+might be useful for programs that write a lot of useless information to this
+filestream.</p>
+<p>Some parameters concerning the creation of temporary files can be changed.
+TmpDir: default is /tmp. TmpNameLen is the length of the filenames, default is
+20.</p>
+<p>HALT_EXEC is a parameter that can be set to True for debugging purposes. It
+stops the process right before execution of the system call, it leaves all the
+input files (incl. temporary) in place. This allows the user to check whether
+the input is generated correctly. See Section <a class="reference internal" href="#sec-haltexec"><em>HALT_EXEC is your friend</em></a> for more
+details.</p>
+</div>
+<div class="section" id="running-the-application-using-the-output-and-cleaning-up">
+<h3>Running the application, using the output, and cleaning up<a class="headerlink" href="#running-the-application-using-the-output-and-cleaning-up" title="Permalink to this headline">¶</a></h3>
+<p>When calling the instance of the APPC on some data the __call__ method is
+invoked. The call method has to optional parameters: data (the input data) and
+remove_tmp (if True the temporary files are removed). The call method returns a
+CommandLineAppResult object, containing all the application output information.</p>
+<p>The output dictionary can be used to access the resulting files. All the
+information can be incorporated in a downstream analysis. In the example below
+the aligned sequences in clustalw format are parsed and printed.</p>
+<p>Additionally CommandLineAppResult contains one public method: cleanUp() which
+takes no parameters.  The method cleanUp() should be used when you want to
+delete the files that were created by the CommandLineApplication from disk. Note
+that after cleanUp() you may still have access to your files, but these are not
+reliable. You will only have access to what has already been loaded into memory
+(ie. only a fraction of your file typically), so you should only run cleanUp()
+after you are done accessing you files. Also note that running cleanUp() is not
+required. If you want the result files to remain on disc you should not run
+cleanUp() and they will be left in place. This is useful for running an
+application for later analysis of results.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">PROTEIN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.clustalw</span> <span class="kn">import</span> <span class="n">Clustalw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.clustal</span> <span class="kn">import</span> <span class="n">ClustalParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="s">&#39;MHSSIVLATVLFVAIASASKTRELCMKSL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span> <span class="o">=</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="s">&#39;MALAEADDGAVVFGEEQEALVLKSWAVMKKDA&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s3</span> <span class="o">=</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="s">&#39;MSTVEGREFSEDQEALVVKSWTVMKLNAGELALKF&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Clustalw</span><span class="p">(</span><span class="n">InputHandler</span><span class="o">=</span><span class="s">&quot;_input_as_seqs&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="p">([</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">s3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;ExitStatus&#39;</span><span class="p">]</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln_txt</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;Align&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">ClustalParser</span><span class="p">(</span><span class="n">aln_txt</span><span class="p">):</span> <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+<span class="go">2: MALAEADDGAVVFGEEQEALVLKSWAVMKKDA-------</span>
+<span class="go">3: MSTVEGRE----FSEDQEALVVKSWTVMKLNAGELALKF</span>
+<span class="go">1: MHSSIVLAT-VLFVAIASASKTRELCMKSL---------</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="designing-and-implementing-a-new-type-of-application-controller">
+<span id="sec-build"></span><h2>Designing and implementing a new type of application controller<a class="headerlink" href="#designing-and-implementing-a-new-type-of-application-controller" title="Permalink to this headline">¶</a></h2>
+<p>Each specific application that you wish to control through PyCogent requires an
+application controller, i.e., a subclass of CommandLineApplication. Building the
+new application controller consists of three steps:</p>
+<ol class="arabic simple">
+<li>Creating the application controller class: Overwrite CommandLineApplication
+to define your new application controller, and define the class data. (Section
+<a class="reference internal" href="#sec-step1"><em>Step 1: Creating the application controller class and defining class data</em></a>.)</li>
+<li>Input handing: Determine whether the built-in input handlers (in
+CommandLineApplication) are sufficient. If not, write one or more input handling
+methods. (Section <a class="reference internal" href="#sec-step2"><em>Step 2: Input handling</em></a>.)</li>
+<li>Output handling: Determine whether the program writes any output files to
+disk. If so, implement the _get_result_paths method. (Section <a class="reference internal" href="#sec-step3"><em>Step 3: Output handling</em></a>.)</li>
+</ol>
+<div class="section" id="step-1-creating-the-application-controller-class-and-defining-class-data">
+<span id="sec-step1"></span><h3>Step 1: Creating the application controller class and defining class data<a class="headerlink" href="#step-1-creating-the-application-controller-class-and-defining-class-data" title="Permalink to this headline">¶</a></h3>
+<p>All of these class variables are discussed in detail in Sections
+<a class="reference internal" href="#sec-application"><em>Application: cogent.app. util.py</em></a> and <a class="reference internal" href="#sec-commandlineapplication"><em>Command-LineApplication: cogent.app.util.py</em></a>. &#8212;</p>
+<p><strong>The following class data must be overwritten:</strong></p>
+<dl class="docutils">
+<dt>_command:</dt>
+<dd>The command used to run the command (a string).</dd>
+</dl>
+<p><strong>The following class data can be overwritten:</strong></p>
+<dl class="docutils">
+<dt>_parameters:</dt>
+<dd>A dictionary of Parameter objects. Keys should be the identifiers of the
+parameters, and values should be the Parameter objects.</dd>
+<dt>_command_delimiter:</dt>
+<dd>String that specifies the delimiter between the components of a full command,
+e.g. the command, parameters, and arguments.</dd>
+<dt>_synonyms:</dt>
+<dd>A dictionary of parameter synonyms. Keys should be the alternative keys to
+lookup a parameter, and values should be the identifiers used in the _parameters
+dictionary.</dd>
+<dt>_input_handler:</dt>
+<dd>The name of the input handler method that should be used by default. The value
+should be a string (see CommandLineApplication.__call__ for how it&#8217;s used).</dd>
+<dt>_working_dir:</dt>
+<dd>Specifies where the command should be run (string). Default is current working
+directory.</dd>
+<dt>_suppress_stdout:</dt>
+<dd>Boolean value that specifies what happens with standard output (stdout) by
+default.</dd>
+<dt>_suppress_stderr:</dt>
+<dd>Boolean value that specifies what happens with standard error (stderr) by
+default.</dd>
+</dl>
+<div class="section" id="defining-parameters">
+<h4>Defining parameters<a class="headerlink" href="#defining-parameters" title="Permalink to this headline">¶</a></h4>
+<p>All parameters should be one of the three built-in types: FlagParamater,
+ValuedParameter, or MixedParameter. (We don&#8217;t know of any types that wouldn&#8217;t
+fit into this framework, but if you come across any, please let us know.)
+Examples illustrating how to define the three different parameter types can be
+found in Section <a class="reference internal" href="#sec-parameters"><em>Parameters: cogent.app. parameters.py</em></a>. The _parameters dict is a mapping of
+parameter identifiers, or Prefix and Name joined by the empty string, to
+parameter objects. All parameters which can be passed to an application should
+be defined in the parameters dict. Usually you can get this list by reviewing
+the application&#8217;s documentation. See Section <a class="reference internal" href="#sec-rnafoldexample"><em>A complete Command-LineApplication subclass example</em></a> for an
+example including the definition of the _parameters dict. Note: if for a given
+ValuedParameter or MixedParameter, the value is intended to be a path to a
+directory or file, <tt class="docutils literal"><span class="pre">IsPath=True</span></tt> must be passed when initializing those
+parameters. &#8212;  <strong>Defining a new Parameter type</strong> &#8212;  If the application
+you&#8217;re working with uses a type of parameter that is not supported by the
+framework yet, you might want to write your own subclass. To subclass Parameter,
+the following methods will need to be implemented: __str__, isOn(), isOff(),
+on(), off(). These methods cover the two important characteristics of each
+parameter: knowing how to print itself, based on its status, and knowing how to
+be turned on or off. It is unlikely that you will need to subclass parameter if
+working with CommandLineApplication subclasses. If you think you do, please let
+us know. &#8212;  <strong>Writing constructor functions/wrappers</strong> &#8212;  There might be
+several reasons, such as to make some attribute of the parameter fixed, to write
+a wrapper around or constructor function for a parameter. For example to fixate
+the prefix of the FlagParameter, one might write this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">FlagParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">DashedFlag</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">FlagParameter</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">DashedFlag</span><span class="p">(</span><span class="s">&#39;tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span>
+<span class="go">&lt;cogent.app.parameters.FlagParameter object at ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span>
+<span class="go">-tree</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-complete-command-lineapplication-subclass-example">
+<span id="sec-rnafoldexample"></span><h4>A complete Command-LineApplication subclass example<a class="headerlink" href="#a-complete-command-lineapplication-subclass-example" title="Permalink to this headline">¶</a></h4>
+<p>A subclass of CommandLineApplication might look something like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">RNAfold</span><span class="p">(</span><span class="n">CommandLineApplication</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Application controller for RNAfold (in the Vienna RNA package)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;RNAfold&#39;</span>
+    <span class="n">_parameters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;-p&#39;</span><span class="p">:</span><span class="n">MixedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+    <span class="s">&#39;-C&#39;</span><span class="p">:</span><span class="n">FlagParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;C&#39;</span><span class="p">),</span>
+    <span class="s">&#39;-T&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="mi">37</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">),</span>
+    <span class="s">&#39;-4&#39;</span><span class="p">:</span><span class="n">FlagParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s">&#39;-d&#39;</span><span class="p">:</span><span class="n">MixedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;d&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s">&#39;-noLP&#39;</span><span class="p">:</span><span class="n">FlagParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;noLP&#39;</span><span class="p">),</span>
+    <span class="s">&#39;-noGU&#39;</span><span class="p">:</span><span class="n">FlagParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;noGU&#39;</span><span class="p">),</span>
+    <span class="s">&#39;-noCloseGU&#39;</span><span class="p">:</span><span class="n">FlagParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;noCloseGU&#39;</span><span class="p">),</span>
+    <span class="s">&#39;-e&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;e&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">),</span>
+    <span class="s">&#39;-P&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;P&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">),</span>
+    <span class="s">&#39;-nsp&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;nsp&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">),</span>
+    <span class="s">&#39;-S&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;S&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="mf">1.07</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">)}</span>
+    <span class="n">_synonyms</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Temperature&#39;</span><span class="p">:</span><span class="s">&#39;-T&#39;</span><span class="p">,</span><span class="s">&#39;Temp&#39;</span><span class="p">:</span><span class="s">&#39;-T&#39;</span><span class="p">,</span><span class="s">&#39;Scale&#39;</span><span class="p">:</span><span class="s">&#39;-S&#39;</span><span class="p">}</span>
+    <span class="n">_input_handler</span> <span class="o">=</span> <span class="s">&#39;_input_as_lines&#39;</span>
+    <span class="n">_suppress_stderr</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>If the built-in input handlers are sufficient, and no output to disk is written
+by the program, this would complete the application controller.</p>
+</div>
+</div>
+<div class="section" id="step-2-input-handling">
+<span id="sec-step2"></span><h3>Step 2: Input handling<a class="headerlink" href="#step-2-input-handling" title="Permalink to this headline">¶</a></h3>
+<p>Not all applications handle their input in the same way. The input might be
+specified as a filename on the command line, as a list of values on the command
+line,   or an input file might be specified through parameters. Some input data
+might also require processing before it is used by the application.</p>
+<p>To give the user control over how input is handled without having to overwrite
+__call__(), small input handling methods can be specified in the application
+controller. In most cases, the CommandLineApplication input handlers can
+probably be used (e.g., passing data via stdin or a temp file), but for more
+complicated input formats, custom input handlers may need to be written for a
+CommandLineApplication subclass. Every input handling method should take one
+parameter, data, and return a string that will be appended to the command, e.g.
+<tt class="docutils literal"><span class="pre">/path/to/input/file.txt</span></tt>, if a path is passed to the application. (In this
+example, you would want to use CommandLineApplication._input_as_path as the
+input handler.)</p>
+<p>By writing multiple input handling methods, multiple types of input can be
+handled by one application. The user can specify which one they want to use in a
+certain instance by setting the _input_handler class variable, or the
+InputHandler initialization variable.</p>
+<p>For example, RNAfold takes a list of sequences from stdin. In this case, none of
+the built-in input handlers provides this functionaloty. The following input
+handler (from cogent.app.rnafold.Rnafold) writes the sequences (data) to a
+temporary file and redirects them to stdin.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_input_as_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns &#39;&lt;temp_filename to redirect input to stdin&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;&lt;&#39;</span><span class="p">,</span><span class="nb">super</span><span class="p">(</span><span class="n">RNAfold</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_input_as_lines</span><span class="p">(</span><span class="n">data</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Clustalw requires the input filename be passes via the -infile paramter. This
+custom input handler from cogent.app.clustalw.Clustalw performs that function.
+Note that the empty string is returned, as input handlers are required to return
+a string that should be appended to the command line.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_input_as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Makes data the value of a specific parameter</span>
+<span class="sd">    This method returns the empty string. The parameter will be printed</span>
+<span class="sd">    automatically once set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-infile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The default input handler should be set (as a string) via the class variable.
+See the example in Section <a class="reference internal" href="#sec-rnafoldexample"><em>A complete Command-LineApplication subclass example</em></a>.</p>
+</div>
+<div class="section" id="step-3-output-handling">
+<span id="sec-step3"></span><h3>Step 3: Output handling<a class="headerlink" href="#step-3-output-handling" title="Permalink to this headline">¶</a></h3>
+<p>Stdout and the exit status of any program are caught automatically. Stderr is
+accessible as well, unless suppressed via the _suppress_stderr class variable or
+the SupressStderr instance varaible. Any other files that are written should be
+made accessible by specifying their paths in the method _get_result_paths(). If
+you don&#8217;t overwrite this method, it is assumed that the program doesn&#8217;t create
+additional output files, so if it does, they will be written, but won&#8217;t be
+accessible through the CommandLineAppResult object, and won&#8217;t be cleaned up upon
+program termination!</p>
+<p>Names and locations of output files may be fixed, but they can also be created
+on the fly based on things such as input file name, data the application is
+called on, a combination of values of parameters, or specified filename plus a
+fixed suffix. Since the generation of output files is so application specific
+and may be very complex, each application controller should handle its own
+output.</p>
+<p>The _get_result_paths method should take data (as passed to __call__) as an
+argument. This is necessary to allow access to any possible variable used by the
+program. The user has access to data, self._input_filename (for an on the fly
+generated input file), all parameter values, and all public attributes of an
+Application.</p>
+<p>_get_result_paths() should return a dictionary of ResultPath objects. The file
+streams resulting from a run of the application (in the CommandLineAppResult)
+will be accessed by the keys in the dictionary. The ResultPath specifies the
+<em>absolute</em> path of a file and whether the file has been written. This dictionary
+is used as input for the CommandLineAppResult which will handle opening the
+files etc.</p>
+<p>As an example we show the output handling method of RNAfold. For a more complex
+example, see RnaView.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_get_result_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Specifies the paths of output files generated by the application</span>
+
+<span class="sd">        data: the data the instance of the application is called on</span>
+
+<span class="sd">        You always get back: StdOut,StdErr, and ExitStatus</span>
+<span class="sd">        RNAfold can produce two additional output files:</span>
+<span class="sd">            a secondary structure structure graph. Default name: rna.ps</span>
+<span class="sd">            a dot plot of the base pairing matrix. Default name: dp.ps</span>
+<span class="sd">        The default names are used for unnamed sequences. Files are created</span>
+<span class="sd">            in the current working directory.</span>
+<span class="sd">        You can make a sequence named by inserting a line &#39;&gt;name&#39; above it in</span>
+<span class="sd">            your input file (or list of sequences). The ss and dp files for</span>
+<span class="sd">            named sequences will be written to name_ss.ps and name_dp.ps</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">name_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">seq_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="c">#means data is file</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;&gt;&#39;</span><span class="p">):</span>
+                <span class="n">name_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[(</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;_ss&#39;</span><span class="p">)]</span> <span class="o">=</span>\
+                    <span class="n">ResultPath</span><span class="p">(</span><span class="n">Path</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WorkingDir</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;_ss.ps&#39;</span><span class="p">))</span>
+                <span class="n">result</span><span class="p">[(</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;_dp&#39;</span><span class="p">)]</span> <span class="o">=</span>\
+                    <span class="n">ResultPath</span><span class="p">(</span><span class="n">Path</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WorkingDir</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;_dp.ps&#39;</span><span class="p">),</span>\
+                    <span class="n">IsWritten</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isOn</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">seq_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">result</span><span class="p">[</span><span class="s">&#39;SS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ResultPath</span><span class="p">(</span><span class="n">Path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WorkingDir</span><span class="o">+</span><span class="s">&#39;rna.ps&#39;</span><span class="p">,</span>\
+            <span class="n">IsWritten</span><span class="o">=</span><span class="n">seq_counter</span> <span class="o">-</span> <span class="n">name_counter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c">#Secondary Structure</span>
+        <span class="n">result</span><span class="p">[</span><span class="s">&#39;DP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ResultPath</span><span class="p">(</span><span class="n">Path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WorkingDir</span><span class="o">+</span><span class="s">&#39;dot.ps&#39;</span><span class="p">,</span>
+            <span class="n">IsWritten</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isOn</span><span class="p">()</span> <span class="ow">and</span>\
+            <span class="n">seq_counter</span> <span class="o">-</span> <span class="n">name_counter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="c">#DotPlot</span>
+        <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tips-and-tricks-for-creating-application-controllers">
+<h3>Tips and tricks for creating application controllers<a class="headerlink" href="#tips-and-tricks-for-creating-application-controllers" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="halt-exec-is-your-friend">
+<span id="sec-haltexec"></span><h4>HALT_EXEC is your friend<a class="headerlink" href="#halt-exec-is-your-friend" title="Permalink to this headline">¶</a></h4>
+<p>The __init__ method takes a boolean parameter, HALT_EXEC, which is False by
+default. Setting HALT_EXEC=True will cause __call__ to exit before the system
+call, print out the complete command that was about to be run, and leave all
+temporary files in place. This is extremely useful for debugging, because it
+allows you to run the application directly with the input that was generated by
+the application controller. You can therefore run the command and look directly
+at stdout and stderr, debug any temporary files that were created, etc. If the
+application you are controlling is slow, this can also allow you to debug
+earlier steps without having to wait for the application to run. HALT_EXEC is
+your friend.</p>
+</div>
+</div>
+</div>
+<div class="section" id="application-controller-base-classes-developer-s-reference">
+<h2>Application controller base classes: Developer&#8217;s reference<a class="headerlink" href="#application-controller-base-classes-developer-s-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Command line applications<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="application-cogent-app-util-py">
+<span id="sec-application"></span><h4>Application: cogent.app. util.py<a class="headerlink" href="#application-cogent-app-util-py" title="Permalink to this headline">¶</a></h4>
+<p>Application is an abstract class that contains some data used by for all
+application handlers that could be written. Private class data of Application
+consists of:</p>
+<dl class="docutils">
+<dt>_command:</dt>
+<dd><p class="first">The command used to run the command (a string). If the command is in your path
+(in a directory listed in the environment variable <tt class="docutils literal"><span class="pre">$PATH</span></tt>, or found by typing
+<tt class="docutils literal"><span class="pre">which</span></tt> followed by the command) you can provide only the command, e.g.
+<tt class="docutils literal"><span class="pre">RNAfold</span></tt>. If the command is not in your path, you must specify the absolute
+path it, e.g. <tt class="docutils literal"><span class="pre">/some/other/bin/rnaview</span></tt>. The use of absolute paths here is
+<em>not</em> recommended, because the location of the installation might be different
+on every machine. Instead, consider setting your <tt class="docutils literal"><span class="pre">$PATH</span></tt> environment variable
+to include the directory where the application is installed.</p>
+<p class="last">For example if you are writing an application controller for <tt class="docutils literal"><span class="pre">ls</span></tt> where you
+might run: &#8212;   ls -al *.jpg &#8212;  _command should be set to <tt class="docutils literal"><span class="pre">ls</span></tt>.</p>
+</dd>
+<dt>_parameters:</dt>
+<dd><p class="first">A dictionary of Parameter objects. Keys should be the identifiers of the
+parameters, and values should be the Parameter objects. This dictionary defines
+which parameters are available to the application. No values are specified,
+except for occasional default values. The default value for _parameters is the
+empty dictionary. If the application takes any command line parameters, this
+must be overwritten. This is almost always the case. See
+cogent.app.clustalw.Clustalw._parameters for an example of when parameters is
+overwritten.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;-T&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39;=&#39;</span><span class="p">)}</span>
+</pre></div>
+</div>
+</dd>
+<dt>_synonyms:</dt>
+<dd><p class="first">A dictionary of parameter synonyms. Keys should be the alternative keys to
+lookup a parameter, and values should be the identifiers used in the _parameters
+dictionary. It probably a good idea to comment on the available synonyms in the
+docstring of the application controller, so users that haven&#8217;t read the manual
+know what they can use to control the parameters. The default value for
+_synonyms is the empty dictionary. See
+cogent.app.vienna_package.ViennaPackage._synonyms for an example of this being
+overwritten.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">_synonyms</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Temperature&#39;</span><span class="p">:</span><span class="s">&#39;-T&#39;</span><span class="p">,</span> <span class="s">&#39;Temp&#39;</span><span class="p">:</span><span class="s">&#39;-T&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>_command_delimiter:</dt>
+<dd><p class="first">String that specifies the delimiter between the components of a full command,
+e.g. the command, parameters, and arguments. The default value is &#8216; &#8216; (a single
+space). This delimiter will work for any Unix application, so it is usually not
+overwritten. (We are interested in hearing about any circumstances where this
+might be overwritten. Please let us know if you come across any. One example
+might be if the command being constructed is a URL.)</p>
+<p class="last">In the above &#8216;ls&#8217; example, a single space (&#8216; &#8216;) spearates the command
+componenets: the base command <tt class="docutils literal"><span class="pre">ls</span></tt>, the parameters <tt class="docutils literal"><span class="pre">-al</span></tt>, and the argument
+<tt class="docutils literal"><span class="pre">*.jpg</span></tt>.</p>
+</dd>
+</dl>
+<p>The only method that is defined by Application is __init__, which takes one
+optional argument, params. The value of params should be a dictionary of
+parameters that should be turned on. Keys should be either the Parameter ID or a
+synonym. The values in params should be the values to turn the parameters on
+with for Valued or Mixed Parameters, or None for Flag or Mixed Parameters.</p>
+<p>Application is never directly instantiated, but is instead inherited (either
+directly or indirectly) by all application controllers. It is necessary that
+Application.__init__() be called somewhere during the initialization of your
+class, but if you are inheriting from a higher level class (such as
+CommandLineApplication) this should already be handled.</p>
+</div>
+<div class="section" id="command-lineapplication-cogent-app-util-py">
+<span id="sec-commandlineapplication"></span><h4>Command-LineApplication: cogent.app.util.py<a class="headerlink" href="#command-lineapplication-cogent-app-util-py" title="Permalink to this headline">¶</a></h4>
+<p>CommandLineApplication is an abstract class for command line application
+controllers. Several variables are class data to facilitate subclassing
+CommandLineApplication and to allow definition of defaults for Application
+Controller subclasses. This class was designed to be easily and minimally
+subclassed.</p>
+<p>CommandLineApplication inherits from Application. CommandLineApplication
+contains the following additional class data:</p>
+<dl class="docutils">
+<dt>_input_handler:</dt>
+<dd>The name of the input handler method that should be used by default. The value
+should be a string (see CommandLineApplication.__call__ for how it&#8217;s used). The
+input handling methods are private, so they should start with an underscore. The
+default value for _input_handler is &#8216;_input_as_string&#8217;. The input handler can be
+changed on instance level via the InputHandler initialization parameter.</dd>
+<dt>_working_dir:</dt>
+<dd>Specifies the default working directory (string). The working_dir is where many
+applications write out their output. Setting this value gives you control over
+where output is written. The value of _working_dir should be an <em>absolute</em> path.
+If the value of _working_dir is None (the default) the current working directory
+will be used. The working directory can be changed at instance level via the
+WorkingDir initialization parameter.</dd>
+<dt>_suppress_stdout:</dt>
+<dd>Boolean value that specifies what happens with standard output (stdout) by
+default. If the value is False (default), stdout is caught and accessible in the
+result object. If the value is True, stdout is routed to /dev/null and won&#8217;t be
+accessible. Suppression of stdout can also be controlled at instance level via
+the SuppressStdout initialization parameter.</dd>
+<dt>_suppress_stderr:</dt>
+<dd>Boolean value that specifies what happens with standard error (stderr) by
+default. Some programs write a lot to stderr which you might want to ignore. If
+the value is False (default), stderr is caught and accessible in the result
+object. If the value is True, stderr is routed to /dev/null and won&#8217;t be
+accessible. Suppression of stderr can also be controlled at instance level via
+the SuppressStderr initialization parameter.</dd>
+</dl>
+<p>Class data can be overruled on the instance level by passing alternate data in
+as parameters to __init__(). These parameters are InputHandler, SupressStderr,
+and WorkingDir.  Note that _working_dir and WorkingDir must always be an
+absolute path, although no explicit checking is done for this. You <em>will</em> get
+weird results in many cases if you use relative paths. WorkingDir, InputHandler,
+and SupressStderr are all public attributes of CommandLineApplication, and can
+be modified at anytime. You should (obviously) not modify the private versions
+of these attributes. Note that if WorkingDir does not exist on the system it
+will be created, and it will not be removed after the program runs.</p>
+<p>There is an additional private variable _input_filename. This is set to the
+string containing the absolute path to an input file when the input file is a
+python generated temporary file. This should not be accessed from outside of the
+program, but may be useful at times when subclassing.</p>
+<p>CommandLineApplication defines several methods. These include:</p>
+<div class="highlight-python"><pre>__init__(), __call__(), _input_as_string(), _input_as_multiline_string(),
+_input_as_lines(), _input_as_path(), _input_as_paths(), _absolute(),
+ _get_base_command(), _get_WorkingDir(), _set_WorkingDir(), _accept_exit_status(),
+ _get_result_paths(), getTmpFilename()</pre>
+</div>
+<p>We will go over these in differing depths, because for most cases, these are
+background methods that should never be called directly, or overwritten.</p>
+<dl class="docutils">
+<dt>__init__():</dt>
+<dd>Initializes the object, taking as parameters params (see Application),
+InputHandler, WorkingDir, SupressStderr (discussed above). This method <em>must</em> be
+called by subclasses in their __init__() if they have one. For most purposes,
+you will never need to overwrite this method.</dd>
+<dt>__call__():</dt>
+<dd>This is the method that does most of the work in the CommandLineApplication.
+Most of a users interaction with CommandLineApplications will be through this
+method, which takes data as a parameter. data is the data that should be passed
+as input to the application when it is called, default is None. Note that before
+data is appended to the command the InputHandler function is called on it. If
+data=None, no data is passed into the function, and the input handler will not
+be called. You should at all costs avoid overwriting __call__() as a lot is
+going on here.</dd>
+<dt>_input_as_string():</dt>
+<dd>The default input handler. This acts on one parameter, data, that is passed in.
+It type casts data to a string, and returns the string.</dd>
+<dt>_input_as_lines():</dt>
+<dd>An alternate input handler. In this case, data is a a sequence of lines to be
+written in a temporary file. This allows you interact with programs which only
+takes files as input, when you have created a data file on the fly. The return
+value of this function is a string representing the absolute path to the
+filename, which will be created with in self.WorkingDir.</dd>
+<dt>_input_as_multiline_string():</dt>
+<dd>Input handler, similar to _input_as_lines, except data is a single string which
+should be written to a temporary file. The temporary file&#8217;s path is passed as
+input to the application as input.</dd>
+<dt>_input_as_path():</dt>
+<dd>Another alternate input handler. This is similar to _input_as_string, but casts
+the input to a FilePath object rather than a string. If the input is a path,
+this input handler should be used.</dd>
+<dt>_input_as_paths():</dt>
+<dd>Yet another alternate input handler. This is similar to _input_as_path, but
+operates on a list of paths.</dd>
+<dt>_absolute():</dt>
+<dd>Converts a filename to an absolute path if it is not already. The path that is
+appended is self.WorkingDir. The result is a FilePath object.</dd>
+<dt>_get_base_command():</dt>
+<dd>Appends the necessary parameters to self._command and returns the full command
+as a string (without input and output).</dd>
+<dt>_get_WorkingDir() and _set_WorkingDir():</dt>
+<dd>accessor methods for the WorkingDir attribute.</dd>
+<dt>_accept_exit_status():</dt>
+<dd>This function takes a string containing the return value of the application that
+was run. It is meant to be overwritten when necessary. It&#8217;s purpose is to
+analyze the exit_status of the application being run to determine if an
+ApplicationError should be raised. By default, no ApplicationError is raised
+regardless of the exit_status. In a subclass this is handy because you can
+customize what exit statuses are acceptable to you, and which are not, or you
+can not define the function in your subclass and accept all exit statuses.</dd>
+<dt>_get_result_paths():</dt>
+<dd>This method is used to initialize the CommandLineAppResult class (see Section
+<a class="reference internal" href="#sec-commandlineappresult"><em>CommandLine-AppResult: cogent.app.util.py</em></a>). This method should be overwritten if the
+application creates output other than stdout and stderr.  A dict should be
+returned with ResultPath objects keyed by the names that you&#8217;d like to access
+their data by in the CommandLineAppResult object. When building the ResultPath
+objects, you will need to construct the names of all of the files that are being
+created. For this reason, you will need access to all of the data that the
+application has access to in the case of dynamic filenames. In order to
+construct these file name you have access to the Parameters object, data (which
+is passed in to the function) in the case where, for example, the output
+filename is specified as input to the program. The name of the input filename,
+when generated as a temporary file is available as self._input_filename, for
+cases where the output file name is based on the name of the input filename.
+This, in addition to system calls if necessary, should provide all of the
+information needed to build the names and paths of output files.</dd>
+<dt>getTmpFilename():</dt>
+<dd>Generates a random filename using <tt class="docutils literal"><span class="pre">TmpLenName</span></tt> random alphanumeric (upper and
+lowercase) characters. The result will be an absolute path (presuming that
+<tt class="docutils literal"><span class="pre">TmpDir</span></tt> is absolute, which it should be), and the filename will begin with
+<tt class="docutils literal"><span class="pre">prefix</span></tt>, end with <tt class="docutils literal"><span class="pre">suffix</span></tt>, and be in
+<tt class="docutils literal"><span class="pre">tmp_dir</span></tt> or <tt class="docutils literal"><span class="pre">TmpDir</span></tt>. The <tt class="docutils literal"><span class="pre">tmp_dir</span></tt> parameter
+overrides the class/object-level default. Note that this function does not
+actually created the file, just the filename. The result is a <tt class="docutils literal"><span class="pre">FilePath</span></tt>
+object.</dd>
+</dl>
+<p>Two module level functions are also implemented:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">get_tmp_filename</span><span class="p">,</span> <span class="n">guess_input_handler</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>get_tmp_filename:</dt>
+<dd>A module level implementation of <tt class="docutils literal"><span class="pre">CommandLineApplication.getTmpFilename().</span></tt></dd>
+<dt>guess_input_handler:</dt>
+<dd>This is a module-level function intended to pick the right input_handler in case
+the input is a set of sequences. It will return one of four input handlers: &#8212;
+_input_as_multiline_string, _input_as_path, _input_as_seqs, _input_as_lines.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="parameter-cogent-app-parameters-py">
+<h4>Parameter: cogent.app. parameters.py<a class="headerlink" href="#parameter-cogent-app-parameters-py" title="Permalink to this headline">¶</a></h4>
+<p>The class Parameter is an abstract class. Every Parameter object has six
+attributes: Prefix, Name, Value, Delimiter, Quote, and IsPath. All attributes
+may have any value, as long as it can be type casted into a string.</p>
+<p>The Prefix of a parameter specifies the character that precedes the name of the
+parameter. It is mandatory to specify a prefix for a parameter, although it may
+be the empty string. For example: &#8216;-&#8216; is the prefix in &#8216;-T=37&#8217;, and &#8216;*&#8217; is the
+prefix in &#8216;*d&#8217;. Note that some characters may have to be escaped (e.g.
+<cite>backslash</cite>).</p>
+<p>Name is the second mandatory attribute of Parameter. The combination of the
+prefix and name of a parameter should form a unique combination that identifies
+the parameter. This ID is a public property of Parameter and will function later
+on as the key in the dictionary of parameters.</p>
+<p>The attribute Value specifies the value of a parameter. It will be clear that
+not all parameters, such as flags, require a value. Therefore this field is
+optional in the __init__ method. For example, the value in &#8216;-T=37&#8217; is 37, the
+value in &#8216;-d1&#8217; is 1.</p>
+<p>The Delimiter specifies what separates the name from the value when a parameter
+is printed. For example: &#8216;=&#8217; in &#8216;T=37&#8217; or &#8216; &#8216; (single space) in &#8216;#r 14&#8217;.</p>
+<p>The Quote is an optional attribute that determines which characters will
+surround the value when the parameter is printed. Be alert on escaping quotes,
+since most quote-values will have a special meaning in python. At the moment
+only symmetrical quotes are supported, such as &#8221; &#8216; &#8221; (single quote) in &#8221; -p=&#8217;a&#8217;
+&#8221;. Asymmetrical quotes are not possible, e.g. &#8216;d=[4]&#8217;. <em>Is this something that
+should get supported?</em></p>
+<p>IsPath should be set to true if the Value of the Parameter object is intended to
+be a path to a directory or file. Paths require special handling when printing,
+and Value is therefore cast to a cogent.app.parameters.FilePath object. IsPath
+is only used by ValuedParameter and MixedParameter objects, and has no effect on
+FlagParameters.</p>
+<p>Every type of parameter prints itself differently. A flag will only print a
+combination of its prefix and name; another parameter may include everything.
+Therefore, the __str__ has to be specified in each specific subclass of
+Parameter. Whether a parameter is printed is determined by its value. This is
+also subclass specific and will be explained in the following sections.</p>
+</div>
+<div class="section" id="flagparameter-cogent-app-parameters-py">
+<h4>FlagParameter: cogent.app. parameters.py<a class="headerlink" href="#flagparameter-cogent-app-parameters-py" title="Permalink to this headline">¶</a></h4>
+<p>FlagParameter inherits from Parameter. A flag can&#8217;t have a value, it is just on
+or off. For example: if &#8216;-tree&#8217; is set, a dendrogram is calculated; if &#8216;-tree&#8217;
+is not set, the tree is not calculated. Since a flag can never have a value, we
+can easily use the value to specify whether the flag will be printed or not. If
+Value=True, the parameter will print itself; if Value=False, it won&#8217;t.</p>
+<p>A FlagParameter can be initialized with three things. Prefix, Name (mandatory),
+and Value (optional). The default for Value is False to indicate that the
+parameter is off (i.e. not printed) by default. The only thing that counts for a
+flag is whether its value evaluates to True or to False.</p>
+<p>If a FlagParameter has to print itself, it checks first whether it is on or off
+(Value=True or Value=False). If it is off, it will return the empty string. If
+it is on it will return the combination of its prefix and name.</p>
+<p>The methods isOn() and isOff() will return True or False depending on the Value
+of the FlagParameter. These methods can be used to see whether the parameter
+will be printed on the command line or not. With the methods on() and off() the
+parameter can be turned on or off. These methods don&#8217;t take a value, because a
+flag can&#8217;t have a value. Internally, they&#8217;ll set parameter.Value to True or
+False.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">FlagParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">FlagParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;tree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span>
+<span class="go">-tree</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="valuedparameter-cogent-app-parameters-py">
+<h4>ValuedParameter: cogent.app. parameters.py<a class="headerlink" href="#valuedparameter-cogent-app-parameters-py" title="Permalink to this headline">¶</a></h4>
+<p>ValuedParameter also inherits from Parameter. In addition to setting all
+attributes of the parameter during initialization, a default value is set. This
+is a private property of a ValuedParameter and will be set to the value with
+which the parameter.Value is initialized. The Default value is available for
+inspection through parameter.Default. The default value should not be changed by
+the user. With the method reset() the Value of the parameter will be reset to
+the default value.</p>
+<p>Like in FlagParameter, the value is used to control whether the parameter will
+print itself or not. If the Value is None, the parameter is off and __str__ will
+return the empty string. If the Value is anything else, the parameter will be
+printed in full glory: prefix, name, value and optionally delimiter and quotes.
+If IsPath is True, the value will be wrapped in double quotes when printed
+allowing for spaces in paths.</p>
+<p>The methods isOn() and isOff() can be used to check whether the parameter will
+be printed or not. If parameter.Value is not None, the parameter is on and will
+be printed. If parameter.Value is None the parameter is off and won&#8217;t be
+printed. By using the method on(value) the Value of the parameter is set to the
+specified value. If you accidentally try to turn the parameter on with the value
+None, an error will be raised. Calling off() will set the Value of the parameter
+to None.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">ValuedParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp</span> <span class="o">=</span> <span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&quot;=&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp</span><span class="o">.</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">temp</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">37</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">temp</span>
+<span class="go">-T=37</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp_def</span> <span class="o">=</span> <span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&quot;=&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp_def</span><span class="o">.</span><span class="n">Default</span>
+<span class="go">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">temp_def</span>
+<span class="go">-T=100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp_def</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">temp_def</span>
+<span class="go">-T=15</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp_def</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">temp_def</span>
+<span class="go">-T=100</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mixedparameter-cogent-app-parameters-py">
+<h4>MixedParameter: cogent.app. parameters.py<a class="headerlink" href="#mixedparameter-cogent-app-parameters-py" title="Permalink to this headline">¶</a></h4>
+<p>MixedParameter is a subclass of ValuedParameter, because they share many
+features. A MixedParameter is a parameter that has an optional value; sometimes
+it behaves like a FlagParameter, sometimes like a ValuedParameter. An example
+is: &#8216;-d[0<cite>mid</cite>1<cite>mid</cite>2]&#8217;.</p>
+<p>During initialization the Default value is set like in ValuedParameter. The
+method reset() is available to reset the parameter value to the default.</p>
+<p>This type of Parameter has the most complicated control over &#8216;on&#8217; or &#8216;off&#8217;. If
+the Value is False, the parameter is off. If the Value is None, the parameter is
+on, but behaves like a flag (only prefix and name will be printed), if the Value
+is anything else, the parameter is on and behaves like a ValuedParameter.</p>
+<p>The methods isOn() and isOff() have the same functionality as in the other
+parameter types. When using on(val=None) it is optional to specify the value. If
+a MixedParameter is turned on without a value it will behave like flag. When
+turned on with a value, it will behave like a ValuedParameter. The method off()
+sets the Value to False, which indicates that the parameter should not be
+printed.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">MixedParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">MixedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;d&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">isOff</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">d</span>
+<span class="go">-d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">d</span>
+<span class="go">-d2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="filepath-cogent-app-parameters-py">
+<h4>FilePath: cogent.app. parameters.py<a class="headerlink" href="#filepath-cogent-app-parameters-py" title="Permalink to this headline">¶</a></h4>
+<p>The FilePath object inherits from string, and should be used to wrap all strings
+that represent paths. Examples inlcude:</p>
+<div class="highlight-python"><pre>my_file.txt
+/path/to/my/file.txt
+/path/to/my/dir/</pre>
+</div>
+<p>Wrapping paths in a FilePath object wraps the path in quotes when it should be,
+for example when passed to a system call, and doesn&#8217;t wrap it in quotes when it
+shouldn&#8217;t be, for example when performing operations on strings. The following
+example illustrates how this fails with a simple string, but performs as it
+should with a FilePath. In this example, p1 and p2 are simple strings, and p3,
+p4, p5, and p6 are FilePath objects. Since the example path contains spaces, a
+system call would not generate the desired result if the path is not wrapped in
+quotes. The FilePath object will wrap it in quotes when it is cast to a string,
+but will not wrap it in quotes when performing other string operations. The
+string object, on the other hand, does not differentiate, and joining p1 and p2
+results in quotes placed in the middle of the string.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="s">&#39;&quot;/path to/&quot;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="s">&#39;&quot;my_file.txt&quot;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">p1</span> <span class="o">+</span> <span class="n">p2</span><span class="p">)</span>
+<span class="go">&quot;/path to/&quot;&quot;my_file.txt&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">FilePath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p3</span> <span class="o">=</span> <span class="n">FilePath</span><span class="p">(</span><span class="s">&quot;/path to/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p4</span> <span class="o">=</span> <span class="n">FilePath</span><span class="p">(</span><span class="s">&quot;my_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">p3</span><span class="o">+</span><span class="n">p4</span><span class="p">)</span>
+<span class="go">&quot;/path to/my_file.txt&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p5</span> <span class="o">=</span> <span class="n">FilePath</span><span class="p">(</span><span class="s">&quot;/path to/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p6</span> <span class="o">=</span> <span class="n">FilePath</span><span class="p">(</span><span class="s">&quot;my_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">p5</span><span class="o">+</span><span class="n">p6</span><span class="p">)</span>
+<span class="go">&quot;/path to/my_file.txt&quot;</span>
+</pre></div>
+</div>
+<p>The FilePath object is used by MixedParameter and ValuedParameter when their
+IsPath attribute is set to True. This causes the Value attribute to be cast to a
+FilePath object, and it is wrapped in quotes when used in a system call. The
+_input_as_path input handler also casts the input to a FilePath object. In
+general, if you are working with a string in an application controller that
+represents a path to a file or directory, for example in a custom input handler,
+that string should be cast to a FilePath object. Failure to do this will result
+in errors if users pass a path that contains spaces.</p>
+</div>
+<div class="section" id="parameters-cogent-app-parameters-py">
+<span id="sec-parameters"></span><h4>Parameters: cogent.app. parameters.py<a class="headerlink" href="#parameters-cogent-app-parameters-py" title="Permalink to this headline">¶</a></h4>
+<p>For most applications multiple parameters can be set. An application controller
+should have a set of known parameters with optional default values. All
+parameters of an application are organized in a dictionary where keys are
+parameter identifiers (combination of prefix and name) and values are Parameter
+objects.</p>
+<p>Sometimes it might be hard to remember what the identifiers of the parameters in
+a specific application are. Lets look at an example. Suppose the user knows that
+the temperature can be set in three applications. In application <em>A</em> with &#8216;-T&#8217;,
+in application <em>B</em> with &#8216;*temp&#8217;, and in application <em>C</em> with &#8216;&#8211;t&#8217;. It is very
+likely that he/she doesn&#8217;t remember what parameter is used in which application.
+If every application controller has an synonyms dictionary which maps &#8216;temp&#8217; to
+the identifier of the application specific parameter, the user can always lookup
+the temperature with parameters[&#8216;temp&#8217;].</p>
+<p>To support the lookup of parameters by synonyms, the class Parameters is not a
+simple dictionary, but a MappedDict (in cogent.util.misc). A MappedDict is a
+dictionary that can apply some function to a lookup value, before it looks it up
+in the dictionary. This function is called a mask. In the Parameters object the
+mask allows users to look up parameters in the dictionary by synonyms.</p>
+<p>The Parameters object uses the private function _find_synonym() internally to
+determine by what key the parameter will be looked up. If the key, given by the
+user, appears in the synonyms dictionary the key to use for the parameters
+dictionary is looked up. Otherwise, it is assumed that the user used an existing
+key in the parameters dictionary.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">FlagParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">FlagParameter</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span>  <span class="n">ValuedParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">ValuedParameter</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="mi">37</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39;=&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">MixedParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">MixedParameter</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="s">&#39;d&#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;-a&#39;</span><span class="p">:</span><span class="n">a</span><span class="p">,</span><span class="s">&#39;-T&#39;</span><span class="p">:</span><span class="n">b</span><span class="p">,</span><span class="s">&#39;-d&#39;</span><span class="p">:</span><span class="n">c</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">synonyms</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;temp&#39;</span><span class="p">:</span><span class="s">&#39;-T&#39;</span><span class="p">,</span><span class="s">&#39;distance&#39;</span><span class="p">:</span><span class="s">&#39;-d&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">Parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">synonyms</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="p">[</span><span class="s">&#39;-a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;temp&#39;</span><span class="p">]</span>
+<span class="go">-T=37</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="p">[</span><span class="s">&#39;distance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;-d&#39;</span><span class="p">]</span>
+<span class="go">-d2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Input<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>CommandLineApplication subclasses are called using the __call__ method with a
+single variable, data. This is the value passed to the application on the
+command line. The value of data will differ based on the application you are
+interfacing. Controlling for this without having to overwrite __call__ for every
+CommandLineApplication is the purpose of the _input_handlers discussed in
+Section <a class="reference internal" href="#sec-commandlineapplication"><em>Command-LineApplication: cogent.app.util.py</em></a>.</p>
+<p>Some examples of data that might be passed to CommandLineApplications are
+strings, via the _input_as_string input handler, a list of lines that should be
+written to file and then passed to the application, via the _input_as_lines
+input handler, or a path to a file or directory, via the _input_as_path input
+handler. To define the input handler that should be used, the class data
+_input_handler should be set. If one of the default input handlers is not
+applicable for a new CommandLineApplication, you will need to write a custom
+input handler. See <tt class="docutils literal"><span class="pre">cogent.app.raxml.Raxml._input_as_seqs</span></tt> for an example of a
+custom input handler.</p>
+<p>For a discussion of the predefined input handlers, see Section
+<a class="reference internal" href="#sec-commandlineapplication"><em>Command-LineApplication: cogent.app.util.py</em></a>. For a discussion on defining custom input
+handlers, see Section <a class="reference internal" href="#sec-step2"><em>Step 2: Input handling</em></a>.</p>
+</div>
+<div class="section" id="id5">
+<h3>Output<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="resultpath-cogent-app-util-py">
+<h4>ResultPath:  cogent.app.util.py<a class="headerlink" href="#resultpath-cogent-app-util-py" title="Permalink to this headline">¶</a></h4>
+<p>The ResultPath object is intended to hold the important information pertaining
+to output files created by an application, namely the path to where the file can
+be found, and whether the file was written or not. ResultPath is a very simple
+container class. It has no methods aside from __init__().</p>
+<p>To initialize a ResultPath object you must specify the path to the output file
+by setting the Path parameter. This must be a string, and it is <em>highly</em>
+recommended that this be an absolute path, though relative paths will also work
+in many cases. You can also optionally specify a boolean value specifying
+whether the file has been written or not by setting the IsWritten parameter.
+This is True by default.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.util</span> <span class="kn">import</span> <span class="n">ResultPath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span> <span class="o">=</span> <span class="n">ResultPath</span><span class="p">(</span><span class="n">Path</span><span class="o">=</span><span class="s">&#39;/tmp/my_output.txt&#39;</span><span class="p">,</span><span class="n">IsWritten</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span><span class="o">.</span><span class="n">Path</span>
+<span class="go">&#39;/tmp/my_output.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span><span class="o">.</span><span class="n">IsWritten</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span>
+<span class="go">&lt;cogent.app.util.ResultPath object at ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="commandline-appresult-cogent-app-util-py">
+<span id="sec-commandlineappresult"></span><h4>CommandLine-AppResult: cogent.app.util.py<a class="headerlink" href="#commandline-appresult-cogent-app-util-py" title="Permalink to this headline">¶</a></h4>
+<p>The CommandLineApp result object is a dictionary, and a container class for the
+results from a run of a CommandLineApplication.  CommandLineAppResult has three
+default items in it:</p>
+<dl class="docutils">
+<dt>StdOut:</dt>
+<dd>The stdout from the application, a file object</dd>
+<dt>StdErr:</dt>
+<dd>The stderr from the application, a file object (or None when suppressing stderr,
+more on this in CommandLineApplication)</dd>
+<dt>ExitStatus:</dt>
+<dd>The exit status of the application, and int that is returned by the
+CommandLineApplication, usually indicating the success or failure of the run of
+the application.</dd>
+</dl>
+<p>The __init__() method takes several required parameters:</p>
+<dl class="docutils">
+<dt>out:</dt>
+<dd>a file handle which will be assigned to &#8216;StdOut&#8217; in the CommandLineAppResult</dd>
+<dt>err:</dt>
+<dd>a file handle or None which will be assigned to &#8216;StdErr&#8217; in the
+CommandLineAppResult</dd>
+<dt>exit_status:</dt>
+<dd>an int or None which will be assigned to &#8216;ExitStatus&#8217; in the
+CommandLineAppResult</dd>
+<dt>result_paths:</dt>
+<dd>a dictionary of ResultPath objects keyed by the name by which you want to access
+the output. For each item in result_paths, an entry will be created in the
+CommandLineAppResult and if ResultPath.IsWritten is True, the file specified by
+ResultPath.Path will be opened. If the file can not be opened (due to not being
+found at the specified path, or inadequate read access) an ApplicationError will
+be raised.</dd>
+</dl>
+<p>Note that as a user, you will never instantiate a CommandLineAppResult, it is
+taken care of upon calling the CommandLineApplication. You may at times however
+be responsible for creating the result_paths dict, but more on this in
+CommandLineApplication.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Application Controller Documentation</a><ul>
+<li><a class="reference internal" href="#about-this-document">About this document</a></li>
+<li><a class="reference internal" href="#the-application-controller-framework-brief-overview">The application controller framework: brief overview</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#command-line-applications">Command line applications</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#input">Input</a></li>
+<li><a class="reference internal" href="#output">Output</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-an-application-controller">Using an application controller</a><ul>
+<li><a class="reference internal" href="#id1">Summary</a></li>
+<li><a class="reference internal" href="#creating-an-instance-with-basic-settings-parameters-working-directory">Creating an instance with basic settings (parameters, working directory)</a></li>
+<li><a class="reference internal" href="#other-settings-on-initialization">Other settings on initialization</a></li>
+<li><a class="reference internal" href="#running-the-application-using-the-output-and-cleaning-up">Running the application, using the output, and cleaning up</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#designing-and-implementing-a-new-type-of-application-controller">Designing and implementing a new type of application controller</a><ul>
+<li><a class="reference internal" href="#step-1-creating-the-application-controller-class-and-defining-class-data">Step 1: Creating the application controller class and defining class data</a><ul>
+<li><a class="reference internal" href="#defining-parameters">Defining parameters</a></li>
+<li><a class="reference internal" href="#a-complete-command-lineapplication-subclass-example">A complete Command-LineApplication subclass example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#step-2-input-handling">Step 2: Input handling</a></li>
+<li><a class="reference internal" href="#step-3-output-handling">Step 3: Output handling</a></li>
+<li><a class="reference internal" href="#tips-and-tricks-for-creating-application-controllers">Tips and tricks for creating application controllers</a><ul>
+<li><a class="reference internal" href="#halt-exec-is-your-friend">HALT_EXEC is your friend</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#application-controller-base-classes-developer-s-reference">Application controller base classes: Developer&#8217;s reference</a><ul>
+<li><a class="reference internal" href="#id2">Command line applications</a><ul>
+<li><a class="reference internal" href="#application-cogent-app-util-py">Application: cogent.app. util.py</a></li>
+<li><a class="reference internal" href="#command-lineapplication-cogent-app-util-py">Command-LineApplication: cogent.app.util.py</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">Parameters</a><ul>
+<li><a class="reference internal" href="#parameter-cogent-app-parameters-py">Parameter: cogent.app. parameters.py</a></li>
+<li><a class="reference internal" href="#flagparameter-cogent-app-parameters-py">FlagParameter: cogent.app. parameters.py</a></li>
+<li><a class="reference internal" href="#valuedparameter-cogent-app-parameters-py">ValuedParameter: cogent.app. parameters.py</a></li>
+<li><a class="reference internal" href="#mixedparameter-cogent-app-parameters-py">MixedParameter: cogent.app. parameters.py</a></li>
+<li><a class="reference internal" href="#filepath-cogent-app-parameters-py">FilePath: cogent.app. parameters.py</a></li>
+<li><a class="reference internal" href="#parameters-cogent-app-parameters-py">Parameters: cogent.app. parameters.py</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">Input</a></li>
+<li><a class="reference internal" href="#id5">Output</a><ul>
+<li><a class="reference internal" href="#resultpath-cogent-app-util-py">ResultPath:  cogent.app.util.py</a></li>
+<li><a class="reference internal" href="#commandline-appresult-cogent-app-util-py">CommandLine-AppResult: cogent.app.util.py</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="manipulating_tree_nodes.html"
+                        title="previous chapter">Manipulation of Tree Node Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="building_and_using_an_application_controller.html"
+                        title="next chapter">Building and using a new application controller</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/application_controller_framework.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="building_and_using_an_application_controller.html" title="Building and using a new application controller"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manipulating_tree_nodes.html" title="Manipulation of Tree Node Objects"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

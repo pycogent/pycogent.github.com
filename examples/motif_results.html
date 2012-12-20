@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Motif results example &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Run a Fast Unifrac community analysis" href="unifrac.html" />
+    <link rel="prev" title="Perform Nonmetric Multidimensional Scaling" href="perform_nmds.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="unifrac.html" title="Run a Fast Unifrac community analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="perform_nmds.html" title="Perform Nonmetric Multidimensional Scaling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="motif-results-example">
+<h1>Motif results example<a class="headerlink" href="#motif-results-example" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Jeremy Widmann</em></p>
+<p>In this example we will be parsing a motif results file and doing some basic operations highlighting the features of the various core motif handling objects. We first want to import the necessary modules.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.meme</span> <span class="kn">import</span> <span class="n">MemeParser</span>
+</pre></div>
+</div>
+<p>Now we want to parse the MEME (<a class="reference external" href="http://meme.sdsc.edu">http://meme.sdsc.edu</a>) motif results file and the fasta file that we passed to MEME originally. This will construct a <tt class="docutils literal"><span class="pre">MotifResults</span></tt> object and a <tt class="docutils literal"><span class="pre">SequenceCollection</span></tt> object respectively, then add the <tt class="docutils literal"><span class="pre">SequenceCollection</span></tt> to the <tt class="docutils literal"><span class="pre">MotifResults</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">MemeParser</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/motif_example_meme_results.txt&#39;</span><span class="p">,</span><span class="s">&#39;U&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/motif_example.fasta&#39;</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span><span class="o">.</span><span class="n">Alignment</span> <span class="o">=</span> <span class="n">seqs</span>
+</pre></div>
+</div>
+<p>Lets quickly look at an overview of the <tt class="docutils literal"><span class="pre">MotifResults</span></tt>. First, we can check the <tt class="docutils literal"><span class="pre">MolType</span></tt> of the sequences, how many sequences were searched, and how many distinct motifs were found.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span><span class="o">.</span><span class="n">MolType</span><span class="o">.</span><span class="n">label</span>
+<span class="go">&#39;protein&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">Alignment</span><span class="o">.</span><span class="n">NamedSeqs</span><span class="p">)</span>
+<span class="go">96</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">Motifs</span><span class="p">)</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+<p>Here 10 unique motifs were found searching 96 protein sequences. Now lets look in more detail at the motifs that were found by MEME. The <tt class="docutils literal"><span class="pre">MotifResults</span></tt> object has a list of <tt class="docutils literal"><span class="pre">Motif</span></tt> objects. Each <tt class="docutils literal"><span class="pre">Motif</span></tt> object contains a list of <tt class="docutils literal"><span class="pre">Module</span></tt> objects that make up the motif. In this example, each <tt class="docutils literal"><span class="pre">Motif</span></tt> has only one <tt class="docutils literal"><span class="pre">Module</span></tt>. Show the module ID, Evalue, and number of instances of the module in the set of sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">motif</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">Motifs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">module</span> <span class="o">=</span> <span class="n">motif</span><span class="o">.</span><span class="n">Modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">module</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">module</span><span class="o">.</span><span class="n">Evalue</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">NamedSeqs</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">1 0.0 50</span>
+<span class="go">2 7.3e-239 41</span>
+<span class="go">3 2.2e-254 45</span>
+<span class="go">4 7.8e-153 37</span>
+<span class="go">5 2.9e-120 13</span>
+<span class="go">6 2e-99 29</span>
+<span class="go">7 4.2e-54 20</span>
+<span class="go">8 6.1e-41 29</span>
+<span class="go">9 3.5e-15 9</span>
+<span class="go">10 5.3e-14 7</span>
+</pre></div>
+</div>
+<p>Module 1 has the smallest Evalue and the most instances, so we&#8217;ll look at this one in more detail. The <tt class="docutils literal"><span class="pre">Module</span></tt> object is a subclass of the core <tt class="docutils literal"><span class="pre">Alignment</span></tt> object, so it shares much of this functionality. We can look at the consensus sequence for Module 1 calculated in different ways. Lets compare the consensus that MEME provides, the calculated majority consensus, and the calculated IUPAC consensus.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">module_1</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">Motifs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module_1</span><span class="o">.</span><span class="n">ID</span>
+<span class="go">&#39;1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module_1</span><span class="o">.</span><span class="n">ConsensusSequence</span>
+<span class="go">&#39;GKPVVVDFWATWCGPCRxEAPILEELAKE&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module_1</span><span class="o">.</span><span class="n">majorityConsensus</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="go">&#39;GKPVVVDFWATWCGPCRAEAPILEELAKE&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module_1</span><span class="o">.</span><span class="n">IUPACConsensus</span><span class="p">()</span>
+<span class="go">&#39;XXXXXXXXXXXXCXXCXXXXXXXXXXXXX&#39;</span>
+</pre></div>
+</div>
+<p>Here we can see that the consensus sequences provided by MEME and the calculated majority consensus are about the same. The IUPAC consensus is an easy way to see if any positions in the module are absolutely conserved. To get a better idea of the conservation of the module, we can calculate the uncertainties for every position in the module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">iupac</span> <span class="o">=</span> <span class="n">module_1</span><span class="o">.</span><span class="n">IUPACConsensus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">majority</span> <span class="o">=</span> <span class="n">module_1</span><span class="o">.</span><span class="n">majorityConsensus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uncertainty</span> <span class="o">=</span> <span class="n">module_1</span><span class="o">.</span><span class="n">uncertainties</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">u</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">iupac</span><span class="p">,</span><span class="n">majority</span><span class="p">,</span><span class="n">uncertainty</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">i</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">u</span>
+<span class="gp">...</span>
+<span class="go">X G 2.69585768303</span>
+<span class="go">X K 2.29582593843</span>
+<span class="go">X P 2.96578451217</span>
+<span class="go">X V 1.61117952123</span>
+<span class="go">X V 1.91067699662</span>
+<span class="go">X V 2.01512726036</span>
+<span class="go">X D 1.57769736083</span>
+<span class="go">X F 0.777268500731</span>
+<span class="go">X W 2.0045407601</span>
+<span class="go">X A 0.522179190202</span>
+<span class="go">X T 2.70369216641</span>
+<span class="go">X W 0.282292189082</span>
+<span class="go">C C 0.0</span>
+<span class="go">X G 1.96072818839</span>
+<span class="go">X P 0.937268500731</span>
+<span class="go">C C 0.0</span>
+<span class="go">X R 2.03875770182</span>
+<span class="go">X A 3.68637013016</span>
+<span class="go">X E 2.60359082041</span>
+<span class="go">X A 2.9672863748</span>
+<span class="go">X P 0.282292189082</span>
+<span class="go">X I 3.49915032218</span>
+<span class="go">X L 2.19664948376</span>
+<span class="go">X E 2.71346937346</span>
+<span class="go">X E 2.49058231553</span>
+<span class="go">X L 1.94895812367</span>
+<span class="go">X A 2.71230564207</span>
+<span class="go">X K 2.85533775047</span>
+<span class="go">X E 2.36191706121</span>
+</pre></div>
+</div>
+<p>The first column is the IUPAC consensus symbol, the second column is the majority consensus symbol, and the third column is the uncertainty at a given position in the module. The smaller the number, the less uncertainty, and therefore the more conserved the majority residue is at that position. Now that we have examined Module 1 in some detail, lets do some more simple tasks. How many different sequences is Module 1 located in?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">module_1</span><span class="o">.</span><span class="n">LocationDict</span>
+<span class="go">{&#39;18309723&#39;: [284], &#39;15614085&#39;: [58], &#39;15966937&#39;: [59], ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">module_1</span><span class="o">.</span><span class="n">LocationDict</span><span class="p">)</span>
+<span class="go">49</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">LocationDict</span></tt> property of the <tt class="docutils literal"><span class="pre">Module</span></tt> object is a dictionary of sequences IDs and indices in the sequence where the module was found. Here we see that Module 1 was found in 49 different sequences, which means that it was found twice in one sequence. We can find what other modules were found to have more than one instance in a given sequence.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">motif</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">Motifs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">module</span> <span class="o">=</span> <span class="n">motif</span><span class="o">.</span><span class="n">Modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">seq_id</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">LocationDict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="gp">... </span>                    <span class="k">print</span> <span class="n">module</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">seq_id</span><span class="p">,</span> <span class="n">indices</span>
+<span class="gp">...</span>
+<span class="go">1 18406743 [42, 362]</span>
+<span class="go">3 18406743 [104, 264, 424]</span>
+</pre></div>
+</div>
+<p>We see that Module 1 and Module 3 have more than one instance in sequence 18406743. Since this sequence is the only one to contain multiple instances of the same module, lets quickly examine some statistics of the alignment.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">Alignment</span><span class="o">.</span><span class="n">NamedSeqs</span><span class="p">[</span><span class="s">&#39;18406743&#39;</span><span class="p">])</span>
+<span class="go">578</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">Alignment</span><span class="o">.</span><span class="n">Seqs</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">min</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+<span class="go">89</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">max</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+<span class="go">578</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">))</span>
+<span class="go">169.86458333333334</span>
+</pre></div>
+</div>
+<p>This sequence is the longest of all the sequences searched and more than 3 times longer than the average sequence.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="perform_nmds.html"
+                        title="previous chapter">Perform Nonmetric Multidimensional Scaling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unifrac.html"
+                        title="next chapter">Run a Fast Unifrac community analysis</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/motif_results.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="unifrac.html" title="Run a Fast Unifrac community analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="perform_nmds.html" title="Perform Nonmetric Multidimensional Scaling"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

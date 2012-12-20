@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The goodness_of_fit module &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Perform Principal Coordinates Analysis" href="perform_PCoA_analysis.html" />
+    <link rel="prev" title="Generating application commandlines" href="generating_app_commandlines.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="perform_PCoA_analysis.html" title="Perform Principal Coordinates Analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generating_app_commandlines.html" title="Generating application commandlines"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-goodness-of-fit-module">
+<h1>The <tt class="docutils literal"><span class="pre">goodness_of_fit</span></tt> module<a class="headerlink" href="#the-goodness-of-fit-module" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Andreas Wilm</em></p>
+<p>This is a short example of how to use the goodness_of_fit module.</p>
+<p><tt class="docutils literal"><span class="pre">goodness_of_fit</span></tt> will measure the degree of correspondence (or goodness of fit) between a multidimensional scaling (i.e. a lower dimensional representation of distances between objects) and the input distance matrix.</p>
+<p>Let&#8217;s setup some example data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cogent.cluster.goodness_of_fit</span> <span class="kn">as</span> <span class="nn">goodness_of_fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distmat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.039806</span><span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.21595</span> <span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.0138</span>  <span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.219002</span><span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.064283</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.039806</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.025505</span><span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.0208</span>  <span class="p">,</span>  <span class="mf">0.039806</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.194917</span><span class="p">,</span>  <span class="mf">0.21291</span> <span class="p">,</span>  <span class="mf">0.0208</span>  <span class="p">,</span>  <span class="mf">0.027869</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.025505</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.197887</span><span class="p">,</span>  <span class="mf">0.018459</span><span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.191958</span><span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.018459</span><span class="p">,</span>  <span class="mf">0.025505</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.21595</span> <span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.197887</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.206866</span><span class="p">,</span>  <span class="mf">0.206866</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.07956</span> <span class="p">,</span>  <span class="mf">0.066935</span><span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.206866</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.0208</span>  <span class="p">,</span>  <span class="mf">0.018459</span><span class="p">,</span>  <span class="mf">0.206866</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.21595</span> <span class="p">,</span>  <span class="mf">0.0138</span>  <span class="p">,</span>  <span class="mf">0.0208</span>  <span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.0138</span>  <span class="p">,</span>  <span class="mf">0.039806</span><span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.206866</span><span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.197887</span><span class="p">,</span>  <span class="mf">0.209882</span><span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.064283</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.194917</span><span class="p">,</span>  <span class="mf">0.191958</span><span class="p">,</span>  <span class="mf">0.07956</span> <span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.197887</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.030311</span><span class="p">,</span>  <span class="mf">0.200869</span><span class="p">,</span>  <span class="mf">0.206866</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.219002</span><span class="p">,</span>  <span class="mf">0.21291</span> <span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.066935</span><span class="p">,</span>  <span class="mf">0.21595</span> <span class="p">,</span>  <span class="mf">0.209882</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.030311</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.21291</span> <span class="p">,</span>  <span class="mf">0.219002</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.056853</span><span class="p">,</span>  <span class="mf">0.0208</span>  <span class="p">,</span>  <span class="mf">0.018459</span><span class="p">,</span>  <span class="mf">0.203862</span><span class="p">,</span>  <span class="mf">0.0138</span>  <span class="p">,</span>  <span class="mf">0.056853</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.200869</span><span class="p">,</span>  <span class="mf">0.21291</span> <span class="p">,</span>  <span class="mf">0.</span>      <span class="p">,</span>  <span class="mf">0.011481</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.064283</span><span class="p">,</span>  <span class="mf">0.027869</span><span class="p">,</span>  <span class="mf">0.025505</span><span class="p">,</span>  <span class="mf">0.206866</span><span class="p">,</span>  <span class="mf">0.0208</span>  <span class="p">,</span>  <span class="mf">0.064283</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="mf">0.206866</span><span class="p">,</span>  <span class="mf">0.219002</span><span class="p">,</span>  <span class="mf">0.011481</span><span class="p">,</span>  <span class="mf">0.</span>      <span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mds_coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.065233</span><span class="p">,</span>  <span class="mf">0.035019</span><span class="p">,</span>  <span class="mf">0.015413</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.059604</span><span class="p">,</span>  <span class="mf">0.00168</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.003254</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.052371</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010959</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014047</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span><span class="o">-</span><span class="mf">0.13804</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.036031</span><span class="p">,</span>  <span class="mf">0.031628</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.063703</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015483</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00751</span> <span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.056803</span><span class="p">,</span>  <span class="mf">0.031762</span><span class="p">,</span>  <span class="mf">0.021767</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span><span class="o">-</span><span class="mf">0.135082</span><span class="p">,</span>  <span class="mf">0.023552</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.021006</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span><span class="o">-</span><span class="mf">0.150323</span><span class="p">,</span>  <span class="mf">0.011935</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010013</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.06072</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.01622</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.007721</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">[</span> <span class="mf">0.065009</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025254</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005257</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>You are now good to compute stress values as shown in the following.</p>
+<div class="section" id="stress-calckruskalstress">
+<h2><tt class="docutils literal"><span class="pre">Stress.calcKruskalStress()</span></tt><a class="headerlink" href="#stress-calckruskalstress" title="Permalink to this headline">¶</a></h2>
+<p>This computes Kruskal&#8217;s Stress AKA Stress Formula 1 (Kruskal, 1964).
+Kruskal gives the following numbers as guideline:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Stress [%]</th>
+<th class="head">Goodness of fit</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>20</td>
+<td>Poor</td>
+</tr>
+<tr class="row-odd"><td>10</td>
+<td>Fair</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Good</td>
+</tr>
+<tr class="row-odd"><td>2.5</td>
+<td>Excellent</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>Perfect</td>
+</tr>
+</tbody>
+</table>
+<p>Our example data gives a very good stress value:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">stress</span> <span class="o">=</span> <span class="n">goodness_of_fit</span><span class="o">.</span><span class="n">Stress</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">mds_coords</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stress</span><span class="o">.</span><span class="n">calcKruskalStress</span><span class="p">()</span>
+<span class="go">0.02255...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="stress-calcsstress">
+<h2><tt class="docutils literal"><span class="pre">Stress.calcSstress()</span></tt><a class="headerlink" href="#stress-calcsstress" title="Permalink to this headline">¶</a></h2>
+<p>This computes S-Stress (Takane, 1977). S-Stress emphasises larger dissimilarities more than smaller ones. S-Stress values behave nicer then Stress-1 values:</p>
+<ul class="simple">
+<li>The value of S-Stress is always between 0 and 1</li>
+<li>Values less then 0.1 mean good representation.</li>
+</ul>
+<p>Using the example data again:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">stress</span> <span class="o">=</span> <span class="n">goodness_of_fit</span><span class="o">.</span><span class="n">Stress</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">mds_coords</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stress</span><span class="o">.</span><span class="n">calcSstress</span><span class="p">()</span>
+<span class="go">0.00883...</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">goodness_of_fit</span></tt> module</a><ul>
+<li><a class="reference internal" href="#stress-calckruskalstress"><tt class="docutils literal"><span class="pre">Stress.calcKruskalStress()</span></tt></a></li>
+<li><a class="reference internal" href="#stress-calcsstress"><tt class="docutils literal"><span class="pre">Stress.calcSstress()</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generating_app_commandlines.html"
+                        title="previous chapter">Generating application commandlines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="perform_PCoA_analysis.html"
+                        title="next chapter">Perform Principal Coordinates Analysis</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/goodness_of_fit.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="perform_PCoA_analysis.html" title="Perform Principal Coordinates Analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generating_app_commandlines.html" title="Generating application commandlines"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

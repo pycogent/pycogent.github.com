@@ -1,0 +1,929 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Changelog &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="index.html" />
+    <link rel="prev" title="PyCogent License" href="COGENT_LICENSE.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="COGENT_LICENSE.html" title="PyCogent License"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cogent-1-5-2-1-5-3">
+<h2>Cogent 1.5.2 - 1.5.3<a class="headerlink" href="#cogent-1-5-2-1-5-3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="new-features">
+<h3>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Added a withoutLostSpans() method to Feature objects in
+cogent.core.annotation. Useful after projecting features from one aligned
+sequence across to another. Implemented for ordinary Features and
+SimpleVariables but not xxy_list Variables.</li>
+</ul>
+</div>
+<div class="section" id="changes">
+<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Make Span.remapWith() a little clearer in cogent.core.location.</li>
+<li>Tidy annotation remapping code in cogent.core.annotation and
+cogent.core.sequence so that new positions are only calculated once when
+slicing, projecting, or otherwise remapping parts of sequences. The old code
+was needlessly doing it twice.</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Fixed bug in BLAT application controller (cogent.app.blat) which would drop
+some input sequences when running assign_dna_reads_to_protein_database.</li>
+<li>Prevent negative widths from arising in cogent.draw.compatibility when
+alignment is too wide.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-5-1-1-5-2">
+<h2>Cogent 1.5.1 - 1.5.2<a class="headerlink" href="#cogent-1-5-1-1-5-2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>New Features<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Added new mantel_test function to cogent.maths.stats.test that allows the
+type of significance test to be specified. This function is meant to replace
+the pre-existing mantel function.</li>
+<li>Added new correlation_test function to cogent.maths.stats.test that computes
+the correlation (pearson or spearman) between two vectors, in addition to
+parametric and nonparametric tests of significance and confidence intervals.
+This function gives more control and information than the pre-existing
+correlation function. The spearman function is also a new addition.</li>
+<li>Added new mc_t_two_sample function to cogent.maths.stats.test that performs a
+two-sample t-test and uses Monte Carlo permutations to determine
+nonparametric significance (similar to R&#8217;s Deducer::perm.t.test).</li>
+<li>Added guppy 1.1, pplacer 1.1, ParsInsert 1.04, usearch 5.2.32, rtax 0.981,
+raxml 7.3.0, BLAT 34, and BWA 0.6.2 application controllers.</li>
+<li>Added new functions to cogent.maths.stats.rarefaction that provide
+alternative ways to perform rarefaction subsampling.</li>
+<li>Added convenience wrappers assign_dna_reads_to_database,
+assign_dna_reads_to_protein_database, and assign_dna_reads_to_dna_database
+for BLAT, BWA, and usearch with consistent interface across all three.</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h3>Changes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Minimum matplotlib version now set to 1.1.0.</li>
+<li>Minimum Vienna package version now set to 1.8.5.</li>
+<li>The pearson function in cogent.maths.stats.test has more robust
+error-checking.</li>
+<li>The mantel and mantel_test functions in cogent.maths.stats.test now check for
+symmetric, hollow distance matrices as input by default, with an option to
+disable these checks.</li>
+<li>cogent.draw.distribution_plots now uses matplotlib proxy Artists for legend
+creation (this simplifies the code a bit). Added ability to set the size of
+plot figures through two new optional parameters to generate_box_plots and
+generate_comparative_plots. More robust checks have been put in place in
+case making room for labels fails (this now uses matplotlib 1.1.0&#8217;s new
+tight_layout() functionality, but this can still fail in some cases).</li>
+<li>cogent.app.raxml (version 7.0.3) is now deprecated and will be removed in
+1.6.0. Please use cogent.app.raxml_v730 instead (version 7.3.0).</li>
+<li>cogent.app.muscle (version 3.6) is now deprecated and will be removed in
+1.6.0. Please use cogent.app.muscle_v38 instead (version 3.8).</li>
+<li>Updated cogent.app.uclust to handle &#8211;stepwords and &#8211;w.</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h3>Bug Fixes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>improve handling of reading frames from Ensembl</li>
+<li>actually included the test_ensembl/test_metazoa.py file that was
+accidentally overlooked.</li>
+<li>fixed small diff in postcript output from RNAfold</li>
+<li>Deprecation and discontinued warnings are now not ignored by default.
+cogent.util.warning was ignored in Python 2.7 because it uses
+DeprecationWarnings. These warnings are temporarily forced to not be ignored.</li>
+<li>Included test_app/test_formatdb.py and test_app/test_mothur.py files in
+alltests.py.</li>
+<li>Fixed test_safe_md5 in tests.test_util.test_misc to no longer run an MD5 over
+a file in PyCogent (this caused the test to break when a new release went out
+because the MD5 changes due to the new version string). The test now writes a
+temporary file populated with fixed data and computes the MD5 from that.</li>
+<li>Fixed data_file_links.html in the PyCogent documentation to correctly point
+to several data files that were previously unreachable.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-5-1-5-1">
+<h2>Cogent 1.5 - 1.5.1<a class="headerlink" href="#cogent-1-5-1-5-1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>New Features<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Alignments can now add sequences that are pairwise aligned to a sequence
+already present in the alignment.</li>
+<li>Alignment.addSeqs has more flexibility with the specific order of sequences
+now controllable by the user. Thanks to Jan Kosinski for these two very
+useful patches!</li>
+<li>Increased options for reading Table data from files: limit keyword; and,
+line based (as distinct from column-based) type-casting of delimited files.</li>
+<li>Flexible parser for raw Greengenes 16S records</li>
+<li>Add fast pairwise distance estimation for DNA/RNA sequences. Currently only
+Jukes-Cantor 1969 and Tamura-Nei 1993 distances are provided. A cookbook
+entry was added to building_phylogenies.</li>
+<li>Added a PredefinedNucleotide substitution model class. This class uses
+Cython implementations for nucleotide models where analytical solutions
+are available. Substantial speedups are achieved. These implementations
+do not support obtaining the rate matrix. Use the older style implementation
+if you require that (toggled by the rate_matrix_required argument).</li>
+<li>Added fit_function function. This allows to fit any model to a x and y
+dataset using simplex to reduce the error between the model and the data.</li>
+<li>Added parsers for bowtie and for BLAT&#8217;s PSL format</li>
+<li>Table can now read/write gzipped files.</li>
+<li>GeneticCode class has a getStopIndices method. Returns the index positions
+of stop codons in a sequence for a user specified translation frame.</li>
+<li>Added LogDet metric to cogent.evolve.pairwise_distance. With able assistance
+from Yicheng Zhu. Thanks Yicheng!</li>
+<li>Added jackknife code to cogent.maths.stats.jackknife. This can be used to
+measure confidence of an estimate from a single vector or a matrix. Thanks
+to Anuj Pahwa for help implementing this!</li>
+<li>Added abundance-based Jaccard beta diversity index (Chao et. al., 2005)</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h3>Changes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>python 2.6 is now the minimum required version</li>
+<li>We have removed code authored by Ziheng Yang as it is not available under
+an open source license. We note a modest performance hit for nucleotide and
+dinucleotide models. Codon models are not affected. The PredefinedNucleotide
+models recently added are faster than the older approach that used Yang&#8217;s
+code.</li>
+<li>The PredefinedNucleotide models are now available via cogent.evolve.models.
+The old-style (slower) nucleotide models can be obtained by setting
+rate_matrix_required=True.</li>
+<li>RichGenbankParser can now return WGS blocks</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h3>Bug Fixes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>fixed bug that crept into doing consensus trees from tree collections.
+Thanks to Klara Verbyla for catching this one!</li>
+<li>fixed a bug (#3170464) affecting obtaining sequences from non-chromosome
+level coordinate systems. Thanks to brandoninvergo for reporting and Hua
+Ying for the patch!</li>
+<li>fixed a bug (#2987278) associated with missing unit tests for gbseq.py</li>
+<li>fixed a bug (#2987264) associated with missing unit tests for paml_matrix.py</li>
+<li>fixed a bug (#2987238) associated with missing unit tests for tinyseq.py</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-4-1-1-5">
+<h2>Cogent 1.4.1 - 1.5<a class="headerlink" href="#cogent-1-4-1-1-5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h3>New Features<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>major additions to Cookbook. Thanks to the many contributors (too many to
+list here)!</li>
+<li>added AlleleFreqs attribute to ensembl Variation objects.</li>
+<li>added getGeneByStableId method to genome objects.</li>
+<li>added Introns attribute to Transcript objects and an Intron class. (Thanks
+to Hua Ying for this patch!)</li>
+<li>added Mann-Whitney test and a Monte-Carlo version</li>
+<li>exploratory and confirmatory period estimation techniques (suitable for
+symbolic and continuous data)</li>
+<li>Information theoretic measures (AIC and BIC) added</li>
+<li>drawing of trees with collapsed nodes</li>
+<li>progress display indicator support for terminal and GUI apps</li>
+<li>added parser for illumina HiSeq2000 and GAiix sequence files as
+cogent.parse.illumina_sequence.MinimalIlluminaSequenceParser.</li>
+<li>added parser to FASTQ files, one of the output options for illumina&#8217;s
+workflow, also added cookbook demo.</li>
+<li>added functionality for parsing of SFF files without the Roche tools in
+cogent.parse.binary_sff</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h3>Changes<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>thousand fold performance improvement to nmds</li>
+<li>&gt;10-fold performance improvements to some Table operations</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h3>Bug Fixes<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Fixed a Bug in cogent.core.alphabet that resulted in 4 tests err&#8217;ing out
+when using NumPy v1.4.1</li>
+<li>Sourceforge bugs 2987289, 2987277, 2987378, 2987272, 2987269 were addressed
+and fixed</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-4-1-4-1">
+<h2>Cogent 1.4 - 1.4.1<a class="headerlink" href="#cogent-1-4-1-4-1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id10">
+<h3>New Features<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Simplified getting genetic variation from Ensembl and provide the protein
+location of nonsynonymous variants.</li>
+<li>rate heterogeneity variants of pre-canned continuous time substitution
+models easier to define.</li>
+<li>Added implementation of generalised neighbour joining.</li>
+<li>New capabilities for examining genetic variants using Ensembl.</li>
+<li>Phylogenetic methods that can return collections of trees do so as a
+TreeCollections object, which has writeToFile and getConsensusTree methods.</li>
+<li>Added uclust application controller which currently supports uclust
+v1.1.579.</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h3>Changes<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Major additions to Cookbook documentation courtesy of Tom Elliot. Thanks
+Tom!</li>
+<li>Improvements to parallelisation.</li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h3>Bug Fixes<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="cogent-1-3-1-4">
+<h2>Cogent 1.3 - 1.4<a class="headerlink" href="#cogent-1-3-1-4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id13">
+<h3>New Features<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>added support for manipulating and handling macromolecular structures.
+This includes a PDB file format parser, a hierarchical data structure
+to represent molecules. Various utilities to manipulate e.g. clean-up
+molecules, efficient surface area and proximity-contact calculation via
+cython. Expansion into unit-cells and crystal lattices is also possible.</li>
+<li>added a KD-Tree class for fast nearest neighbor look-ups.
+Supports k-nearest neighbours and all neighbours within radius queries
+currently only in 3D.</li>
+<li>added new tools for evaluating clustering stresses, goodness_of_fit.
+In cogent.cluster .</li>
+<li>added a new clustering tool, procrustes analysis.  In cogent.cluster .</li>
+<li>phylo.distance.EstimateDistances class has a new argument, modify_lf. This
+allows the use the modify the likelihood function, possibly constraining
+parameters, freeing them, setting bounds, pre-optimising etc..</li>
+<li>cogent Table mods; added transposed and normalized methods while the summed
+method can now return column or row sums.</li>
+<li>Added a new context dependent model class. The conditional nucleotide
+frequency weighted class has been demonstrated to be superior to the model
+forms of Goldman and Yang (1994) and Muse and Gaut (1994). The publication
+supporting this claim is In press at Mol Biol Evol, authored by Yap,
+Lindsay, Easteal and Huttley.</li>
+<li>added new argument to LoadTable to facilitate speedier loading of large
+files. The static_column_types argument auto-generates a separator format
+parser with column conversion for numeric columns.</li>
+<li>added BLAST XML parser + tests.</li>
+<li>Add compatibility matrix module for determining reticulate evolution.</li>
+<li>Added &#8216;start&#8217; and &#8216;order&#8217; options to the WLS and ML tree finding method
+.trex() These allow the search of tree-space to be constrained to start at a
+particular subtree and to proceed in a specified order of leaf additions.</li>
+<li>Consensus tree of weighted trees from phylo.maximum_likelihood.</li>
+<li>Add Alignment.withGapsFrom() aka mirrorGaps, mirrors the gaps into a
+provided alignment.</li>
+<li>added ANOVA to maths.stats.test</li>
+<li>LoadTable gets an optional argument (static_column_types) to simplify speedy
+loading of big files.</li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h3>Changes<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Python 2.4 is no longer supported.</li>
+<li>NumPy 1.3 is now the minimum supported NumPy version.</li>
+<li>zlib is now a dependency.</li>
+<li>cogent.format.table.asReportlabTable is being discontinued in version 1.5.
+This is the last dependency on reportlab and removal will simplify
+installation.</li>
+<li>the conditional nucleotide model (Yap et al 2009) will be made the default
+model form for context dependent models in version 1.5.</li>
+<li>Change required MPI library from PyxMPI to mpi4py.</li>
+<li>Move all of the cogent.draw.matplotlib.* modules up to cogent.draw.*</li>
+<li>Substitute matplotlib for reportlab throughout cogent.draw</li>
+<li>cogent.db.ensembl code updated to work with the latest Ensembl release (56)</li>
+<li>motif prob pseudocount option, used for initial values of optimisable mprobs</li>
+<li>The mlagan application controller has been removed.</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h3>Bug Fixes<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Fix and test for two bugs in multiple alignment, One in the pairwise.py
+Hirschberg code and the other in indel_positions.py where gaps at the end
+were effectively taken to be deletions and never insertions, unlike gaps at
+the start.</li>
+<li>fix #2811993 alignment getMotifProbs. allow_gap argument now has an effect.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-2-1-3">
+<h2>Cogent 1.2 - 1.3<a class="headerlink" href="#cogent-1-2-1-3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id16">
+<h3>New Features<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Python2.6 is now supported</li>
+<li>added cogent.cluster.nmds, code to perform nonmetric multidimensional
+scaling.  Not as fast as others (e.g.: R, MASS package, isoMDS)</li>
+<li>Documentation ported to using the Sphinx documentation generator.</li>
+<li>Major additions to documentation in doc/examples.</li>
+<li>Added partial support for querying the Ensembl MySQL databases. This
+capacity has additional dependencies (MySQL-python and SQLAlchemy). This
+module should be considered alpha level code, (although it has worked
+reliably for some time in the hands of the developers).</li>
+<li>Introduced a new substitution model family. This family has the same form as
+that originally described by Muse and Gaut (Mol Biol Evol, 11, 715-24).
+These models were applied in the article by Lindsay et al. (2008, Biol
+Direct, 3, 52). Model state defaults to the tuple weighted matrix (eg. the
+Goldman and Yang codon models). Selecting the nucleotide weighted matrix is
+done using the mprob_model argument.</li>
+<li>Likelihood functions now have a getStatistics method. This returns cogent
+Table objects. Optional arguments are with_motif_probs and with_titles where
+the latter refers to the Table.Title attribute being set.</li>
+<li>Added rna_struct formatter and rna_plot parser</li>
+<li>A fast unifrac method implementation.</li>
+<li>Added new methods on tree related objects: TreeNode.getNodesDict;
+TreeNode.reassignNames; PhyloNode.tipsWithinDistance;
+PhyloNode.totalDescendingBranchLength</li>
+<li>Adopted Sphinx documentation system, added many new use cases, improved
+existing ones.</li>
+<li>added setTablesFormat to likelihood function. This allows setting the
+spacing, display precision of the stats tables resulting from printing a
+likelihood function.</li>
+<li>Added non-parametric multidimensional scaling (nmds) method.</li>
+<li>Added a seperate app controller for FastTree v1.0</li>
+<li>new protein MolType, PROTEIN_WITH_STOP, that supports the stop codon new
+sequence objects, ProteinWithStopSequence and ModelProteinWithStopSequence
+to support the new MolType.</li>
+<li>Support for Cython added.</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h3>Changes<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>reconstructAncestralSequences has been deprecated to
+reconstructAncestralSeqs. It will be removed in version 1.4.</li>
+<li>updated parsers</li>
+<li>TreeNode.getNewick is now iterative. For recursive, use
+TreeNode.getNewickRecursive. Both the iterative and recursive methods of
+getNewick now support the keyword &#8216;escape_name&#8217;. DndParser now supports the
+keyword &#8216;unescape_name&#8217;. DndParser unescape_name will now try to remove
+underscores (like underscore_unmunge).</li>
+<li>Generalized MinimalRnaalifoldParser to parse structures and energies from
+RNAfold as well.</li>
+<li>PhyloNode.tipToTipDistances can now work on a subset of tips by passing
+either a list of tip names or a list of tip nodes using the endpoints param.</li>
+<li>deprecating reconstructAncestralSequences to deprecating
+reconstructAncestralSeqs.</li>
+<li>updated app controller parameters for FastTree v1.1</li>
+<li>Allow and require a more recent version of Pyrex.</li>
+<li>LoadTree is now a method of cogent.__init__</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Pyrex is no longer the accepted way to develop extensions. Use
+<a class="reference external" href="http://www.cython.org/">Cython</a> instead.</p>
+</div>
+</div>
+<div class="section" id="id18">
+<h3>Bug Fixes<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>the alignment sample methods and xsample (randint had the wrong max
+argument)</li>
+<li>Fixes the tests that no longer work with NCBI&#8217;s API changes, and sticks a
+big warning for the unwary in the ncbi module pointing users to the
+&#8220;official&#8221; list of reported rettypes. Note that the rettypes changed
+recently and NCBI says they do not plan to support the old behavior.</li>
+<li>The TreeNode operators cmp, contains, and any operator that relies on those
+methods will now only perform comparisons against the objects id. Prior
+behavior first checked the TreeNode&#8217;s Name attribute and then object id if
+the Name was not present. This resulted in ambiguous behavior in certain
+situations.</li>
+<li>Added type conversion to Mantel so it works on lists.</li>
+<li>kendall tau fix, bug 2794469</li>
+<li>Table now raises a RuntimeError if provided malformed data.</li>
+<li>Fixed silent type conversion in TreeNode, bug 2804431</li>
+<li>RangeNode is now properly passing kwargs to baseclass, bug 2804441</li>
+<li>DndParser was not producing correct trees in niche cases, bug 2798580</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-1-1-2">
+<h2>Cogent 1.1 - 1.2<a class="headerlink" href="#cogent-1-1-1-2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id19">
+<h3>New Features<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Code for performing molecular coevolution/covariation analyses on multiple
+sequence alignments, plus support files. (Described in J. Caporaso et al.
+BMC Evol Biol, 8(1):327, 2008.)</li>
+<li>App controller for <a class="reference external" href="http://www.bioinformatics.org/cd-hit/">CD-HIT</a></li>
+<li>A ParameterEnumerator object is now available in cogent.app.util. This
+method will iterate over a range of parameters, returning parameter dicts
+that can be used with the relevant app controller.</li>
+<li>Sequence and alignment objects that inherit from Annotatable can now mask
+regions of sequence, returning new objects where the observed sequence
+characters in the regions spanned by the annotations are replaced by a mask
+character (mask_char).</li>
+<li>Table.count method. Counts the number of rows satisfying some condition.</li>
+<li>Format writer for stockholm and clustal formats.</li>
+<li>App controllers for dotur, infernal, RNAplot, RNAalifold. Parsers for
+infernal and dotur.</li>
+<li>Empirical nucleotide substitution matrix estimation code (Described in
+M. Oscamou et al. BMC Bioinformatics, 9(1):511, 2008)</li>
+</ul>
+</div>
+<div class="section" id="new-documentation">
+<h3>New Documentation<a class="headerlink" href="#new-documentation" title="Permalink to this headline">¶</a></h3>
+<p>Usage examples (see doc/) were added for the following:</p>
+<ul class="simple">
+<li>Querying NCBI</li>
+<li>The motif module.</li>
+<li>UPGMA clustering</li>
+<li>For using the ParameterCombinations object and generating command lines</li>
+<li>Coevolution modelling</li>
+<li>Sequence annotation handling</li>
+<li>Table manipulation</li>
+<li>Principal components analysis (PCoA)</li>
+<li>Genetic code objects</li>
+<li>How to construct profiles, consensus seqs etc ..</li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h3>Changes<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>PyCogent no longer relies on the Python math module. All math functions are
+now imported from numpy. The main motivator was to remove casting between
+numpy and Python types. Such as, a &#8216;numpy.float64&#8217; variable unknowingly
+being converted to a Python &#8216;float&#8217; type.</li>
+<li>Tables.getDistinctValues now handles multiple columns.</li>
+<li>Table.Header is now an immutable property of Tables. Use the withNewHeader
+method modifying Header labels.</li>
+<li>The TreeNode comparison methods now only check against the objects ID</li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h3>Bug Fixes<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>LoadTable was ignoring title argument for standard file read.</li>
+<li>Fixed bug in Table.joined. When a join produces no result, now returns a
+Table with 0 rows.</li>
+<li>Improved consistency of LoadTable with previous behaviour of cogent.Table</li>
+<li>Added methods to detect large sequences/alphabets and handle counts from
+sequence triples correctly.</li>
+<li>goldman_q_dna_pair() and goldman_q_rna_pair() now average the frequency
+matrix used.</li>
+<li>reverse complement of annotations with disjoint spans correctly preserve
+order.</li>
+<li>Fixed ambiguity in TreeNode comparison methods which resulted in the prune
+method incorrectly removing entire subtrees.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-0-1-1-1">
+<h2>Cogent 1.0.1 - 1.1<a class="headerlink" href="#cogent-1-0-1-1-1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id22">
+<h3>New Features<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>Added functionality to cogent.util.unit_test.TestCase</dt>
+<dd><p class="first">assertSameObj - use in place of &#8216;assert a is b&#8217;
+assertNotSameObj - use in place of &#8216;assert a is not b&#8217;
+assertIsPermutation - checks if observed is a permutation of items
+assertIsProb - checks whether a value(s) are probabilities
+assertIsBetween - use in place of &#8216;assert a &lt; obs &lt; b&#8217;
+assertLessThan - use in place of &#8216;assert obs &lt; value&#8217;
+assertGreaterThan - use in place of &#8216;assert obs &gt; value&#8217;
+assertSimiliarFreqs - compares frequency distributions using a G-test
+assertSimiliarMeans - compares samples using a t-test
+_set_suite_pvalue - set a suite wide pvalue</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">both the similiarity assertions can have a pvalue specified in the
+testing module. This pvalue can be overwritten during alltests.py by
+calling TestCase._set_suite_pvalue(pvalue)</p>
+</div>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All of these new assert methods can take lists as well. For instance:
+obs = [1,2,3,4]
+value = 5
+self.assertLessThan(obs, value)</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Alignment constructor now checks for iterators (e.g. results from
+parsers) and lists() them &#8211; this allows direct construction like
+Alignment(MinimalFastaParser(open(myfile.fasta))). Applies to both
+dense and sparse alignments, and SequenceCollections.</p>
+</li>
+<li><p class="first">Parameterized LoadTree underscore stripping in node names, and turned it off
+by default.</p>
+</li>
+<li><dl class="first docutils">
+<dt>new Table features and refactor</dt>
+<dd><p class="first last">Trivial edits of the code provided by Felix Schill for SQL-like table
+joining. Principally a unification of the different types of table
+joins (inner- and outer-join) between 2 tables, and porting of all
+testing code into test_table.rest. The method Table.joined provides
+the interface (see tests/test_table.rest for usage).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>added a Table.count method</dt>
+<dd><p class="first last">simply counts the number of rows satisfying some condition. Method
+has the same args as for Table.filtered.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Functions for obtaining the rate matrix for 2 or 3 sequences using the
+Goldman method. Support for RNA and DNA.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Additions to clustalw and muscle app controllers</dt>
+<dd><dl class="first last docutils">
+<dt>muscle.py</dt>
+<dd><p class="first last">add_seqs_to_alignment
+align_two_alignments
+align_unaligned_seqs
+align_and_build_tree
+build_tree_from_alignment</p>
+</dd>
+<dt>clustalw.py</dt>
+<dd><p class="first last">align_unaligned_seqs
+bootstrap_tree_from_alignment
+build_tree_from_alignment
+align_and_build_tree</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><p class="first">App controllers for Clearcut, ClustalW, Mafft</p>
+</li>
+<li><p class="first">Added midpoint rooting</p>
+</li>
+<li><p class="first">Accept FloatingPointError as well as ZeroDivisionError to accommodate numpy.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Trees can now compare themselves to other trees using a couple of methods.</dt>
+<dd><p class="first">subsets: compare based on fraction of subsets of labels defined by clades that
+are the same in the two trees.</p>
+<p>tip_to_tip: compare based on correlations of tip_to_tip distances.</p>
+<p class="last">Both of these are fairly badly behaved statistically, so should always be
+compared to a distribution of values from random (e.g. label-permuted) trees
+using Monte Carlo.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Added ability to exclude non-shared taxa from subsets tree cmp method.</p>
+</li>
+<li><p class="first">Added Zongzhi&#8217;s combination and permutation implementations to transform.py.</p>
+</li>
+<li><p class="first">Added some docs to UPGMA_cluster.</p>
+</li>
+<li><p class="first">Added median in cogent.maths.stats.test
+Added because the numpy version does not support an axis
+parameter. This function now works like numpy functions
+(sum, mean, etc...) where you can specify axis. This function should
+be safe in place of numpy.median.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h3>Changes<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Many changes to the core objects, mainly for compatibility. Major changes in
+this update:</p>
+<blockquote>
+<div><ul class="simple">
+<li>ModelSequence now inherits from SequenceI and supports the various Sequence
+methods (e.g. nucleic acids can reverse-complement, etc.). Type checking is
+still performed using strings (e.g. for ambiguous characters, etc.) and
+could be improved, but everything seems to work. Bug # 1851959.</li>
+<li>ModelProteinSequence added. Bug # 1851961.</li>
+<li>DenseAlignment and ModelSequence can now handle the &#8216;?&#8217; character, which is
+added to the Alphabet during install. Bug # 1851483.</li>
+<li>Fixed a severe bug in moltype constructors that mutated the dict of ambiguous
+states after construction of each of the standard moltypes (for example,
+preventing re-instantiation of a similar moltype after the initial install:
+bug # 1851482. This would have been very confusing for anyone trying to
+experiment with custom MolTypes.</li>
+<li>DenseAlignment now implements many methods of Alignment (some of which have
+actually been moved into SequenceCollection), e.g. getGappedSeq() as per
+bug # 1816573.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Added parameter to MageListFromString and MageGroupFromString. Can now handle
+&#8216;on&#8217; as well as &#8216;off&#8217;.</p>
+</li>
+<li><p class="first">SequenceCollection, Alignment, etc. now check for duplicate seq labels and
+raise exception or strip duplicates as desired. Added unit test to cover this
+case.</p>
+<blockquote>
+<div><ul class="simple">
+<li>SequenceCollection now also produces FASTA as default __str__ behavior
+like the other objects.</li>
+<li>DenseAlignment now iterates over its mapped items, not the indices for
+those items, by default. This allows API compatibility with Alignment
+but is slow: it may be worth optimizing this for cases such as detecting
+ambiguous chars, as I have already implemented for gaps.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Updated std in cogent.maths.stats.test</p>
+<blockquote>
+<div><ul>
+<li><p class="first">std now takes an axis parameter like numpy functions (sum, mean,etc...).</p>
+</li>
+<li><dl class="first docutils">
+<dt>also added in a docstring and tests.</dt>
+<dd><div class="first last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cogent.maths.stats.test import sqrt from numpy instead of math
+in order to allow std to work on arrays.</p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Tree now uses iterative implementation of traverse().</dt>
+<dd><div class="first last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you <strong>do</strong> modify the tree while using traverse(), you will get
+undesired results. If you need to modify the tree, use
+traverse_recursive() instead. This only applies to the tree topology
+(e.g. if you are adding or deleting nodes, or moving nodes around;
+doesn&#8217;t apply if you are changing branch lengths, etc.). The only two
+uses I found in Cogent where the tree is modified during iteration
+are in rna2d (some of the structure tree operations) and the prune()
+method. I have changed both to use traverse_recursive for now.
+However, there might be issues with other code. It might be worth
+figuring out how to make the iterative method do the right thing
+when the tree is modified &#8211; suggestions are welcome provided they do
+not impose substantial performance penalties.</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Made compatible with Python 2.4</p>
+</li>
+<li><p class="first">Changed dev status in setup call</p>
+</li>
+<li><p class="first">Dropping comments indicating windows support</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id24">
+<h3>Bug Fixes<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>Fixed bug 1850981:  UPGMA does not check diagonals.</dt>
+<dd><p class="first last">This bug was caused because the UPGMA algorithm picks the smallest
+distances between nodes at each step but should not ever pick something on
+the diagonal. To prevent a diagonal choice we set it to a large number,
+but sometimes, for very large matrices, the diagonal sometimes is chosen
+becuase the number decreases in value as the distances are averaged during
+node collapse. To prevent this error, the program now checks to make sure
+that the selected smallest_index is not on the diagonal. If it is, it
+reassigns the diagonal to the large number.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Fixed bug in gff.py attribute string parsing.</dt>
+<dd><p class="first last">If attribute string did not contain double quotes, find() returned -1, so
+the last character of the string was inadvertently omitted.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Fixed error in taxonomy convenience functions that failed to pass in the specified database.</dt>
+<dd><p class="first last">This used to be masked by ncbi&#8217;s automatic conversion
+between protein and nucleotide ids, but apparently this conversion no
+longer operates in the tested cases.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>fixed unittest methods</dt>
+<dd><p class="first last">Zongzhi noticed that assertFloatEqual would compare two against when a
+shape (4,0) array was compared against a shape (4,4) array.
+I added tests for assertFloatEqual, assertFloatEqualAbs,
+assertFloatEqualRel and assertEqual. The same bug was noticed in
+assertFloatEqualRel. They are now fixed. These fixes resulted in errors
+in maths.stats.test.std and correlation_matrix. The std function needed
+a work over, but the correlation_matrix was a fault in the test case
+itself.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>fixed bug in reading tab-delimited tables</dt>
+<dd><p class="first last">failure when a record had a missing observation in the last field
+has been fixed. Line stripping of only line-feed characters is now
+done.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Fixed important bug in metric_scaling.</dt>
+<dd><p class="first last">numpy eig() produces eigenvector array that is the transpose of Numeric eig().
+Therefore, any code that does not take this into account will produce results
+that are TOTALLY INCORRECT when fed to downstream analyses.
+Coordinates from this module prior to this patch are incorrect and are not
+to be trusted.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Fixed a typo in dialign test</p>
+</li>
+<li><p class="first">tree __repr__ now more robust to non-str Name entries</p>
+</li>
+<li><p class="first">seqsim.rangenode traverse now compatible /w base class.</p>
+</li>
+<li><p class="first">Fixed line color bug in PR2 bias plots.</p>
+</li>
+<li><p class="first">Added method to dump raw coords from dendrogram.</p>
+</li>
+<li><p class="first">Fixed called to eigenvector when no pyrex</p>
+</li>
+<li><p class="first">Fixed bug in nonrecursive postorder traversal if not root</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="cogent-1-0-9-8-2007">
+<h2>Cogent 1.0 - (9/8/2007)<a class="headerlink" href="#cogent-1-0-9-8-2007" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Initial release</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#cogent-1-5-2-1-5-3">Cogent 1.5.2 - 1.5.3</a><ul>
+<li><a class="reference internal" href="#new-features">New Features</a></li>
+<li><a class="reference internal" href="#changes">Changes</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-5-1-1-5-2">Cogent 1.5.1 - 1.5.2</a><ul>
+<li><a class="reference internal" href="#id1">New Features</a></li>
+<li><a class="reference internal" href="#id2">Changes</a></li>
+<li><a class="reference internal" href="#id3">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-5-1-5-1">Cogent 1.5 - 1.5.1</a><ul>
+<li><a class="reference internal" href="#id4">New Features</a></li>
+<li><a class="reference internal" href="#id5">Changes</a></li>
+<li><a class="reference internal" href="#id6">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-4-1-1-5">Cogent 1.4.1 - 1.5</a><ul>
+<li><a class="reference internal" href="#id7">New Features</a></li>
+<li><a class="reference internal" href="#id8">Changes</a></li>
+<li><a class="reference internal" href="#id9">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-4-1-4-1">Cogent 1.4 - 1.4.1</a><ul>
+<li><a class="reference internal" href="#id10">New Features</a></li>
+<li><a class="reference internal" href="#id11">Changes</a></li>
+<li><a class="reference internal" href="#id12">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-3-1-4">Cogent 1.3 - 1.4</a><ul>
+<li><a class="reference internal" href="#id13">New Features</a></li>
+<li><a class="reference internal" href="#id14">Changes</a></li>
+<li><a class="reference internal" href="#id15">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-2-1-3">Cogent 1.2 - 1.3</a><ul>
+<li><a class="reference internal" href="#id16">New Features</a></li>
+<li><a class="reference internal" href="#id17">Changes</a></li>
+<li><a class="reference internal" href="#id18">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-1-1-2">Cogent 1.1 - 1.2</a><ul>
+<li><a class="reference internal" href="#id19">New Features</a></li>
+<li><a class="reference internal" href="#new-documentation">New Documentation</a></li>
+<li><a class="reference internal" href="#id20">Changes</a></li>
+<li><a class="reference internal" href="#id21">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-0-1-1-1">Cogent 1.0.1 - 1.1</a><ul>
+<li><a class="reference internal" href="#id22">New Features</a></li>
+<li><a class="reference internal" href="#id23">Changes</a></li>
+<li><a class="reference internal" href="#id24">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cogent-1-0-9-8-2007">Cogent 1.0 - (9/8/2007)</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="COGENT_LICENSE.html"
+                        title="previous chapter">PyCogent License</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ChangeLog.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="COGENT_LICENSE.html" title="PyCogent License"
+             >previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

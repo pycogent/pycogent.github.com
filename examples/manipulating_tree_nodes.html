@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Manipulation of Tree Node Objects &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Application Controller Documentation" href="application_controller_framework.html" />
+    <link rel="prev" title="Querying Ensembl" href="query_ensembl.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="application_controller_framework.html" title="Application Controller Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="query_ensembl.html" title="Querying Ensembl"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="manipulation-of-tree-node-objects">
+<h1>Manipulation of Tree Node Objects<a class="headerlink" href="#manipulation-of-tree-node-objects" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Tony Walters</em></p>
+<p>Examples of how to initialize and manipulate various tree node objects.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.tree</span> <span class="kn">import</span> <span class="n">PhyloNode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.tree</span> <span class="kn">import</span> <span class="n">DndParser</span>
+</pre></div>
+</div>
+<p>The general method to initialize a tree is <tt class="docutils literal"><span class="pre">LoadTree</span></tt>, however, for exceptionally large trees or if one needs to specify the node objects (<tt class="docutils literal"><span class="pre">TreeNode</span></tt>, <tt class="docutils literal"><span class="pre">PhyloNode</span></tt>, or <tt class="docutils literal"><span class="pre">RangeNode</span></tt>), <tt class="docutils literal"><span class="pre">DndParser</span></tt> should be used.  <tt class="docutils literal"><span class="pre">LoadTree</span></tt> uses <tt class="docutils literal"><span class="pre">PhyloNode</span></tt> objects by default.</p>
+<p>The basic properties of the tree node objects are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">TreeNode</span></tt> objects are general purpose in nature, and lack phylogenetic distance values.</li>
+<li><tt class="docutils literal"><span class="pre">PhyloNode</span></tt> objects inherit the methods of the <tt class="docutils literal"><span class="pre">TreeNode</span></tt> class and in addition contain phylogenetic distances.</li>
+<li><tt class="docutils literal"><span class="pre">RangeNode</span></tt> objects contain evolution simulation methods in addition to the standard features of a <tt class="docutils literal"><span class="pre">PhyloNode</span></tt>.</li>
+</ul>
+<p>The following demonstrates the two methods for initializing a phylogenetic tree object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simple_tree_string</span><span class="o">=</span><span class="s">&quot;(B:0.2,(C:0.3,D:0.4)E:0.5)F;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">complex_tree_string</span><span class="o">=</span><span class="s">&quot;(((363564 AB294167.1 Alkalibacterium putridalgicola:0.0028006,55874 AB083411.1 Marinilactibacillus psychrotolerans:0.0022089):0.40998,(15050 Y10772.1 Facklamia hominis:0.32304,(132509 AY707780.1 Aerococcus viridans:0.58815,((143063 AY879307.1 Abiotrophia defectiva:0.5807,83619 AB042060.1 Bacillus schlegelii:0.23569):0.03586,169722 AB275483.1 Fibrobacter succinogenes:0.38272):0.06516):0.03492):0.14265):0.63594,(3589 M62687.1 Fibrobacter intestinalis:0.65866,314063 CP001146.1 Dictyoglomus thermophilum:0.38791):0.32147,276579 EU652053.1 Thermus scotoductus:0.57336);&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simple_tree</span><span class="o">=</span><span class="n">LoadTree</span><span class="p">(</span><span class="n">treestring</span><span class="o">=</span><span class="n">simple_tree_string</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">complex_tree</span><span class="o">=</span><span class="n">DndParser</span><span class="p">(</span><span class="n">complex_tree_string</span><span class="p">,</span> <span class="n">PhyloNode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now to displaying, creating, deleting, and inserting a node in simple_tree.  Note that simple_tree has three tips, one internal node &#8216;E&#8217;, and the root &#8216;F.&#8217;  For this example, we will create a node named &#8216;A&#8217;, with a distance of 0.1, delete the node &#8216;C&#8217; through its parent, the internal node &#8216;E&#8217;, and finally we will insert &#8216;A&#8217; where &#8216;C&#8217; once was.</p>
+<p>Display the original tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">          /-B</span>
+<span class="go">-F-------|</span>
+<span class="go">         |          /-C</span>
+<span class="go">          \E-------|</span>
+<span class="go">                    \-D</span>
+</pre></div>
+</div>
+<p>Create a new node object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A_node</span><span class="o">=</span><span class="n">PhyloNode</span><span class="p">(</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="n">Length</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Display the children of the root node, one of which is the parent of the tip we wish to alter.  To add or remove a node, we need to use the parent of the target node, which in this case is the internal node &#8216;E.&#8217;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">Children</span>
+<span class="go">[Tree(&quot;B;&quot;), Tree(&quot;(C,D)E;&quot;)]</span>
+</pre></div>
+</div>
+<p>Remove the &#8216;C&#8217; tip.  <strong>Note:</strong> <tt class="docutils literal"><span class="pre">remove()</span></tt> and <tt class="docutils literal"><span class="pre">removeNode()</span></tt> return &#8216;True&#8217; if a node is removed, &#8216;False&#8217; if they cannot remove a node.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simple_tree</span><span class="o">.</span><span class="n">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;C&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Insert the new &#8216;A&#8217; tip where &#8216;C&#8217; was previously.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simple_tree</span><span class="o">.</span><span class="n">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">A_node</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, display the modified tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">          /-B</span>
+<span class="go">-F-------|</span>
+<span class="go">         |          /-A</span>
+<span class="go">          \E-------|</span>
+<span class="go">                    \-D</span>
+</pre></div>
+</div>
+<p>When deleting tree nodes, it is often desirable to clean up any unbranched internal nodes that may have resulted from removal of tips.  For example, if we wanted to delete the node &#8216;A&#8217; that was previously added, the resulting tree would have an unbranched internal node &#8216;E.&#8217;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simple_tree</span><span class="o">.</span><span class="n">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">          /-B</span>
+<span class="go">-F-------|</span>
+<span class="go">          \E------- /-D</span>
+</pre></div>
+</div>
+<p>With the <tt class="docutils literal"><span class="pre">prune()</span></tt> method, internal nodes with only a single branch are removed.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simple_tree</span><span class="o">.</span><span class="n">prune</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<span class="go">          /-B</span>
+<span class="go">-F-------|</span>
+<span class="go">          \-D</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="an-example-of-conditional-tree-node-modifications">
+<h1>An Example of Conditional Tree Node Modifications<a class="headerlink" href="#an-example-of-conditional-tree-node-modifications" title="Permalink to this headline">¶</a></h1>
+<p>Now to look at the more complex and realistic tree.  In complex_tree, there are no internal nodes or a defined root.  In order to display this tree in a more succinct manner, we can rename these tips to only contain the genus and species names.  To step through the tips only, we can use the <tt class="docutils literal"><span class="pre">iterTips()</span></tt> iterator, and rename each node.  The <tt class="docutils literal"><span class="pre">asciiArt()</span></tt> function, by default, will attempt to display internal nodes; this can be suppressed by the parameter <tt class="docutils literal"><span class="pre">show_internal=False</span></tt>.</p>
+<p>First, let&#8217;s split the ungainly name string for each tip and only preserve the genus and species component, separated by a space.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">complex_tree</span><span class="o">.</span><span class="n">iterTips</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">n</span><span class="o">.</span><span class="n">Name</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">n</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Now we display the tree with <tt class="docutils literal"><span class="pre">asciiArt()</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">complex_tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">(</span><span class="n">show_internal</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">                              /-Alkalibacterium putridalgicola</span>
+<span class="go">                    /--------|</span>
+<span class="go">                   |          \-Marinilactibacillus psychrotolerans</span>
+<span class="go">          /--------|</span>
+<span class="go">         |         |          /-Facklamia hominis</span>
+<span class="go">         |         |         |</span>
+<span class="go">         |          \--------|          /-Aerococcus viridans</span>
+<span class="go">         |                   |         |</span>
+<span class="go">         |                    \--------|                    /-Abiotrophia defectiva</span>
+<span class="go">         |                             |          /--------|</span>
+<span class="go">---------|                              \--------|          \-Bacillus schlegelii</span>
+<span class="go">         |                                       |</span>
+<span class="go">         |                                        \-Fibrobacter succinogenes</span>
+<span class="go">         |</span>
+<span class="go">         |          /-Fibrobacter intestinalis</span>
+<span class="go">         |---------|</span>
+<span class="go">         |          \-Dictyoglomus thermophilum</span>
+<span class="go">         |</span>
+<span class="go">          \-Thermus scotoductus</span>
+</pre></div>
+</div>
+<p>For another example of manipulating a phylogenetic tree, let us suppose that we want to remove any species in the tree that are not closely related to <em>Aerococcus viridans</em>.  To do this, we will delete any nodes that have a greater phylogenetic distance than 1.8 from <em>Aerococcus viridans</em>.  The best method to remove a large number of nodes from a tree is to first create a list of nodes to delete, followed by the actual removal process.  It is important that the <tt class="docutils literal"><span class="pre">prune()</span></tt> function be called after deletion of each node to ensure that internal nodes whose tips are deleted are removed instead of becoming tips.  Alternatively, one could test for internal nodes whose children are deleted in the procedure and flag these nodes to be deleted as well.</p>
+<p>First, generate a list of tip nodes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tips</span><span class="o">=</span><span class="n">complex_tree</span><span class="o">.</span><span class="n">tips</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next, iterate through this list, compare the distances to <em>Aerococcus</em>, and append to the deletion list if greater than 1.8.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tips_to_delete</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AEROCOCCUS_INDEX</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">tips</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">tips</span><span class="p">[</span><span class="n">AEROCOCCUS_INDEX</span><span class="p">]</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">&gt;</span><span class="mf">1.8</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">tips_to_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now for the actual deletion process.  We can simply use the parent of each node in the deletion list to remove itself.  Pruning is necessary to prevent internal nodes from being left as tips.  <strong>Note:</strong> <tt class="docutils literal"><span class="pre">remove()</span></tt> and <tt class="docutils literal"><span class="pre">removeNode()</span></tt> return &#8216;True&#8217; if a node is successfully removed, &#8216;False&#8217; otherwise.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">tips_to_delete</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">n</span><span class="o">.</span><span class="n">Parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">complex_tree</span><span class="o">.</span><span class="n">prune</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="go">True</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Finally, print the modified complex_tree.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">complex_tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">(</span><span class="n">show_internal</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">                              /-Alkalibacterium putridalgicola</span>
+<span class="go">                    /--------|</span>
+<span class="go">                   |          \-Marinilactibacillus psychrotolerans</span>
+<span class="go">--------- /--------|</span>
+<span class="go">                   |          /-Facklamia hominis</span>
+<span class="go">                   |         |</span>
+<span class="go">                    \--------|          /-Aerococcus viridans</span>
+<span class="go">                             |         |</span>
+<span class="go">                              \--------|                    /-Abiotrophia defectiva</span>
+<span class="go">                                       |          /--------|</span>
+<span class="go">                                        \--------|          \-Bacillus schlegelii</span>
+<span class="go">                                                 |</span>
+<span class="go">                                                  \-Fibrobacter succinogenes</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Manipulation of Tree Node Objects</a></li>
+<li><a class="reference internal" href="#an-example-of-conditional-tree-node-modifications">An Example of Conditional Tree Node Modifications</a></li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="query_ensembl.html"
+                        title="previous chapter">Querying Ensembl</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="application_controller_framework.html"
+                        title="next chapter">Application Controller Documentation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/manipulating_tree_nodes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="application_controller_framework.html" title="Application Controller Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="query_ensembl.html" title="Querying Ensembl"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

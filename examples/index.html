@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cogent Usage Examples &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="next" title="Translating DNA into protein" href="translate_dna.html" />
+    <link rel="prev" title="The data files used in the documentation" href="../data_file_links.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="translate_dna.html" title="Translating DNA into protein"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../data_file_links.html" title="The data files used in the documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cogent-usage-examples">
+<h1>Cogent Usage Examples<a class="headerlink" href="#cogent-usage-examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-note-on-the-computable-documentation">
+<h2>A Note on the Computable Documentation<a class="headerlink" href="#a-note-on-the-computable-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The following examples are all available as standalone text files which can be computed using the Python doctest module.</p>
+</div>
+<div class="section" id="data-manipulation">
+<h2>Data manipulation<a class="headerlink" href="#data-manipulation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="translate_dna.html">Translating DNA into protein</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seq_features.html">Advanced sequence handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_seq_features.html">Complete version of manipulating sequence annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reverse_complement.html">Getting the reverse complement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align_codons_to_protein.html">Map protein alignment gaps to DNA alignment gaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aln_profile.html">Creating and manipulating alignment profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genetic_code_aa_index.html">Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handling_tabular_data.html">Data Manipulation using <tt class="docutils literal"><span class="pre">Table</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="handling_3dstructures.html">Working with macromolecular structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_selection.html">Selecting and grouping entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_ncbi.html">Querying NCBI for VWF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_ensembl.html">Querying Ensembl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manipulating_tree_nodes.html">Manipulation of Tree Node Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manipulating_tree_nodes.html#an-example-of-conditional-tree-node-modifications">An Example of Conditional Tree Node Modifications</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="controlling-3rd-party-applications">
+<h2>Controlling 3rd party applications<a class="headerlink" href="#controlling-3rd-party-applications" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="application_controller_framework.html">Application Controller Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_and_using_an_application_controller.html">Building and using a new application controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment_app_controllers.html">Using alignment application controllers to align unaligned sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phylogeny_app_controllers.html">Using phylogeny application controllers to construct phylogenetic trees from alignments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generating_app_commandlines.html">Generating application commandlines</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="general-data-analysis">
+<h2>General data analysis<a class="headerlink" href="#general-data-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="goodness_of_fit.html">The <tt class="docutils literal"><span class="pre">goodness_of_fit</span></tt> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perform_PCoA_analysis.html">Perform Principal Coordinates Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perform_nmds.html">Perform Nonmetric Multidimensional Scaling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motif_results.html">Motif results example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unifrac.html">Run a Fast Unifrac community analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="period_estimation.html">Estimating periodic signals</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="data-visualisation">
+<h2>Data Visualisation<a class="headerlink" href="#data-visualisation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="draw_dendrogram.html">Drawing dendrograms and saving to PDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="draw_dotplot.html">Drawing a dotplot</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="modelling-evolution">
+<h2>Modelling Evolution<a class="headerlink" href="#modelling-evolution" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simple.html">The simplest script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relative_rate.html">Performing a relative rate test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="neutral_test.html">A test of the neutral theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scope_model_params_on_trees.html">Allowing substitution model parameters to differ between branches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="codon_models.html">Using codon models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empirical_protein_models.html">Use an empirical protein substitution model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing_multi_loci.html">Likelihood analysis of multiple loci</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reuse_results.html">Reusing results to speed up optimisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unrestricted_nucleotide.html">Specifying and using an unrestricted nucleotide substitution model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulate_alignment.html">Simulate an alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parametric_bootstrap.html">Performing a parametric bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimate_startingpoint.html">Estimate parameter values using a sampling from a dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coevolution.html">Perform a coevolutionary analysis on biological sequence alignments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rate_heterogeneity.html">Analysis of rate heterogeneity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hmm_par_heterogeneity.html">Evaluate process heterogeneity using a Hidden Markov Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seqsim_alignment_simulation.html">Seqsim Simple Alignment Simulation Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seqsim_aln_sim_user_alphabet.html">Seqsim Alignment Simulation Example with Non-standard alphabet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seqsim_tree_sim.html">Seqsim Simple Tree Simulation</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="phylogenetic-reconstruction">
+<h2>Phylogenetic Reconstruction<a class="headerlink" href="#phylogenetic-reconstruction" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculate_pairwise_distances.html">Calculate pairwise distances between sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calculate_neigbourjoining_tree.html">Make a neighbor joining tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calculate_UPGMA_cluster.html">Make a UPGMA cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phylo_by_ls.html">Phylogenetic reconstruction by least squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maketree_from_proteinseqs.html">Making a phylogenetic tree from a protein sequence alignment</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cogent Usage Examples</a><ul>
+<li><a class="reference internal" href="#a-note-on-the-computable-documentation">A Note on the Computable Documentation</a></li>
+<li><a class="reference internal" href="#data-manipulation">Data manipulation</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#controlling-3rd-party-applications">Controlling 3rd party applications</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#general-data-analysis">General data analysis</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-visualisation">Data Visualisation</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#modelling-evolution">Modelling Evolution</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#phylogenetic-reconstruction">Phylogenetic Reconstruction</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../data_file_links.html"
+                        title="previous chapter">The data files used in the documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="translate_dna.html"
+                        title="next chapter">Translating DNA into protein</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="translate_dna.html" title="Translating DNA into protein"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../data_file_links.html" title="The data files used in the documentation"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

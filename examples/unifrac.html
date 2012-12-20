@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Run a Fast Unifrac community analysis &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Estimating periodic signals" href="period_estimation.html" />
+    <link rel="prev" title="Motif results example" href="motif_results.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="period_estimation.html" title="Estimating periodic signals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="motif_results.html" title="Motif results example"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="run-a-fast-unifrac-community-analysis">
+<h1>Run a Fast Unifrac community analysis<a class="headerlink" href="#run-a-fast-unifrac-community-analysis" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Justin Kuczynski</em></p>
+<p>Below is a simple example of using the fast unifrac function.</p>
+<p>first we import some tools</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.tree</span> <span class="kn">import</span> <span class="n">DndParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_unifrac</span> <span class="kn">import</span> <span class="n">fast_unifrac</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.unifrac.fast_tree</span> <span class="kn">import</span> <span class="n">UniFracTreeNode</span>
+</pre></div>
+</div>
+<p>then we make a small example tree with tips B, C, D representing the relationship
+between species B, C, and D</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree_str</span> <span class="o">=</span> <span class="s">&quot;(B:0.2,(C:0.3,D:0.4)E:0.6)F;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tr</span> <span class="o">=</span> <span class="n">DndParser</span><span class="p">(</span><span class="n">tree_str</span><span class="p">,</span> <span class="n">UniFracTreeNode</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tr</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span> 
+<span class="go">          /-B</span>
+<span class="go">-F-------|</span>
+<span class="go">         |          /-C</span>
+<span class="go">          \E-------|</span>
+<span class="go">                    \-D</span>
+</pre></div>
+</div>
+<p>here&#8217;s what the sample (rows) by sequence (cols) abundance matrix looks like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>    <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">...</span>    <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span>
+<span class="o">...</span>    <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>and here it is in dict format for unifrac</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">envs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;B&#39;</span><span class="p">:{</span><span class="s">&#39;sample1&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s">&#39;sample2&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;sample3&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span>
+<span class="gp">... </span>       <span class="s">&#39;C&#39;</span><span class="p">:{</span><span class="s">&#39;sample1&#39;</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span><span class="s">&#39;sample2&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;sample3&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span>
+<span class="gp">... </span>       <span class="s">&#39;D&#39;</span><span class="p">:{</span><span class="s">&#39;sample1&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;sample2&#39;</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span> <span class="s">&#39;sample3&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">... </span>       <span class="p">}</span>
+</pre></div>
+</div>
+<p>now we run unifrac:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fast_unifrac</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="n">envs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="p">[</span><span class="s">&#39;distance_matrix&#39;</span><span class="p">]</span> 
+
+<span class="go">(array([[ 0.        ,  0.46666667,  0.26666667],</span>
+<span class="go">       [ 0.46666667,  0.        ,  0.2       ],</span>
+<span class="go">       [ 0.26666667,  0.2       ,  0.        ]]),</span>
+<span class="go">       [&#39;sample1&#39;, &#39;sample2&#39;, &#39;sample3&#39;])</span>
+</pre></div>
+</div>
+<p>the pcoa results are misleading for such a small dataset, but the distance
+matrix is accurate</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="motif_results.html"
+                        title="previous chapter">Motif results example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="period_estimation.html"
+                        title="next chapter">Estimating periodic signals</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/unifrac.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="period_estimation.html" title="Estimating periodic signals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="motif_results.html" title="Motif results example"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

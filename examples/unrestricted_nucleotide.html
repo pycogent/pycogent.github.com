@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Specifying and using an unrestricted nucleotide substitution model &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Simulate an alignment" href="simulate_alignment.html" />
+    <link rel="prev" title="Reusing results to speed up optimisation" href="reuse_results.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="simulate_alignment.html" title="Simulate an alignment"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="reuse_results.html" title="Reusing results to speed up optimisation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="specifying-and-using-an-unrestricted-nucleotide-substitution-model">
+<h1>Specifying and using an unrestricted nucleotide substitution model<a class="headerlink" href="#specifying-and-using-an-unrestricted-nucleotide-substitution-model" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>Do standard <tt class="docutils literal"><span class="pre">cogent</span></tt> imports.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.predicate</span> <span class="kn">import</span> <span class="n">MotifChange</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.substitution_model</span> <span class="kn">import</span> <span class="n">Nucleotide</span>
+</pre></div>
+</div>
+<p>To specify substitution models we use the <tt class="docutils literal"><span class="pre">MotifChange</span></tt> class from predicates. In the case of an unrestricted nucleotide model, we specify 11 such <tt class="docutils literal"><span class="pre">MotifChanges</span></tt>, the last possible change being ignored (with the result it is constrained to equal 1, thus calibrating the matrix). Also note that this is a non-reversible model and thus we can&#8217;t assume the nucleotide frequencies estimated from the alignments are reasonable estimates for the root frequencies. We therefore specify they are to be optimised using <tt class="docutils literal"><span class="pre">optimise_motif_probs</span></tt> argument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ACTG</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="s">&#39;ACTG&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preds</span> <span class="o">=</span> <span class="p">[</span><span class="n">MotifChange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">forward_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ACTG</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">ACTG</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preds</span>
+<span class="go">[A&gt;C, A&gt;T, A&gt;G, C&gt;A, C&gt;T, C&gt;G, T&gt;A, T&gt;C, T&gt;G, G&gt;A, G&gt;C]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">Nucleotide</span><span class="p">(</span><span class="n">predicates</span><span class="o">=</span><span class="n">preds</span><span class="p">,</span> <span class="n">recode_gaps</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">optimise_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">sm</span>
+
+<span class="go">Nucleotide ( name = &#39;&#39;; type = &#39;None&#39;; params = [&#39;A&gt;T&#39;, &#39;C&gt;G&#39;, &#39;T&gt;G&#39;,...</span>
+</pre></div>
+</div>
+<p>We&#8217;ll illustrate this with a sample alignment and tree in <tt class="docutils literal"><span class="pre">data/primate_cdx2_promoter.fasta</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/primate_cdx2_promoter.fasta&quot;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span>
+<span class="go">3 x 1525 dna alignment: human[AGCGCCCGCGG...], macaque[AGC...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tr</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">tip_names</span><span class="o">=</span><span class="n">al</span><span class="o">.</span><span class="n">Names</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tr</span>
+<span class="go">(human,macaque,chimp)root;</span>
+</pre></div>
+</div>
+<p>We now construct the parameter controller with each predicate constant across the tree, get the likelihood function calculator and optimise the function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">al</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;Unrestricted model&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We just used the Powell optimiser, as this works quite well.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Unrestricted model</span>
+<span class="go">==========================================================================</span>
+<span class="go"> A&gt;C    A&gt;G    A&gt;T    C&gt;A    C&gt;G    C&gt;T    G&gt;A    G&gt;C    T&gt;A    T&gt;C    T&gt;G</span>
+<span class="go">--------------------------------------------------------------------------</span>
+<span class="go">0.49   4.88   1.04   2.04   0.99   7.89   9.00   1.55   0.48   5.53   1.57</span>
+<span class="go">--------------------------------------------------------------------------</span>
+<span class="go">=========================</span>
+<span class="go">   edge   parent   length</span>
+<span class="go">-------------------------</span>
+<span class="go">  human     root     0.00</span>
+<span class="go">macaque     root     0.04</span>
+<span class="go">  chimp     root     0.01</span>
+<span class="go">-------------------------</span>
+<span class="go">==============</span>
+<span class="go">motif   mprobs</span>
+<span class="go">--------------</span>
+<span class="go">    T     0.26</span>
+<span class="go">    C     0.26</span>
+<span class="go">    A     0.24</span>
+<span class="go">    G     0.24</span>
+<span class="go">--------------</span>
+</pre></div>
+</div>
+<p>This data set consists of species that are relatively close for a modest length alignment. As a result, doing something like allowing the parameters to differ between edges is not particularly well supported. If you have lots of data it makes sense to allow parameters to differ between edges, which can be specified by modifying the <tt class="docutils literal"><span class="pre">lf</span></tt> as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">pred</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You would then re-optimise the model as above.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="reuse_results.html"
+                        title="previous chapter">Reusing results to speed up optimisation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simulate_alignment.html"
+                        title="next chapter">Simulate an alignment</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/unrestricted_nucleotide.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="simulate_alignment.html" title="Simulate an alignment"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="reuse_results.html" title="Reusing results to speed up optimisation"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

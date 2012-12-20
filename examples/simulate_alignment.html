@@ -1,0 +1,169 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simulate an alignment &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Performing a parametric bootstrap" href="parametric_bootstrap.html" />
+    <link rel="prev" title="Specifying and using an unrestricted nucleotide substitution model" href="unrestricted_nucleotide.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parametric_bootstrap.html" title="Performing a parametric bootstrap"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unrestricted_nucleotide.html" title="Specifying and using an unrestricted nucleotide substitution model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="simulate-an-alignment">
+<h1>Simulate an alignment<a class="headerlink" href="#simulate-an-alignment" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>How to  simulate an alignment. For this example we just create a simple model using a four taxon tree with very different branch lengths, a Felsenstein model with very different nucleotide frequencies and a long alignment.</p>
+<p>See the other examples for how to define other substitution models.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve</span> <span class="kn">import</span> <span class="n">substitution_model</span>
+</pre></div>
+</div>
+<p>Specify the 4 taxon tree,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">treestring</span><span class="o">=</span><span class="s">&#39;(a:0.4,b:0.3,(c:0.15,d:0.2)edge.0:0.1);&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Define our Felsenstein 1981 substitution model.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">substitution_model</span><span class="o">.</span><span class="n">Nucleotide</span><span class="p">(</span><span class="n">motif_probs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+<span class="gp">... </span><span class="s">&#39;G&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s">&#39;T&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span> <span class="n">model_gaps</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setConstantLengths</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;F81 model&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">F81 model</span>
+<span class="go">==========================</span>
+<span class="go">  edge    parent    length</span>
+<span class="go">--------------------------</span>
+<span class="go">     a      root    0.4000</span>
+<span class="go">     b      root    0.3000</span>
+<span class="go">     c    edge.0    0.1500</span>
+<span class="go">     d    edge.0    0.2000</span>
+<span class="go">edge.0      root    0.1000</span>
+<span class="go">--------------------------</span>
+<span class="go">===============</span>
+<span class="go">motif    mprobs</span>
+<span class="go">---------------</span>
+<span class="go">    T    0.1000</span>
+<span class="go">    C    0.2000</span>
+<span class="go">    A    0.5000</span>
+<span class="go">    G    0.2000</span>
+<span class="go">---------------</span>
+</pre></div>
+</div>
+<p>We&#8217;ll now create a simulated alignment of length 1000 nucleotides.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simulated</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">simulateAlignment</span><span class="p">(</span><span class="n">sequence_length</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a normal <tt class="docutils literal"><span class="pre">Cogent</span></tt> alignment object, which can be used in the same way as any other alignment object.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unrestricted_nucleotide.html"
+                        title="previous chapter">Specifying and using an unrestricted nucleotide substitution model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parametric_bootstrap.html"
+                        title="next chapter">Performing a parametric bootstrap</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/simulate_alignment.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parametric_bootstrap.html" title="Performing a parametric bootstrap"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unrestricted_nucleotide.html" title="Specifying and using an unrestricted nucleotide substitution model"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

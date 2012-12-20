@@ -1,0 +1,166 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using alignment application controllers to align unaligned sequences &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Using phylogeny application controllers to construct phylogenetic trees from alignments" href="phylogeny_app_controllers.html" />
+    <link rel="prev" title="Building and using a new application controller" href="building_and_using_an_application_controller.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="phylogeny_app_controllers.html" title="Using phylogeny application controllers to construct phylogenetic trees from alignments"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="building_and_using_an_application_controller.html" title="Building and using a new application controller"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-alignment-application-controllers-to-align-unaligned-sequences">
+<span id="alignment-controllers"></span><h1>Using alignment application controllers to align unaligned sequences<a class="headerlink" href="#using-alignment-application-controllers-to-align-unaligned-sequences" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Daniel McDonald</em></p>
+<p>This document provides examples of how to align sequences using the alignment application controllers. Each alignment application controller module provides the support method <tt class="docutils literal"><span class="pre">align_unaligned_seqs</span></tt>. This method takes as input a <tt class="docutils literal"><span class="pre">SequenceCollection</span></tt> object or a dict mapping sequence ids to sequences, the <tt class="docutils literal"><span class="pre">MolType</span></tt> of the sequences, and an option dict containing specific parameter settings. As output, the method returns an <tt class="docutils literal"><span class="pre">Alignment</span></tt> object.</p>
+<p>First, lets import all of the <tt class="docutils literal"><span class="pre">align_unaligned_seqs</span></tt> methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.clustalw</span> <span class="kn">import</span> <span class="n">align_unaligned_seqs</span> <span class="k">as</span> <span class="n">clustalw_align_unaligned_seqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.muscle</span> <span class="kn">import</span> <span class="n">align_unaligned_seqs</span> <span class="k">as</span> <span class="n">muscle_align_unaligned_seqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.app.mafft</span> <span class="kn">import</span> <span class="n">align_unaligned_seqs</span> <span class="k">as</span> <span class="n">mafft_align_unaligned_seqs</span>
+</pre></div>
+</div>
+<p>Next, we&#8217;ll load our test data. We will be using DNA sequences for this example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.moltype</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unaligned_seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;data/test2.fasta&#39;</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lets align some sequences using default parameters!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Output is truncated for document formatting</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_aln</span> <span class="o">=</span> <span class="n">clustalw_align_unaligned_seqs</span><span class="p">(</span><span class="n">unaligned_seqs</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">muscle_aln</span> <span class="o">=</span> <span class="n">muscle_align_unaligned_seqs</span><span class="p">(</span><span class="n">unaligned_seqs</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mafft_aln</span> <span class="o">=</span> <span class="n">mafft_align_unaligned_seqs</span><span class="p">(</span><span class="n">unaligned_seqs</span><span class="p">,</span> <span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_aln</span>
+<span class="go">5 x 60 dna alignment: NineBande[------CGCCA...], Mouse[GCAGTGAGCCA...], ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">muscle_aln</span>
+<span class="go">5 x 60 dna alignment: NineBande[------CGCCA...], Mouse[GCAGTGAGCCA...], ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mafft_aln</span>
+<span class="go">5 x 60 dna alignment: NineBande[------CGCCA...], Mouse[GCAGTGAGCCA...], ...</span>
+</pre></div>
+</div>
+<p>To change specific parameters, simply specify the parameters in a dict and pass it in:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Output is truncated for document formatting</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;-gapopen&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;-quicktree&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_aln</span> <span class="o">=</span> <span class="n">clustalw_align_unaligned_seqs</span><span class="p">(</span><span class="n">unaligned_seqs</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">clustalw_params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustalw_aln</span>
+<span class="go">5 x 60 dna alignment: NineBande[------CGCCA...], Mouse[GCAGTGAGCCA...], ...</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="building_and_using_an_application_controller.html"
+                        title="previous chapter">Building and using a new application controller</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="phylogeny_app_controllers.html"
+                        title="next chapter">Using phylogeny application controllers to construct phylogenetic trees from alignments</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/alignment_app_controllers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="phylogeny_app_controllers.html" title="Using phylogeny application controllers to construct phylogenetic trees from alignments"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="building_and_using_an_application_controller.html" title="Building and using a new application controller"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

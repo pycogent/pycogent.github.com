@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>For Developers &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="index.html" />
+    <link rel="next" title="Scripting guidelines" href="scripting_guidelines.html" />
+    <link rel="prev" title="Code development" href="cookbook/code_development.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="scripting_guidelines.html" title="Scripting guidelines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cookbook/code_development.html" title="Code development"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="for-developers">
+<h1>For Developers<a class="headerlink" href="#for-developers" title="Permalink to this headline">¶</a></h1>
+<p>Anyone can contribute to the development of PyCogent, not just registered developers. If you figure out a solution to something using PyCogent that you&#8217;d like to share please post comments on the <a class="reference external" href="http://sourceforge.net/forum/?group_id=186234">forums</a> page at sourceforge and we&#8217;ll look at including your tips! If you have ideas for improving the current documentation, then we want to hear from you so please post on the <a class="reference external" href="http://sourceforge.net/tracker2/?group_id=186234">tracker</a> page!</p>
+<div class="section" id="grabbing-from-the-subversion-repository">
+<h2>Grabbing from the subversion repository<a class="headerlink" href="#grabbing-from-the-subversion-repository" title="Permalink to this headline">¶</a></h2>
+<p>To grab PyCogent from the sourceforge subversion repository, do the following:</p>
+<div class="highlight-python"><pre>$ svn co https://pycogent.svn.sourceforge.net/svnroot/pycogent/trunk PyCogent</pre>
+</div>
+</div>
+<div class="section" id="building-testing-the-documentation">
+<h2>Building/testing the documentation<a class="headerlink" href="#building-testing-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>To build the documentation or <tt class="docutils literal"><span class="pre">doctest</span></tt> the contents, you&#8217;ll need to install Sphinx. Assuming you have <tt class="docutils literal"><span class="pre">easy_install</span></tt> configured on your machine (and if not, download <tt class="docutils literal"><span class="pre">setuptools</span></tt> from <a class="reference external" href="http://pypi.python.org/pypi/setuptools">http://pypi.python.org/pypi/setuptools</a> and follow the instructions). Then grab Sphinx:</p>
+<div class="highlight-python"><pre>$ sudo easy_install -U sphinx</pre>
+</div>
+<p>Generating the html form of the documentation requires changing into the <tt class="docutils literal"><span class="pre">doc</span></tt> directory and executing a <tt class="docutils literal"><span class="pre">make</span></tt> command:</p>
+<div class="highlight-python"><pre>$ cd path/to/PyCogent/doc
+$ make html
+... # bunch of output
+Build finished. The HTML pages are in _build/html.</pre>
+</div>
+<p>This prints a bunch of output to screen and creates a directory <tt class="docutils literal"><span class="pre">PyCogent/doc/_build</span></tt> and within that <tt class="docutils literal"><span class="pre">html</span></tt>. The index file <tt class="docutils literal"><span class="pre">PyCogent/doc/_build/html/index.html</span></tt> is the root of the documentation.</p>
+<p>One can also generate a pdf file, using the Sphinx latex generation capacity. This is slightly more involved. (It also requires that you have an installation of <a class="reference external" href="http://www.tug.org/texlive/">TeTex</a>.)</p>
+<p>First generate the latex</p>
+<div class="highlight-python"><pre>$ make latex
+... # bunch of output
+Build finished; the LaTeX files are in _build/latex.
+Run `make all-pdf' or `make all-ps' in that directory to run these through (pdf)latex.</pre>
+</div>
+<p>then change into the <tt class="docutils literal"><span class="pre">latex</span></tt> dir and build the pdf</p>
+<div class="highlight-python"><pre>$ cd _build/latex
+$ make all-pdf</pre>
+</div>
+<p>You can now open <tt class="docutils literal"><span class="pre">PyCogent.pdf</span></tt>.</p>
+<p>To actually test the documentation, you need to be in the <tt class="docutils literal"><span class="pre">doc</span></tt> directory and then execute another <tt class="docutils literal"><span class="pre">make</span></tt> command:</p>
+<div class="highlight-python"><pre>$ cd path/to/PyCogent/doc
+$ make doctest</pre>
+</div>
+<p>The results are in <tt class="docutils literal"><span class="pre">_build/doctest/output.txt</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The documentation does not test for presence of 3rd party dependencies (such as applications or python modules) like the PyCogent <tt class="docutils literal"><span class="pre">unittest</span></tt> test suite. If you don&#8217;t have all the 3rd party applications installed you will see failures. At this point <strong>no effort</strong> is being expended to hide such failures.</p>
+</div>
+</div>
+<div class="section" id="adding-to-the-documentation">
+<h2>Adding to the documentation<a class="headerlink" href="#adding-to-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>You can maximise the cogent user experience for yourself and others by contributing to the documentation. If you solve a problem that you think might prove useful to others then add it into the documentation. If you can think of ways to improve the existing documents let us know.</p>
+<p>For guidance on adding documentation, look at any of the existing examples. The restructured text format is pretty easy to write (for overview see the Sphinx <a class="reference external" href="http://sphinx.pocoo.org/rest.html">rest overview</a>). The conventions adopted by PyCogent are to use heading levels to be consistent with the Python.org standard (taken from <a class="reference external" href="http://sphinx.pocoo.org/rest.html#sections">Sphinx headings</a>). They are</p>
+<ul class="simple">
+<li># with overline, for parts</li>
+<li>* with overline, for chapters</li>
+<li>=, for sections</li>
+<li>-, for subsections</li>
+<li>^, for subsubsections</li>
+<li>&#8221;, for paragraphs</li>
+<li>+, added for sub-paragraphs (non-standard)</li>
+</ul>
+<p>If it&#8217;s a use-case, create your file in the <tt class="docutils literal"><span class="pre">examples</span></tt> directory, giving it a <tt class="docutils literal"><span class="pre">.rst</span></tt> suffix. Link it into the documentation tree, adding a line into the <tt class="docutils literal"><span class="pre">examples/index.rst</span></tt> file. If it&#8217;s something you think should be added into the cookbook, add it into the appropriate cookbook document.</p>
+<div class="section" id="the-new-documentation-checklist">
+<h3>The new documentation checklist<a class="headerlink" href="#the-new-documentation-checklist" title="Permalink to this headline">¶</a></h3>
+<p>Things you should check before committing your new document:</p>
+<ul>
+<li><p class="first">Add a line at the beginning with yourself as author (<tt class="docutils literal"><span class="pre">..</span> <span class="pre">sectionauthor::</span> <span class="pre">My</span> <span class="pre">Name</span></tt>) so people can contact you with feedback.</p>
+</li>
+<li><p class="first">Add any data files used in your documentation under <tt class="docutils literal"><span class="pre">PyCogent/doc/data/</span></tt></p>
+</li>
+<li><p class="first">Add a download link to those files to <tt class="docutils literal"><span class="pre">PyCogent/doc/data_file_links.rst</span></tt> following the style employed in that file.</p>
+</li>
+<li><p class="first">Spellcheck!!</p>
+</li>
+<li><p class="first">Check what you wrote is valid restructured text by building the documents for both html and latex. If your document isn&#8217;t connected into the table of contents, Sphinx will print a warning to screen.</p>
+</li>
+<li><p class="first">Check you have correctly marked up the content and that it looks OK. Make sure that python code and shell commands are correctly highlighted and that literals are marked up as literals. In particular, check the latex build since it is common for text to span beyond the page margins. If the latter happens, revise your document!</p>
+</li>
+<li><p class="first">Check that it works (rather than testing the entire suite, you can use the convenience script within doc). For instance, the following is a single test of one file:</p>
+<div class="highlight-python"><pre>$ cd path/to/PyCogent/doc
+$ python doctest_rsts.py examples/reverse_complement.rst</pre>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="adding-todos">
+<h3>Adding TODOs<a class="headerlink" href="#adding-todos" title="Permalink to this headline">¶</a></h3>
+<p>Add todo&#8217;s into the rst files using the <tt class="docutils literal"><span class="pre">todo</span></tt> directive as in</p>
+<div class="highlight-python"><pre>.. todo::
+
+    some task</pre>
+</div>
+<p>To see the list of todo&#8217;s in the project, uncomment the line that sets <tt class="docutils literal"><span class="pre">todo_include_todos=True</span></tt> in <tt class="docutils literal"><span class="pre">doc/conf.py</span></tt>, then cd into the <tt class="docutils literal"><span class="pre">doc/</span></tt> and make the html docs again. The todo&#8217;s are listed on the main page.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Be sure to revert the conf.py file back to it&#8217;s original state so you don&#8217;t accidentally commit the change as this affects everyone else&#8217;s documentation too!</p>
+</div>
+</div>
+</div>
+<div class="section" id="developing-c-extensions">
+<h2>Developing C-extensions<a class="headerlink" href="#developing-c-extensions" title="Permalink to this headline">¶</a></h2>
+<p>Extensions for PyCogent should be written in <a class="reference external" href="http://www.cython.org/">Cython</a>.</p>
+<p>If you have any questions, contact <a class="reference external" href="mailto:Gavin&#46;Huttley&#37;&#52;&#48;anu&#46;edu&#46;au">Gavin</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">For Developers</a><ul>
+<li><a class="reference internal" href="#grabbing-from-the-subversion-repository">Grabbing from the subversion repository</a></li>
+<li><a class="reference internal" href="#building-testing-the-documentation">Building/testing the documentation</a></li>
+<li><a class="reference internal" href="#adding-to-the-documentation">Adding to the documentation</a><ul>
+<li><a class="reference internal" href="#the-new-documentation-checklist">The new documentation checklist</a></li>
+<li><a class="reference internal" href="#adding-todos">Adding TODOs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developing-c-extensions">Developing C-extensions</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cookbook/code_development.html"
+                        title="previous chapter">Code development</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scripting_guidelines.html"
+                        title="next chapter">Scripting guidelines</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/developer_notes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="scripting_guidelines.html" title="Scripting guidelines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cookbook/code_development.html" title="Code development"
+             >previous</a> |</li>
+        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Distribution of tasks across multiple CPUs using multiprocess &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="HPC environments" href="hpc_environments.html" />
+    <link rel="next" title="Checkpointing optimisation runs" href="checkpointing_long_running.html" />
+    <link rel="prev" title="Distribution of tasks across multiple CPUs using mpi" href="parallel_tasks_with_mpi.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="checkpointing_long_running.html" title="Checkpointing optimisation runs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parallel_tasks_with_mpi.html" title="Distribution of tasks across multiple CPUs using mpi"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="hpc_environments.html" accesskey="U">HPC environments</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="distribution-of-tasks-across-multiple-cpus-using-multiprocess">
+<h1>Distribution of tasks across multiple CPUs using <tt class="docutils literal"><span class="pre">multiprocess</span></tt><a class="headerlink" href="#distribution-of-tasks-across-multiple-cpus-using-multiprocess" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Using multiprocess requires no extra commands on invoking the script!</p>
+</div>
+<p>In the <tt class="docutils literal"><span class="pre">multiprocess</span></tt> case,  <tt class="docutils literal"><span class="pre">foo()</span></tt> is called in a <em>temporary</em> subprocesses. Communication from a subprocess back into the top process is via the value that <tt class="docutils literal"><span class="pre">foo()</span></tt> returns.</p>
+<p>I illustrate the use of <tt class="docutils literal"><span class="pre">parallel.map</span></tt> here with an example that collects both the process id and the integer.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.util</span> <span class="kn">import</span> <span class="n">parallel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parallel</span><span class="o">.</span><span class="n">use_multiprocessing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c"># do some real intensive work in here, which I&#39;ve simulated by</span>
+<span class="gp">... </span>    <span class="c"># using sleep</span>
+<span class="gp">... </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">val</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the purpose of testing the code is executing correctly, I&#8217;ll check that there are 2 pid&#8217;s returned.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pids</span><span class="p">,</span> <span class="n">nums</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">pids</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">result</span></tt> list is a series of tuples of process id&#8217;s and the integer, the latter not necessarily being in order.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">result</span> 
+<span class="go">[(7332, 0), (7333, 1), (7332, 2), (7333, 3), (7332, 4), (7333, 5), (7332, 6), (7333, 7), (7332, 8), (7333, 9), (7332, 10), (7333, 11), (7332, 12), (7333, 13), (7332, 14), (7333, 15), (7332, 16), (7333, 17), (7332, 18), (7333, 19)]</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parallel_tasks_with_mpi.html"
+                        title="previous chapter">Distribution of tasks across multiple CPUs using <tt class="docutils literal docutils literal docutils literal"><span class="pre">mpi</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="checkpointing_long_running.html"
+                        title="next chapter">Checkpointing optimisation runs</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/parallel_tasks_with_multiprocess.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="checkpointing_long_running.html" title="Checkpointing optimisation runs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parallel_tasks_with_mpi.html" title="Distribution of tasks across multiple CPUs using mpi"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="hpc_environments.html" >HPC environments</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

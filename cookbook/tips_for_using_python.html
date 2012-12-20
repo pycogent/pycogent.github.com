@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tips for using python &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Manipulating biological data" href="manipulating_biological_data.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="manipulating_biological_data.html" title="Manipulating biological data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tips-for-using-python">
+<h1>Tips for using python<a class="headerlink" href="#tips-for-using-python" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Doug Wendel</em></p>
+<p>If you are new to Python, this is the right place for you. This is not a comprehensive guide, rather this section is intended help you install an appropriate version of Python and get you started using the language with PyCogent.</p>
+<div class="section" id="checking-your-version">
+<h2>Checking your version<a class="headerlink" href="#checking-your-version" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are running OSX 10.5 or later you only need to install the Apple Developer tools which come with OSX and you&#8217;ll have a suitable version.</p>
+</div>
+<p>At a minimum, you need to be using Python 2.5.x. If you have Python installed, open a terminal window and type <tt class="docutils literal"><span class="pre">python</span></tt>. The first few lines of text should tell you what version you&#8217;re running. For example:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">$ python
+Python 2.6.4 (r264:75706, Mar 11 2010, 12:48:01)
+[GCC 4.2.1 (Apple Inc. build 5646) (dot 1)] on darwin
+Type &#8220;help&#8221;, &#8220;copyright&#8221;, &#8220;credits&#8221; or &#8220;license&#8221; for more information.</p>
+</div>
+<p>In this case, Python 2.6.4 is installed. If you don&#8217;t have Python installed or your version is older than 2.5.x, download the most recent 2.x release of Python <a class="reference external" href="http://www.python.org/download/">here</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>DO NOT</strong> install Python 3.x or above. This version of the language was significantly restructured and will currently not work with PyCogent.</p>
+</div>
+</div>
+<div class="section" id="getting-help">
+<h2>Getting help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h2>
+<p>Python comes with a built-in help utility. To access it, open a terminal window and type <tt class="docutils literal"><span class="pre">python</span></tt> to enter Python&#8217;s interactive mode:</p>
+<div class="highlight-python"><pre>help()
+
+Welcome to Python 2.6!  This is the online help utility.
+
+If this is your first time using Python, you should definitely check out
+the tutorial on the Internet at http://docs.python.org/tutorial/.
+
+Enter the name of any module, keyword, or topic to get help on writing
+Python programs and using Python modules.  To quit this help utility and
+return to the interpreter, just type "quit".
+
+To get a list of available modules, keywords, or topics, type "modules",
+"keywords", or "topics".  Each module also comes with a one-line summary
+of what it does; to list the modules whose summaries contain a given word
+such as "spam", type "modules spam".
+
+help&gt;</pre>
+</div>
+<p>Note that you are now in the interactive help mode as noted by the prompt <tt class="docutils literal"><span class="pre">help&gt;</span></tt>. In this mode you can type in the names of various objects and get additional information on them. For example, if I want to know something about the <tt class="docutils literal"><span class="pre">map</span></tt> function:</p>
+<div class="highlight-python"><pre>help&gt; map
+
+Help on built-in function map in module __builtin__:
+
+map(...)
+map(function, sequence[, sequence, ...]) -&gt; list
+
+Return a list of the results of applying the function to the items of
+the argument sequence(s).  If more than one sequence is given, the
+function is called with an argument list consisting of the corresponding
+item of each sequence, substituting None for missing values when not all
+sequences have the same length.  If the function is None, return a list of
+the items of the sequence (or a list of tuples if more than one sequence).
+(END)</pre>
+</div>
+<p>To exit the interactive help mode, simply enter a blank line at the <tt class="docutils literal"><span class="pre">help&gt;</span></tt> prompt:</p>
+<blockquote>
+<div><p>help&gt;</p>
+<p>You are now leaving help and returning to the Python interpreter.
+If you want to ask for help on a particular object directly from the
+interpreter, you can type &#8220;help(object)&#8221;.  Executing &#8220;help(&#8216;string&#8217;)&#8221;
+has the same effect as typing a particular string at the help&gt; prompt.</p>
+</div></blockquote>
+<p>As the parting message suggests, you can also invoke help on a specific object directly:</p>
+<blockquote>
+<div><p>help(abs)</p>
+<p>Help on built-in function abs in module __builtin__:</p>
+<p>abs(...)
+abs(number) -&gt; number</p>
+<p>Return the absolute value of the argument.
+(END)</p>
+</div></blockquote>
+<p>To quit help in this case just press <tt class="docutils literal"><span class="pre">q</span></tt>.</p>
+</div>
+<div class="section" id="using-the-dir-function">
+<h2>Using the dir() function<a class="headerlink" href="#using-the-dir-function" title="Permalink to this headline">¶</a></h2>
+<p>Another useful built-in function is <tt class="docutils literal"><span class="pre">dir()</span></tt>. As the name implies, it&#8217;s use is to list defined names in the current scope. To list the currently defined names:</p>
+<blockquote>
+<div>dir()
+[&#8216;__builtins__&#8217;, &#8216;__doc__&#8217;, &#8216;__name__&#8217;, &#8216;__package__&#8217;]</div></blockquote>
+<p>The list shows which names are currently defined. This list includes all imported modules and variable names. For example, if I define a new variable, it will also show up in this list:</p>
+<blockquote>
+<div>my_variable = &#8216;Just testing&#8217;
+dir()
+[&#8216;__builtins__&#8217;, &#8216;__doc__&#8217;, &#8216;__name__&#8217;, &#8216;__package__&#8217;, &#8216;my_variable&#8217;]</div></blockquote>
+<p>Imported modules will also be reflected in this list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="nb">dir</span><span class="p">()</span>
+<span class="p">[</span><span class="s">&#39;__builtins__&#39;</span><span class="p">,</span> <span class="s">&#39;__doc__&#39;</span><span class="p">,</span> <span class="s">&#39;__name__&#39;</span><span class="p">,</span> <span class="s">&#39;__package__&#39;</span><span class="p">,</span> <span class="s">&#39;my_variable&#39;</span><span class="p">,</span> <span class="s">&#39;os&#39;</span><span class="p">,</span> <span class="s">&#39;sys&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">dir()</span></tt> can also be used to list the names defined within a module:</p>
+<div class="highlight-python"><pre>import sys
+dir(sys)
+['__displayhook__', '__doc__', '__excepthook__', '__name__', '__package__', '__stderr__', '__stdin__', '__stdout__',...</pre>
+</div>
+<p>It also works on variable types. For example, let&#8217;s see what attributes the string class has as defined:</p>
+<div class="highlight-python"><pre>dir(str)
+['__add__', '__class__', '__contains__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__',...</pre>
+</div>
+<p>You can also use <tt class="docutils literal"><span class="pre">dir()</span></tt> on a defined variable. It will inspect the variable&#8217;s type and report the attributes for that type. In this case, we defined a variable <tt class="docutils literal"><span class="pre">my_variable</span></tt> of type <tt class="docutils literal"><span class="pre">str</span></tt>. Calling <tt class="docutils literal"><span class="pre">dir(my_variable)</span></tt> will product the same result as calling <tt class="docutils literal"><span class="pre">dir(str)</span></tt>:</p>
+<div class="highlight-python"><pre>my_variable = 'Just testing'
+dir(my_variable)
+['__add__', '__class__', '__contains__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__',...</pre>
+</div>
+</div>
+<div class="section" id="hello-pycogent">
+<h2>Hello PyCogent!<a class="headerlink" href="#hello-pycogent" title="Permalink to this headline">¶</a></h2>
+<p>Now that we&#8217;ve gotten our feet wet, let&#8217;s write a simple function that returns a friendly message. This is a simple function which takes in one parameter, <tt class="docutils literal"><span class="pre">your_name</span></tt>, and outputs the user&#8217;s name prefixed with a standard message. Calling your new function is as simple as typing the name of the function and supplying the appropriate variables:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">hello_pycogent</span><span class="p">(</span><span class="n">your_name</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">message</span> <span class="o">=</span> <span class="s">&#39;PyCogent bids you welcome &#39;</span> <span class="o">+</span> <span class="n">your_name</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">message</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hello_pycogent</span><span class="p">(</span><span class="s">&#39;John Smith&#39;</span><span class="p">)</span>
+<span class="go">PyCogent bids you welcome John Smith</span>
+</pre></div>
+</div>
+<p>Enter each line as you see it and note that white space is important! There are no brackets or keywords to signal blocks of code. Instead, indentation is used to designate related lines of code.</p>
+</div>
+<div class="section" id="further-python-documentation">
+<h2>Further Python documentation<a class="headerlink" href="#further-python-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Now that you&#8217;ve got Python up and running and know a few commands, it might be useful to <a class="reference external" href="http://docs.python.org">browse the official documentation</a>. There is a comprehensive list of information and some excellent tutorials to work though. There are also many code examples to be found in the <a class="reference external" href="http://code.activestate.com/recipes/langs/python">Python cookbook</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tips for using python</a><ul>
+<li><a class="reference internal" href="#checking-your-version">Checking your version</a></li>
+<li><a class="reference internal" href="#getting-help">Getting help</a></li>
+<li><a class="reference internal" href="#using-the-dir-function">Using the dir() function</a></li>
+<li><a class="reference internal" href="#hello-pycogent">Hello PyCogent!</a></li>
+<li><a class="reference internal" href="#further-python-documentation">Further Python documentation</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manipulating_biological_data.html"
+                        title="next chapter">Manipulating biological data</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/tips_for_using_python.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="manipulating_biological_data.html" title="Manipulating biological data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

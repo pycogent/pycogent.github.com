@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reusing results to speed up optimisation &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Specifying and using an unrestricted nucleotide substitution model" href="unrestricted_nucleotide.html" />
+    <link rel="prev" title="Likelihood analysis of multiple loci" href="testing_multi_loci.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="unrestricted_nucleotide.html" title="Specifying and using an unrestricted nucleotide substitution model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="testing_multi_loci.html" title="Likelihood analysis of multiple loci"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="reusing-results-to-speed-up-optimisation">
+<h1>Reusing results to speed up optimisation<a class="headerlink" href="#reusing-results-to-speed-up-optimisation" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>An example of how to use the maximum-likelihood parameter estimates from one model as starting values for another model. In this file we do something silly, by saving a result and then reloading it. This is silly because the analyses are run consecutively. A better approach when running consecutively is to simply use the annotated tree directly.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">MG94HKY</span>
+</pre></div>
+</div>
+<p>We&#8217;ll create a simple model, optimise it and save it for later reuse</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&quot;data/test.tree&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">MG94HKY</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">============</span>
+<span class="go">kappa  omega</span>
+<span class="go">------------</span>
+<span class="go"> 3.85   0.90</span>
+<span class="go">------------</span>
+<span class="go">=========================</span>
+<span class="go">     edge  parent  length</span>
+<span class="go">-------------------------</span>
+<span class="go">    Human  edge.0    0.09</span>
+<span class="go">HowlerMon  edge.0    0.12</span>
+<span class="go">   edge.0  edge.1    0.12</span>
+<span class="go">    Mouse  edge.1    0.84</span>
+<span class="go">   edge.1    root    0.06</span>
+<span class="go">NineBande    root    0.28</span>
+<span class="go"> DogFaced    root    0.34</span>
+<span class="go">-------------------------</span>
+<span class="go">=============</span>
+<span class="go">motif  mprobs</span>
+<span class="go">-------------</span>
+<span class="go">    T    0.23</span>
+<span class="go">    C    0.19</span>
+<span class="go">    A    0.37</span>
+<span class="go">    G    0.21</span>
+<span class="go">-------------</span>
+</pre></div>
+</div>
+<p>The essential object for reuse is an annotated tree these capture the parameter estimates from the above optimisation we can either use this directly in the same run, or we can save the tree to file in <tt class="docutils literal"><span class="pre">xml</span></tt> format and reload the tree at a later time for use. In this example I&#8217;ll illustrate the latter scenario.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">at</span><span class="o">=</span><span class="n">lf</span><span class="o">.</span><span class="n">getAnnotatedTree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">at</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s">&#39;tree.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We load the tree as per usual</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nt</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;tree.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now create a more parameter rich model, in this case by allowing the <tt class="docutils literal"><span class="pre">Human</span></tt> edge to have a different value of <tt class="docutils literal"><span class="pre">omega</span></tt>. By providing the annotated tree, the parameter estimates from the above run will be used as starting values for the new model.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="s">&#39;Human&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">new_lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">=====</span>
+<span class="go">kappa</span>
+<span class="go">-----</span>
+<span class="go"> 3.85</span>
+<span class="go">-----</span>
+<span class="go">================================</span>
+<span class="go">     edge  parent  length  omega</span>
+<span class="go">--------------------------------</span>
+<span class="go">    Human  edge.0    0.09   0.59</span>
+<span class="go">HowlerMon  edge.0    0.12   0.92</span>
+<span class="go">   edge.0  edge.1    0.12   0.92</span>
+<span class="go">    Mouse  edge.1    0.84   0.92</span>
+<span class="go">   edge.1    root    0.06   0.92</span>
+<span class="go">NineBande    root    0.28   0.92</span>
+<span class="go"> DogFaced    root    0.34   0.92</span>
+<span class="go">--------------------------------</span>
+<span class="go">=============</span>
+<span class="go">motif  mprobs</span>
+<span class="go">-------------</span>
+<span class="go">    T    0.23</span>
+<span class="go">    C    0.19</span>
+<span class="go">    A    0.37</span>
+<span class="go">    G    0.21</span>
+<span class="go">-------------</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="testing_multi_loci.html"
+                        title="previous chapter">Likelihood analysis of multiple loci</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unrestricted_nucleotide.html"
+                        title="next chapter">Specifying and using an unrestricted nucleotide substitution model</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/reuse_results.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="unrestricted_nucleotide.html" title="Specifying and using an unrestricted nucleotide substitution model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="testing_multi_loci.html" title="Likelihood analysis of multiple loci"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

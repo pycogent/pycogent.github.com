@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Querying NCBI for VWF &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Querying Ensembl" href="query_ensembl.html" />
+    <link rel="prev" title="Selecting and grouping entities" href="entity_selection.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="query_ensembl.html" title="Querying Ensembl"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="entity_selection.html" title="Selecting and grouping entities"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="querying-ncbi-for-vwf">
+<h1>Querying NCBI for VWF<a class="headerlink" href="#querying-ncbi-for-vwf" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>This example is taken from the PyCogent paper (Knight et al. Genome Biol, 8(8):R171, 2007).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Due to changes by NCBI in the structure of there records, it is no longer easy (but not impossible) to use the Sequences <tt class="docutils literal"><span class="pre">Info</span></tt> attribute to restrict sequences to Swissprot entries as we had done previously.</p>
+</div>
+<p>We query the NCBI protein data base for von Willebrand Factor (VWF), a 2813 amino acid glycoprotein required for platelet adhesion in blood coagulation. Missense mutations in this molecule have been associated with von Willebrand disease, a heterogeneous disorder characterized by prolonged bleeding.</p>
+<p>We import <tt class="docutils literal"><span class="pre">EUtils</span></tt> for querying NCBI and search the protein data-base, restricting our search to mammal sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&quot;protein&quot;</span><span class="p">,</span> <span class="n">rettype</span><span class="o">=</span><span class="s">&quot;gp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&quot;VWf&quot;[gene] AND Mammalia[orgn]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">records</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">query</span><span class="p">]</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We have requested the GenBank record format. We use the <tt class="docutils literal"><span class="pre">RichGenbankParser</span></tt> to grab features from the feature annotations of this format. We illustrate grabbing additional content from the feature tables by extracting the locations of SNPs and whether those SNPs have a disease association. An inspection of the feature tables for human entries reveals that the Swissprot entry had the most complete and accessible content regarding the SNP data: region features with <tt class="docutils literal"><span class="pre">region_name=&quot;Variant&quot;</span></tt> and a note field that contains the indicated amino acid difference along with an indication of whether the SNP was associated with von Willebrand disease (denoted by the symbol VWD). Finally, we seek to extract the protein domain locations for presentation purposes.</p>
+<p>We simply limit our attention to large, relatively complete sequences. From the human record we extract annotation data. We use regular expressions to assist with extracting data regarding the amino acid change and the domain names. We also name sequences based on their [G]enus [spe]cies and accession.</p>
+<p>The selected species are accumulated in a <tt class="docutils literal"><span class="pre">seqs</span></tt> dictionary, keyed by their name. The feature data are accumulated in a list.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.genbank</span> <span class="kn">import</span> <span class="n">RichGenbankParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">RichGenbankParser</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">accession</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">parser</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2800</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">continue</span>
+<span class="gp">... </span>    <span class="c"># we extract annotation data only from the human record</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s">&quot;Homo&quot;</span> <span class="ow">in</span> <span class="n">seq</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">species</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">seq</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="s">&quot;region_name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">:</span>
+<span class="gp">... </span>                <span class="k">continue</span> <span class="c"># ignore this one, go to the next feature</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="s">&quot;Variant&quot;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;region_name&quot;</span><span class="p">]:</span>
+<span class="gp">... </span>                <span class="n">note</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;note&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>                <span class="n">variant</span> <span class="o">=</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&quot;[A-Z] *-&gt; *[A-Z]&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                                              <span class="n">note</span><span class="p">))</span>
+<span class="gp">... </span>                <span class="n">disease</span> <span class="o">=</span> <span class="s">&quot;VWD&quot;</span> <span class="ow">in</span> <span class="n">note</span>
+<span class="gp">... </span>                <span class="n">lo</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="gp">... </span>                <span class="n">hi</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+<span class="gp">... </span>                <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s">&quot;SNP&quot;</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">variant</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">disease</span><span class="p">])</span>
+<span class="gp">... </span>            <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>                <span class="n">region_name</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;region_name&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>                <span class="k">if</span> <span class="n">region_name</span> <span class="o">==</span> <span class="s">&quot;Domain&quot;</span><span class="p">:</span>
+<span class="gp">... </span>                    <span class="n">note</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> \
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;[.;]&quot;</span><span class="p">,</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;note&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">field</span><span class="p">]</span>
+<span class="gp">... </span>                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="gp">... </span>                        <span class="n">note</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span>
+<span class="gp">... </span>                    <span class="n">lo</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="gp">... </span>                    <span class="n">hi</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&quot;location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+<span class="gp">... </span>                    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s">&quot;Domain&quot;</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">note</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="bp">None</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">species</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">species</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">seq_name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">species</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span> <span class="n">accession</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">seqs</span><span class="p">[</span><span class="n">seq_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">seq</span>
+</pre></div>
+</div>
+<p>We convert the sequences to a <tt class="docutils literal"><span class="pre">SequenceCollection</span></tt> using <tt class="docutils literal"><span class="pre">LoadSeqs</span></tt> and then save to a fasta formatted file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">seqs</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">seqs</span><span class="o">.</span><span class="n">NamedSeqs</span><span class="p">[</span><span class="s">&#39;Clup.VWF_CANFA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">toFasta</span><span class="p">()</span>
+<span class="go">&gt;Clup.VWF_CANFA</span>
+<span class="go">MSPTRLVRVLLALALI...</span>
+</pre></div>
+</div>
+<p>We convert the features into a PyCogent <tt class="docutils literal"><span class="pre">Table</span></tt> object, which requires we specify column headings. This can be saved to file if desired, but we don&#8217;t do that here. For display purposes, we just print the first 10 records.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadTable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feature_table</span> <span class="o">=</span> <span class="n">LoadTable</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Type&quot;</span><span class="p">,</span> <span class="s">&quot;Start&quot;</span><span class="p">,</span> <span class="s">&quot;Stop&quot;</span><span class="p">,</span> <span class="s">&quot;Note&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="s">&quot;Disease&quot;</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Printing <tt class="docutils literal"><span class="pre">feature_table[:10]</span></tt> should result in something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">============================================</span>
+  <span class="n">Type</span>    <span class="n">Start</span>    <span class="n">Stop</span>      <span class="n">Note</span>    <span class="n">Disease</span>
+<span class="o">--------------------------------------------</span>
+<span class="n">Domain</span>       <span class="mi">33</span>     <span class="mi">240</span>    <span class="n">VWFD</span> <span class="mi">1</span>
+   <span class="n">SNP</span>      <span class="mi">272</span>     <span class="mi">273</span>    <span class="n">R</span> <span class="o">-&gt;</span> <span class="n">W</span>       <span class="bp">True</span>
+<span class="n">Domain</span>      <span class="mi">294</span>     <span class="mi">348</span>     <span class="n">TIL</span> <span class="mi">1</span>
+   <span class="n">SNP</span>      <span class="mi">317</span>     <span class="mi">318</span>    <span class="n">N</span> <span class="o">-&gt;</span> <span class="n">K</span>      <span class="bp">False</span>
+   <span class="n">SNP</span>      <span class="mi">376</span>     <span class="mi">377</span>    <span class="n">W</span> <span class="o">-&gt;</span> <span class="n">C</span>       <span class="bp">True</span>
+<span class="n">Domain</span>      <span class="mi">386</span>     <span class="mi">598</span>    <span class="n">VWFD</span> <span class="mi">2</span>
+   <span class="n">SNP</span>      <span class="mi">483</span>     <span class="mi">484</span>    <span class="n">H</span> <span class="o">-&gt;</span> <span class="n">R</span>      <span class="bp">False</span>
+   <span class="n">SNP</span>      <span class="mi">527</span>     <span class="mi">528</span>    <span class="n">N</span> <span class="o">-&gt;</span> <span class="n">S</span>       <span class="bp">True</span>
+   <span class="n">SNP</span>      <span class="mi">549</span>     <span class="mi">550</span>    <span class="n">G</span> <span class="o">-&gt;</span> <span class="n">R</span>       <span class="bp">True</span>
+<span class="n">Domain</span>      <span class="mi">651</span>     <span class="mi">707</span>     <span class="n">TIL</span> <span class="mi">2</span>
+<span class="o">--------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="entity_selection.html"
+                        title="previous chapter">Selecting and grouping entities</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="query_ensembl.html"
+                        title="next chapter">Querying Ensembl</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/query_ncbi.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="query_ensembl.html" title="Querying Ensembl"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="entity_selection.html" title="Selecting and grouping entities"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

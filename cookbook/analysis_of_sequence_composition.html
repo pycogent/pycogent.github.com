@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Analysis of sequence composition &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="PyCogent Cookbook" href="index.html" />
+    <link rel="next" title="Sequence similarity search" href="sequence_similarity_search.html" />
+    <link rel="prev" title="Accessing databases" href="accessing_databases.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sequence_similarity_search.html" title="Sequence similarity search"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="accessing_databases.html" title="Accessing databases"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="analysis-of-sequence-composition">
+<h1>Analysis of sequence composition<a class="headerlink" href="#analysis-of-sequence-composition" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Jesse Zaneveld</em></p>
+<p>PyCogent provides several tools for analyzing the composition of DNA, RNA, or
+protein sequences.</p>
+<div class="section" id="loading-your-sequence">
+<h2>Loading your sequence<a class="headerlink" href="#loading-your-sequence" title="Permalink to this headline">¶</a></h2>
+<p>Let us say that we wish to study the sequence composition of the <em>Y. pseudotuberculosis</em> PB1 DNA Polymerase III beta subunit.</p>
+<p>First we input the sequence as a string.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_seq</span> <span class="o">=</span> \
+<span class="gp">... </span>       <span class="sd">&quot;&quot;&quot; atgaaatttatcattgaacgtgagcatctgctaaaaccactgcaacaggtcagtagcccg</span>
+<span class="gp">... </span><span class="sd">       ctgggtggacgccctacgttgcctattttgggtaacttgttgctgcaagtcacggaaggc</span>
+<span class="gp">... </span><span class="sd">       tctttgcggctgaccggtaccgacttggagatggagatggtggcttgtgttgccttgtct</span>
+<span class="gp">... </span><span class="sd">       cagtcccatgagccgggtgctaccacagtacccgcacggaagttttttgatatctggcgt</span>
+<span class="gp">... </span><span class="sd">       ggtttacccgaaggggcggaaattacggtagcgttggatggtgatcgcctgctagtgcgc</span>
+<span class="gp">... </span><span class="sd">       tctggtcgcagccgtttctcgctgtctaccttgcctgcgattgacttccctaatctggat</span>
+<span class="gp">... </span><span class="sd">       gactggcagagtgaggttgaattcactttaccgcaggctacgttaaagcgtctgattgag</span>
+<span class="gp">... </span><span class="sd">       tccactcagttttcgatggcccatcaggatgtccgttattatttgaacggcatgctgttt</span>
+<span class="gp">... </span><span class="sd">       gagaccgaaggcgaagagttacgtactgtggcgaccgatgggcatcgcttggctgtatgc</span>
+<span class="gp">... </span><span class="sd">       tcaatgcctattggccagacgttaccctcacattcggtgatcgtgccgcgtaaaggtgtg</span>
+<span class="gp">... </span><span class="sd">       atggagctggttcggttgctggatggtggtgatacccccttgcggctgcaaattggcagt</span>
+<span class="gp">... </span><span class="sd">       aataatattcgtgctcatgtgggcgattttattttcacatctaagctggttgatggccgt</span>
+<span class="gp">... </span><span class="sd">       ttcccggattatcgccgcgtattgccgaagaatcctgataaaatgctggaagccggttgc</span>
+<span class="gp">... </span><span class="sd">       gatttactgaaacaggcattttcgcgtgcggcaattctgtcaaatgagaagttccgtggt</span>
+<span class="gp">... </span><span class="sd">       gttcggctctatgtcagccacaatcaactcaaaatcactgctaataatcctgaacaggaa</span>
+<span class="gp">... </span><span class="sd">       gaagcagaagagatcctcgatgttagctacgaggggacagaaatggagatcggtttcaac</span>
+<span class="gp">... </span><span class="sd">       gtcagctatgtgcttgatgtgctaaatgcactgaagtgcgaagatgtgcgcctgttattg</span>
+<span class="gp">... </span><span class="sd">       actgactctgtatccagtgtgcagattgaagacagcgccagccaagctgcagcctatgtc</span>
+<span class="gp">... </span><span class="sd">       gtcatgccaatgcgtttgtag&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>To check that our results are reasonable, we can also load a small example string.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">example_seq</span> <span class="o">=</span> <span class="s">&quot;GCGTTT&quot;</span>
+</pre></div>
+</div>
+<p>In order to calculate compositional statistics, we need to import one of the <tt class="docutils literal"><span class="pre">Usage</span></tt> objects from <tt class="docutils literal"><span class="pre">cogent.core.usage</span></tt>, create an object from our string, and normalize the counts contained in the string into frequencies. <tt class="docutils literal"><span class="pre">Usage</span></tt> objects include <tt class="docutils literal"><span class="pre">BaseUsage</span></tt>, <tt class="docutils literal"><span class="pre">PositionalBaseUsage</span></tt>, <tt class="docutils literal"><span class="pre">CodonUsage</span></tt>, and <tt class="docutils literal"><span class="pre">AminoAcidUsage</span></tt>.</p>
+<p>Let us start with the <tt class="docutils literal"><span class="pre">BaseUsage</span></tt> object. The first few steps will be the same for the other Usage objects, however (as we will see below).</p>
+</div>
+<div class="section" id="gc-content">
+<h2>GC content<a class="headerlink" href="#gc-content" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="total-gc-content">
+<h3>Total GC  content<a class="headerlink" href="#total-gc-content" title="Permalink to this headline">¶</a></h3>
+<p>GC content is one commonly used compositional statistic. To calculate the total GC content of our gene, we will need to initiate and normalize a <tt class="docutils literal"><span class="pre">BaseUsage</span></tt> object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">BaseUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_bu</span> <span class="o">=</span> <span class="n">BaseUsage</span><span class="p">(</span><span class="n">example_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Print raw counts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">example_bu</span><span class="o">.</span><span class="n">content</span><span class="p">(</span><span class="s">&quot;GC&quot;</span><span class="p">)</span>
+<span class="go">3.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_bu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">example_bu</span><span class="o">.</span><span class="n">content</span><span class="p">(</span><span class="s">&quot;GC&quot;</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<p>We can now visually verify that the reported GC contents are correct, and use the same technique on our full sequence.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_bu</span> <span class="o">=</span> <span class="n">BaseUsage</span><span class="p">(</span><span class="n">y_pseudo_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Print raw counts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_bu</span><span class="o">.</span><span class="n">content</span><span class="p">(</span><span class="s">&quot;GC&quot;</span><span class="p">)</span>
+<span class="go">555.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_bu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">y_pseudo_bu</span><span class="o">.</span><span class="n">content</span><span class="p">(</span><span class="s">&quot;GC&quot;</span><span class="p">)</span>
+<span class="go">0.50408719346</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="positional-gc-content-of-codons">
+<h3>Positional GC content of Codons<a class="headerlink" href="#positional-gc-content-of-codons" title="Permalink to this headline">¶</a></h3>
+<p>When analyzing protein coding genes, it is often useful to subdivide the GC content by codon position. In particular, the 3rd codon position <tt class="docutils literal"><span class="pre">CodonUsage</span></tt> objects allow us to calculate the GC content at each codon position.</p>
+<p>First, let us calculate the GC content for the codons in the example sequence as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Import CodonUsage object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">CodonUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Initiate &amp; normalize CodonUsage object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_seq_cu</span> <span class="o">=</span> <span class="n">CodonUsage</span><span class="p">(</span><span class="n">example_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_seq_cu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GC</span><span class="p">,</span><span class="n">P1</span><span class="p">,</span><span class="n">P2</span><span class="p">,</span><span class="n">P3</span> <span class="o">=</span> <span class="n">example_seq_cu</span><span class="o">.</span><span class="n">positionalGC</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here, GC is the overall GC content for the sequence, while P1, P2, and P3 are the GC content at the first, second, and third codon positions, respectively.</p>
+<p>Printing the results for the example gives the following results.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;GC:&quot;</span><span class="p">,</span> <span class="n">GC</span>
+<span class="go">GC: 0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;P1:&quot;</span><span class="p">,</span> <span class="n">P1</span>
+<span class="go">P1: 0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;P2:&quot;</span><span class="p">,</span> <span class="n">P2</span>
+<span class="go">P2: 0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;P3:&quot;</span><span class="p">,</span> <span class="n">P3</span>
+<span class="go">P3: 0.5</span>
+</pre></div>
+</div>
+<p>We can then do the same for our biological sequence.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_cu</span> <span class="o">=</span> <span class="n">CodonUsage</span><span class="p">(</span><span class="n">y_pseudo_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_GC</span> <span class="o">=</span> <span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">positionalGC</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">y_pseudo_GC</span>
+<span class="go">[0.51874999999999993, 0.5843749999999999, 0.4750000000000001, 0.49687499999999996]</span>
+</pre></div>
+</div>
+<p>These results could then be fed into downstream analyses.</p>
+<p>One important note is that <tt class="docutils literal"><span class="pre">CodonUsage</span></tt> objects calculate the GC content of codons within nucleotide sequences, rather than the full GC content.  Therefore, <tt class="docutils literal"><span class="pre">BaseUsage</span></tt> rather than <tt class="docutils literal"><span class="pre">CodonUsage</span></tt> objects should be used for calculating the GC content of non-coding sequences.</p>
+</div>
+</div>
+<div class="section" id="total-base-usage">
+<h2>Total Base Usage<a class="headerlink" href="#total-base-usage" title="Permalink to this headline">¶</a></h2>
+<p>A more detailed view of composition incorporates the relative counts or frequencies of all bases. We can calculate total base usage as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">BaseUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_bu</span> <span class="o">=</span> <span class="n">BaseUsage</span><span class="p">(</span><span class="n">example_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Print raw counts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">example_bu</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">example_bu</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">A 0.0</span>
+<span class="go">C 1.0</span>
+<span class="go">U 3.0</span>
+<span class="go">G 2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_bu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">example_bu</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">example_bu</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">A 0.0</span>
+<span class="go">C 0.166666666667</span>
+<span class="go">U 0.5</span>
+<span class="go">G 0.333333333333</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dinucleotide-content">
+<h2>Dinucleotide Content<a class="headerlink" href="#dinucleotide-content" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">DinucUsage</span></tt> object allows us to calculate Dinucleotide usage for our sequence.</p>
+<p>Dinucleotide usage can be calculated using overlapping, non-overlapping, or &#8216;3-1&#8217; dinucleotides.</p>
+<p>Given the sequence &#8220;AATTAAGCC&#8221;, each method will count dinucleotide usage differently. Overlapping dinucleotide usage will count &#8220;AA&#8221;, &#8220;AT&#8221;, &#8220;TT&#8221;, &#8220;TA&#8221;, &#8220;AA&#8221;, &#8220;AG&#8221;, &#8220;GC&#8221;, &#8220;CC&#8221;. Non-overlapping dinucleotide usage will count &#8220;AA&#8221;, &#8220;TT&#8221;, &#8220;AA&#8221;, &#8220;GC&#8221; 3-1 dinucleotide usage will count &#8220;TT&#8221;, &#8220;AC&#8221;.</p>
+<p>Calculating the GC content at the third and first codon positions (&#8220;3-1&#8221; usage) is useful for some applications, such as gene transfer detection, because changes at these positions tend to produce the most conservative amino acid substitutions, and thus are thought to better reflect mutational (rather than selective) pressure.</p>
+<div class="section" id="overlapping-dinucleotide-content">
+<h3>Overlapping dinucleotide content<a class="headerlink" href="#overlapping-dinucleotide-content" title="Permalink to this headline">¶</a></h3>
+<p>To calculate overlapping dinucleotide usage for our <em>Y. pseudotuberculosis</em> PB1 sequence.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">DinucUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">du</span>  <span class="o">=</span> <span class="n">DinucUsage</span><span class="p">(</span><span class="n">y_pseudo_seq</span><span class="p">,</span> <span class="n">Overlapping</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">du</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We can inspect individual dinucleotide usages and confirm that the results add to 100% as follows</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">du</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">du</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="n">total</span> <span class="o">+=</span> <span class="n">du</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">UU 0.0757855822551</span>
+<span class="go">UC 0.0517560073937</span>
+<span class="go">UA 0.043438077634</span>
+<span class="go">UG 0.103512014787</span>
+<span class="go">CU 0.0619223659889</span>
+<span class="go">CC 0.0517560073937</span>
+<span class="go">CA 0.0517560073937</span>
+<span class="go">CG 0.0573012939002</span>
+<span class="go">AU 0.0674676524954</span>
+<span class="go">AC 0.043438077634</span>
+<span class="go">AA 0.0573012939002</span>
+<span class="go">AG 0.054528650647</span>
+<span class="go">GU 0.0711645101664</span>
+<span class="go">GC 0.0794824399261</span>
+<span class="go">GA 0.0674676524954</span>
+<span class="go">GG 0.0619223659889</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Total:&quot;</span><span class="p">,</span><span class="n">total</span>
+<span class="go">Total: 1.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="non-overlapping-dinucleotide-content">
+<h3>Non-overlapping Dinucleotide Content<a class="headerlink" href="#non-overlapping-dinucleotide-content" title="Permalink to this headline">¶</a></h3>
+<p>To calculate non-overlapping dinucleotide usage we simply change the <tt class="docutils literal"><span class="pre">Overlapping</span></tt> parameter to <tt class="docutils literal"><span class="pre">False</span></tt> when initiating the <tt class="docutils literal"><span class="pre">DinucUsage</span></tt> object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">DinucUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">du_no</span>  <span class="o">=</span> <span class="n">DinucUsage</span><span class="p">(</span><span class="n">y_pseudo_seq</span><span class="p">,</span> <span class="n">Overlapping</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">du_no</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">du_no</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">du_no</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="n">total</span> <span class="o">+=</span> <span class="n">du_no</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">UU 0.0733082706767</span>
+<span class="go">UC 0.0507518796992</span>
+<span class="go">UA 0.0375939849624</span>
+<span class="go">UG 0.105263157895</span>
+<span class="go">CU 0.0733082706767</span>
+<span class="go">CC 0.046992481203</span>
+<span class="go">CA 0.0394736842105</span>
+<span class="go">CG 0.0601503759398</span>
+<span class="go">AU 0.0751879699248</span>
+<span class="go">AC 0.046992481203</span>
+<span class="go">AA 0.062030075188</span>
+<span class="go">AG 0.0545112781955</span>
+<span class="go">GU 0.0601503759398</span>
+<span class="go">GC 0.0845864661654</span>
+<span class="go">GA 0.0676691729323</span>
+<span class="go">GG 0.062030075188</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Total:&quot;</span><span class="p">,</span><span class="n">total</span>
+<span class="go">Total: 1.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>&#8216;3-1&#8217; Dinucleotide Content<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>To calculate dinucleotide usage considering only adjacent first and third codon positions, we set the Overlapping parameter to &#8216;3-1&#8217; when constructing our <tt class="docutils literal"><span class="pre">DinucUsage</span></tt> object</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">DinucUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">du_3_1</span>  <span class="o">=</span> <span class="n">DinucUsage</span><span class="p">(</span><span class="n">y_pseudo_seq</span><span class="p">,</span> <span class="n">Overlapping</span><span class="o">=</span><span class="s">&#39;3-1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">du_3_1</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">du_3_1</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">du_3_1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="n">total</span> <span class="o">+=</span> <span class="n">du_3_1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">UU 0.0720221606648</span>
+<span class="go">UC 0.0664819944598</span>
+<span class="go">UA 0.0360110803324</span>
+<span class="go">UG 0.0914127423823</span>
+<span class="go">CU 0.0387811634349</span>
+<span class="go">CC 0.0415512465374</span>
+<span class="go">CA 0.0554016620499</span>
+<span class="go">CG 0.0554016620499</span>
+<span class="go">AU 0.0498614958449</span>
+<span class="go">AC 0.0470914127424</span>
+<span class="go">AA 0.0664819944598</span>
+<span class="go">AG 0.0747922437673</span>
+<span class="go">GU 0.0886426592798</span>
+<span class="go">GC 0.0886426592798</span>
+<span class="go">GA 0.0609418282548</span>
+<span class="go">GG 0.0664819944598</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Total:&quot;</span><span class="p">,</span><span class="n">total</span>
+<span class="go">Total: 1.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparing-dinucleotide-usages">
+<h3>Comparing dinucleotide usages<a class="headerlink" href="#comparing-dinucleotide-usages" title="Permalink to this headline">¶</a></h3>
+<p>Above, we noted that there are several ways to calculate dinucleotide usages on a single sequence, and that the choice of methods changes the reported frequencies somewhat. How could we quantify the effect this choice make on the result?</p>
+<p>One way to test this is to calculate the Euclidean distance between the resulting frequencies. We can do this using the dinucleotide usage&#8217;s</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">du_vs_du_3_1_dist</span> <span class="o">=</span> <span class="n">du</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">du_3_1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As required of a true distance, the results are independent of the direction of the calculation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">du_3_1_vs_du_dist</span> <span class="o">=</span> <span class="n">du_3_1</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">du</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">du_3_1_vs_du_dist</span> <span class="o">==</span> <span class="n">du_vs_du_3_1_dist</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="section" id="caution-regarding-unnormalized-distances">
+<h4>Caution regarding unnormalized distances<a class="headerlink" href="#caution-regarding-unnormalized-distances" title="Permalink to this headline">¶</a></h4>
+<p>Note that in this case we have already called <tt class="docutils literal"><span class="pre">du.normalize()</span></tt> on each <tt class="docutils literal"><span class="pre">DinucUsage</span></tt> object. You MUST call <tt class="docutils literal"><span class="pre">du.normalize()</span></tt> before calculating distances. Otherwise the distance calculated will be for the dinucleotide counts, rather than frequencies. Distances of counts can be non-zero even for sequences with identical dinucleotide usage, if those sequences are of different lengths.</p>
+</div>
+</div>
+<div class="section" id="k-words">
+<h3>k-words<a class="headerlink" href="#k-words" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written.</em></p>
+</div>
+</div>
+<div class="section" id="codon-usage-analyses">
+<h2>Codon usage analyses<a class="headerlink" href="#codon-usage-analyses" title="Permalink to this headline">¶</a></h2>
+<p>In addition to allowing a more detailed examination of GC content in coding sequences, <tt class="docutils literal"><span class="pre">CodonUsage</span></tt> objects (as the name implies) let us examine the codon usage of our sequence.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.usage</span> <span class="kn">import</span> <span class="n">CodonUsage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_cu</span>  <span class="o">=</span> <span class="n">CodonUsage</span><span class="p">(</span><span class="n">y_pseudo_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Print raw counts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_pseudo_cu</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">UUU 8.0</span>
+<span class="go">UUC 4.0</span>
+<span class="go">UUA 5.0</span>
+<span class="go">UUG 14.0</span>
+<span class="go">UCU 4.0</span>
+<span class="go">UCC 3.0</span>
+<span class="go">UCA 5.0</span>
+<span class="go">UCG 3.0</span>
+<span class="go">UAU 8.0...</span>
+</pre></div>
+</div>
+<p>Note that before normalization the <tt class="docutils literal"><span class="pre">CodonUsage</span></tt> object holds raw counts of results. However, for most purposes, we will want frequencies, so we normalize the counts.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Print normalized frequencies</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">RequiredKeys</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_pseudo_cu</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">UUU 0.0225988700565</span>
+<span class="go">UUC 0.0112994350282</span>
+<span class="go">UUA 0.0141242937853</span>
+<span class="go">UUG 0.0395480225989</span>
+<span class="go">UCU 0.0112994350282</span>
+<span class="go">UCC 0.00847457627119</span>
+<span class="go">UCA 0.0141242937853</span>
+<span class="go">UCG 0.00847457627119</span>
+<span class="go">UAU 0.0225988700565...</span>
+</pre></div>
+</div>
+<div class="section" id="relative-synonymous-codon-usage">
+<h3>Relative Synonymous Codon Usage<a class="headerlink" href="#relative-synonymous-codon-usage" title="Permalink to this headline">¶</a></h3>
+<p>The RSCU or relative synonymous codon usage metric divides the frequency of each codon by the total frequency of all codons encoding the same amino acid.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pseudo_rscu</span> <span class="o">=</span> <span class="n">y_pseudo_cu</span><span class="o">.</span><span class="n">rscu</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Print rscu frequencies</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">y_pseudo_rscu</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_pseudo_rscu</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">ACC 0.263157894737</span>
+<span class="go">GUC 0.238095238095</span>
+<span class="go">ACA 0.210526315789</span>
+<span class="go">ACG 0.263157894737</span>
+<span class="go">AAC 0.4</span>
+<span class="go">CCU 0.315789473684</span>
+<span class="go">UGG 1.0</span>
+<span class="go">AUC 0.266666666667</span>
+<span class="go">GUA 0.190476190476...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pr2-bias">
+<h3>PR2 bias<a class="headerlink" href="#pr2-bias" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written</em></p>
+</div>
+<div class="section" id="fingerprint-analysis">
+<h3>Fingerprint analysis<a class="headerlink" href="#fingerprint-analysis" title="Permalink to this headline">¶</a></h3>
+<p><em>To be written</em></p>
+</div>
+</div>
+<div class="section" id="amino-acid-usage">
+<h2>Amino Acid Usage<a class="headerlink" href="#amino-acid-usage" title="Permalink to this headline">¶</a></h2>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="profiles">
+<h2>Profiles<a class="headerlink" href="#profiles" title="Permalink to this headline">¶</a></h2>
+<p><em>To be written.</em></p>
+</div>
+<div class="section" id="visualisation">
+<h2>Visualisation<a class="headerlink" href="#visualisation" title="Permalink to this headline">¶</a></h2>
+<p><em>To be written.</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Analysis of sequence composition</a><ul>
+<li><a class="reference internal" href="#loading-your-sequence">Loading your sequence</a></li>
+<li><a class="reference internal" href="#gc-content">GC content</a><ul>
+<li><a class="reference internal" href="#total-gc-content">Total GC  content</a></li>
+<li><a class="reference internal" href="#positional-gc-content-of-codons">Positional GC content of Codons</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#total-base-usage">Total Base Usage</a></li>
+<li><a class="reference internal" href="#dinucleotide-content">Dinucleotide Content</a><ul>
+<li><a class="reference internal" href="#overlapping-dinucleotide-content">Overlapping dinucleotide content</a></li>
+<li><a class="reference internal" href="#non-overlapping-dinucleotide-content">Non-overlapping Dinucleotide Content</a></li>
+<li><a class="reference internal" href="#id1">&#8216;3-1&#8217; Dinucleotide Content</a></li>
+<li><a class="reference internal" href="#comparing-dinucleotide-usages">Comparing dinucleotide usages</a><ul>
+<li><a class="reference internal" href="#caution-regarding-unnormalized-distances">Caution regarding unnormalized distances</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#k-words">k-words</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#codon-usage-analyses">Codon usage analyses</a><ul>
+<li><a class="reference internal" href="#relative-synonymous-codon-usage">Relative Synonymous Codon Usage</a></li>
+<li><a class="reference internal" href="#pr2-bias">PR2 bias</a></li>
+<li><a class="reference internal" href="#fingerprint-analysis">Fingerprint analysis</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#amino-acid-usage">Amino Acid Usage</a></li>
+<li><a class="reference internal" href="#profiles">Profiles</a></li>
+<li><a class="reference internal" href="#visualisation">Visualisation</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="accessing_databases.html"
+                        title="previous chapter">Accessing databases</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sequence_similarity_search.html"
+                        title="next chapter">Sequence similarity search</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/analysis_of_sequence_composition.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sequence_similarity_search.html" title="Sequence similarity search"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="accessing_databases.html" title="Accessing databases"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

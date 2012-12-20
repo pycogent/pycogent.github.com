@@ -1,0 +1,140 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Distribution of tasks across multiple CPUs using mpi &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="HPC environments" href="hpc_environments.html" />
+    <link rel="next" title="Distribution of tasks across multiple CPUs using multiprocess" href="parallel_tasks_with_multiprocess.html" />
+    <link rel="prev" title="HPC environments" href="hpc_environments.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parallel_tasks_with_multiprocess.html" title="Distribution of tasks across multiple CPUs using multiprocess"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hpc_environments.html" title="HPC environments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="hpc_environments.html" accesskey="U">HPC environments</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="distribution-of-tasks-across-multiple-cpus-using-mpi">
+<h1>Distribution of tasks across multiple CPUs using <tt class="docutils literal"><span class="pre">mpi</span></tt><a class="headerlink" href="#distribution-of-tasks-across-multiple-cpus-using-mpi" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This example requires execution on 2 CPUs. It can be run using: <tt class="docutils literal"><span class="pre">$</span> <span class="pre">mpirun</span> <span class="pre">-n</span> <span class="pre">2</span> <span class="pre">python</span> <span class="pre">path/to/parallel_tasks.rst</span></tt></p>
+</div>
+<p>All I&#8217;m doing here is illustrating the use of <tt class="docutils literal"><span class="pre">parallel.map</span></tt> with the simplest example I could come up with. I create a list which will have an integer appended to it &#8211; hardly useful, but hopefully demonstrates how a series of data can be mapped onto a function in parallel. In this case, the data is just a list of numbers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.util</span> <span class="kn">import</span> <span class="n">parallel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">passed_indices</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">passed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">,</span> <span class="n">series</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">passed_indices</span> <span class="o">==</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="n">passed_indices</span> <span class="o">==</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is either the list of even numbers up to (but not including) 20 or the list of odd numbers.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hpc_environments.html"
+                        title="previous chapter">HPC environments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parallel_tasks_with_multiprocess.html"
+                        title="next chapter">Distribution of tasks across multiple CPUs using <tt class="docutils literal docutils literal"><span class="pre">multiprocess</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/parallel_tasks_with_mpi.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parallel_tasks_with_multiprocess.html" title="Distribution of tasks across multiple CPUs using multiprocess"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hpc_environments.html" title="HPC environments"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="hpc_environments.html" >HPC environments</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

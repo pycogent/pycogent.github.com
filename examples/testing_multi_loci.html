@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Likelihood analysis of multiple loci &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Reusing results to speed up optimisation" href="reuse_results.html" />
+    <link rel="prev" title="Use an empirical protein substitution model" href="empirical_protein_models.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reuse_results.html" title="Reusing results to speed up optimisation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="empirical_protein_models.html" title="Use an empirical protein substitution model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="likelihood-analysis-of-multiple-loci">
+<h1>Likelihood analysis of multiple loci<a class="headerlink" href="#likelihood-analysis-of-multiple-loci" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>We want to know whether an exchangeability parameter is different between alignments. We will specify a null model, under which each alignment get&#8217;s it&#8217;s own motif probabilities and all alignments share branch lengths and the exchangeability parameter kappa (the transition / transversion ratio). We&#8217;ll split the example alignment into two-pieces.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">LoadTable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.recalculation.scope</span> <span class="kn">import</span> <span class="n">EACH</span><span class="p">,</span> <span class="n">ALL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.stats</span> <span class="kn">import</span> <span class="n">chisqprob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">half</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln1</span> <span class="o">=</span> <span class="n">aln</span><span class="p">[:</span><span class="n">half</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln2</span> <span class="o">=</span> <span class="n">aln</span><span class="p">[</span><span class="n">half</span><span class="p">:]</span>
+</pre></div>
+</div>
+<p>We provide names for those alignments, then construct the tree, model instances.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">loci_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;1st-half&quot;</span><span class="p">,</span> <span class="s">&quot;2nd-half&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loci</span> <span class="o">=</span> <span class="p">[</span><span class="n">aln1</span><span class="p">,</span> <span class="n">aln2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="n">tip_names</span><span class="o">=</span><span class="n">aln</span><span class="o">.</span><span class="n">getSeqNames</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">HKY85</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To make a likelihood function with multiple alignments we provide the list of loci names. We can then specify a parameter (other than length) to be the same across the loci (using the imported <tt class="docutils literal"><span class="pre">ALL</span></tt>) or different for each locus (using <tt class="docutils literal"><span class="pre">EACH</span></tt>). We conduct a LR test as before.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">loci</span><span class="o">=</span><span class="n">loci_names</span><span class="p">,</span><span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&quot;length&quot;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;kappa&#39;</span><span class="p">,</span> <span class="n">loci</span> <span class="o">=</span> <span class="n">ALL</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">loci</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">=========================</span>
+<span class="go">   locus   motif   mprobs</span>
+<span class="go">-------------------------</span>
+<span class="go">1st-half       T     0.22</span>
+<span class="go">1st-half       C     0.18</span>
+<span class="go">1st-half       A     0.38</span>
+<span class="go">1st-half       G     0.21</span>
+<span class="go">2nd-half       T     0.24</span>
+<span class="go">2nd-half       C     0.19</span>
+<span class="go">2nd-half       A     0.35</span>
+<span class="go">2nd-half       G     0.22</span>
+<span class="go">-------------------------</span>
+<span class="go">==============</span>
+<span class="go">kappa   length</span>
+<span class="go">--------------</span>
+<span class="go"> 3.98     0.13</span>
+<span class="go">--------------</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;kappa&#39;</span><span class="p">,</span> <span class="n">loci</span> <span class="o">=</span> <span class="n">EACH</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="go">Likelihood Function Table</span>
+<span class="go">================</span>
+<span class="go">   locus   kappa</span>
+<span class="go">----------------</span>
+<span class="go">1st-half    4.33</span>
+<span class="go">2nd-half    3.74</span>
+<span class="go">----------------</span>
+<span class="go">=========================</span>
+<span class="go">   locus   motif   mprobs</span>
+<span class="go">-------------------------</span>
+<span class="go">1st-half       T     0.22</span>
+<span class="go">1st-half       C     0.18</span>
+<span class="go">1st-half       A     0.38</span>
+<span class="go">1st-half       G     0.21</span>
+<span class="go">2nd-half       T     0.24</span>
+<span class="go">2nd-half       C     0.19</span>
+<span class="go">2nd-half       A     0.35</span>
+<span class="go">2nd-half       G     0.22</span>
+<span class="go">-------------------------</span>
+<span class="go">======</span>
+<span class="go">length</span>
+<span class="go">------</span>
+<span class="go">  0.13</span>
+<span class="go">------</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">each_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">each_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">each_lnL</span> <span class="o">-</span> <span class="n">all_lnL</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">each_nfp</span> <span class="o">-</span> <span class="n">all_nfp</span>
+</pre></div>
+</div>
+<p>Just to pretty up the result display, I&#8217;ll print a table consisting of the test statistics created on the fly.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">LoadTable</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;LR&#39;</span><span class="p">,</span> <span class="s">&#39;df&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">],</span>
+<span class="gp">... </span>            <span class="n">rows</span><span class="o">=</span><span class="p">[[</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)]],</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">================</span>
+<span class="go">  LR   df      p</span>
+<span class="go">----------------</span>
+<span class="go">1.59    1   0.21</span>
+<span class="go">----------------</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="empirical_protein_models.html"
+                        title="previous chapter">Use an empirical protein substitution model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reuse_results.html"
+                        title="next chapter">Reusing results to speed up optimisation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/testing_multi_loci.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reuse_results.html" title="Reusing results to speed up optimisation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="empirical_protein_models.html" title="Use an empirical protein substitution model"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

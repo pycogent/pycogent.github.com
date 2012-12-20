@@ -1,0 +1,175 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Advanced sequence handling &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Cogent Usage Examples" href="index.html" />
+    <link rel="next" title="Complete version of manipulating sequence annotations" href="complete_seq_features.html" />
+    <link rel="prev" title="Translating DNA into protein" href="translate_dna.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="complete_seq_features.html" title="Complete version of manipulating sequence annotations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="translate_dna.html" title="Translating DNA into protein"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="advanced-sequence-handling">
+<span id="seq-annotations"></span><h1>Advanced sequence handling<a class="headerlink" href="#advanced-sequence-handling" title="Permalink to this headline">¶</a></h1>
+<p><em>Section author: Gavin Huttley</em></p>
+<p>Individual sequences and alignments can be manipulated by annotations. Most value in the genome sequences arises from sequence annotations regarding specific sequence feature types, e.g. genes with introns / exons, repeat sequences. These can be applied to an alignment either using data formats available from genome portals (e.g. GFF, or GenBank annotation formats) or by custom assignments.</p>
+<p>Annotations can be added in two ways: using either the <tt class="docutils literal"><span class="pre">addAnnotation</span></tt> or the <tt class="docutils literal"><span class="pre">addFeature</span></tt> method. The distinction between these two is that <tt class="docutils literal"><span class="pre">addFeatures</span></tt> is more specialised. Features can be thought of as a type of annotation representing standard sequence properties eg introns/exons. Annotations are the more general case, such as a computed property which has, say a numerical value and a span.</p>
+<p>For illustrative purposes we define a sequence with 2 exons and grab the 1<sup>st</sup> exon:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&quot;aagaagaagacccccaaaaaaaaaattttttttttaaaaaaaaaaaaa&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">Name</span><span class="o">=</span><span class="s">&quot;Orig&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon1</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;exon1&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon2</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;exon2&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Here, &#8216;<tt class="docutils literal"><span class="pre">exon</span></tt>&#8216; is the feature type, and &#8216;<tt class="docutils literal"><span class="pre">exon#</span></tt>&#8216; the feature name. The feature type is used for the display formatting, which won&#8217;t be illustrated here, and also for selecting all features of the same type, shown below.</p>
+<p>We could also have created an annotation using the <tt class="docutils literal"><span class="pre">addAnnotation</span></tt> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.annotation</span> <span class="kn">import</span> <span class="n">Feature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span><span class="o">=</span><span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&quot;aagaagaagacccccaaaaaaaaaattttttttttaaaaaaaaaaaaa&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">Name</span><span class="o">=</span><span class="s">&quot;Orig2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exon3</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="s">&#39;exon1&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">35</span><span class="p">,</span><span class="mi">40</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>We can use the features (eg <tt class="docutils literal"><span class="pre">exon1</span></tt>) to get the corresponding sequence region.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">exon1</span><span class="p">]</span>
+<span class="go">DnaSequence(CCCCC)</span>
+</pre></div>
+</div>
+<p>You can query annotations by type and optionally by label, receiving a list of features:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exons</span>
+<span class="go">[exon &quot;exon1&quot; at [10:15]/48, exon &quot;exon2&quot; at [30:40]/48]</span>
+</pre></div>
+</div>
+<p>We can use this list to construct a pseudo-feature covering (or excluding) multiple features using <tt class="docutils literal"><span class="pre">getRegionCoveringAll</span></tt>. For instance, getting all exons,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span>
+<span class="go">region &quot;exon&quot; at [10:15, 30:40]/48</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">DnaSequence(CCCCCTT... 15)</span>
+</pre></div>
+</div>
+<p>or not exons (the exon <em>shadow</em>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">getRegionCoveringAll</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span><span class="o">.</span><span class="n">getShadow</span><span class="p">()</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">AAGAAGAAGAAAAAAAAAAATTTTTAAAAAAAA</span>
+</pre></div>
+</div>
+<p>The first of these essentially returns the CDS of the gene.</p>
+<p>Features are themselves sliceable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exon1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="go">DnaSequence(CCC)</span>
+</pre></div>
+</div>
+<p>This approach to sequence / alignment handling allows the user to manipulate them according to things they know about such as genes or repeat elements. Most of this annotation data can be obtained from genome portals.</p>
+<p>The toolkit can perform standard sequence / alignment manipulations such as getting a subset of sequences or aligned columns, translating sequences, reading and writing standard formats.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="translate_dna.html"
+                        title="previous chapter">Translating DNA into protein</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="complete_seq_features.html"
+                        title="next chapter">Complete version of manipulating sequence annotations</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/seq_features.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="complete_seq_features.html" title="Complete version of manipulating sequence annotations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="translate_dna.html" title="Translating DNA into protein"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

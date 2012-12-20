@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting a genetic code &mdash; PyCogent 1.5.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
+    <link rel="next" title="Trees" href="simple_trees.html" />
+    <link rel="prev" title="Annotations" href="annotations.html" />     
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
+<script type="text/javascript" src="../_static/google_feed.js"></script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="simple_trees.html" title="Trees"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="annotations.html" title="Annotations"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-a-genetic-code">
+<h1>Getting a genetic code<a class="headerlink" href="#getting-a-genetic-code" title="Permalink to this headline">¶</a></h1>
+<p>The standard genetic code.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">GeneticCodes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span> <span class="o">=</span> <span class="n">GeneticCodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The vertebrate mt genetic code.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">GeneticCodes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt_gc</span> <span class="o">=</span> <span class="n">GeneticCodes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">mt_gc</span><span class="o">.</span><span class="n">Name</span>
+<span class="go">Vertebrate Mitochondrial</span>
+</pre></div>
+</div>
+<p>To see the key -&gt; genetic code mapping, use a loop.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">GeneticCodes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">key</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">Name</span>
+<span class="go">1 Standard Nuclear</span>
+<span class="go">2 Vertebrate Mitochondrial</span>
+<span class="go">3 Yeast Mitochondrial...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="translate-dna-sequences">
+<h1>Translate DNA sequences<a class="headerlink" href="#translate-dna-sequences" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s">&#39;TTTGCAAAC&#39;</span><span class="p">)</span>
+<span class="go">&#39;FAN&#39;</span>
+</pre></div>
+</div>
+<p>Conversion to a <tt class="docutils literal"><span class="pre">ProteinSequence</span></tt> from a <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> is shown in <a class="reference internal" href="DNA_and_RNA_sequences.html#translation"><em>Translate a DnaSequence to protein</em></a>.</p>
+</div>
+<div class="section" id="translate-all-six-frames">
+<h1>Translate all six frames<a class="headerlink" href="#translate-all-six-frames" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;ATGCTAACATAAA&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">translations</span> <span class="o">=</span> <span class="n">standard_code</span><span class="o">.</span><span class="n">sixframes</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">translations</span>
+<span class="go">[&#39;MLT*&#39;, &#39;C*HK&#39;, &#39;ANI&#39;, &#39;FMLA&#39;, &#39;LC*H&#39;, &#39;YVS&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="find-out-how-many-stops-in-a-frame">
+<h1>Find out how many stops in a frame<a class="headerlink" href="#find-out-how-many-stops-in-a-frame" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;ATGCTAACATAAA&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stops_frame1</span> <span class="o">=</span> <span class="n">standard_code</span><span class="o">.</span><span class="n">getStopIndices</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stops_frame1</span>
+<span class="go">[9]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stop_index</span> <span class="o">=</span> <span class="n">stops_frame1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span><span class="p">[</span><span class="n">stop_index</span><span class="p">:</span><span class="n">stop_index</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">DnaSequence(TAA)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="translate-a-codon">
+<h1>Translate a codon<a class="headerlink" href="#translate-a-codon" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="p">[</span><span class="s">&#39;TTT&#39;</span><span class="p">]</span>
+<span class="go">&#39;F&#39;</span>
+</pre></div>
+</div>
+<p>or get the codons for a single amino acid</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span>
+<span class="go">[&#39;GCT&#39;, &#39;GCC&#39;, &#39;GCA&#39;, &#39;GCG&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="look-up-the-amino-acid-corresponding-to-a-single-codon">
+<h1>Look up the amino acid corresponding to a single codon<a class="headerlink" href="#look-up-the-amino-acid-corresponding-to-a-single-codon" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="p">[</span><span class="s">&#39;TTT&#39;</span><span class="p">]</span>
+<span class="go">&#39;F&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="or-get-all-the-codons-for-one-amino-acid">
+<h1>Or get all the codons for one amino acid<a class="headerlink" href="#or-get-all-the-codons-for-one-amino-acid" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span>
+<span class="go">[&#39;GCT&#39;, &#39;GCC&#39;, &#39;GCA&#39;, &#39;GCG&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-a-group-of-amino-acids">
+<h1>For a group of amino acids<a class="headerlink" href="#for-a-group-of-amino-acids" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;C&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codons</span> <span class="o">=</span> <span class="p">[</span><span class="n">standard_code</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codons</span>
+<span class="go">[[&#39;GCT&#39;, &#39;GCC&#39;, &#39;GCA&#39;, &#39;GCG&#39;], [&#39;TGT&#39;, &#39;TGC&#39;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flat_list</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">codons</span><span class="p">,[])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flat_list</span>
+<span class="go">[&#39;GCT&#39;, &#39;GCC&#39;, &#39;GCA&#39;, &#39;GCG&#39;, &#39;TGT&#39;, &#39;TGC&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="converting-the-codonalphabet-to-codon-series">
+<h1>Converting the <tt class="docutils literal"><span class="pre">CodonAlphabet</span></tt> to codon series<a class="headerlink" href="#converting-the-codonalphabet-to-codon-series" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&quot;AGTACACTGGTT&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">my_seq</span><span class="o">.</span><span class="n">CodonAlphabet</span><span class="p">())</span>
+<span class="go">[&#39;AAA&#39;, &#39;AAC&#39;, &#39;AAG&#39;, &#39;AAT&#39;...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">my_seq</span><span class="o">.</span><span class="n">CodonAlphabet</span><span class="p">())</span>
+<span class="go">61</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="obtaining-the-codons-from-a-dnasequence-object">
+<h1>Obtaining the codons from a <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> object<a class="headerlink" href="#obtaining-the-codons-from-a-dnasequence-object" title="Permalink to this headline">¶</a></h1>
+<p>Use the method <tt class="docutils literal"><span class="pre">getInMotifSize</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span><span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;ATGCACTGGTAA&#39;</span><span class="p">,</span><span class="s">&#39;my_gene&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codons</span> <span class="o">=</span> <span class="n">my_seq</span><span class="o">.</span><span class="n">getInMotifSize</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">codons</span>
+<span class="go">[&#39;ATG&#39;, &#39;CAC&#39;, &#39;TGG&#39;, &#39;TAA&#39;]</span>
+</pre></div>
+</div>
+<p>You can&#8217;t translate a sequence that contains a stop codon.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pep</span> <span class="o">=</span> <span class="n">my_seq</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">AlphabetError</span>: <span class="n">TAA</span>
+</pre></div>
+</div>
+<div class="section" id="remove-the-stop-codon-first">
+<h2>Remove the stop codon first<a class="headerlink" href="#remove-the-stop-codon-first" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span><span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;ATGCACTGGTAA&#39;</span><span class="p">,</span><span class="s">&#39;my_gene&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">my_seq</span><span class="o">.</span><span class="n">withoutTerminalStopCodon</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pep</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pep</span><span class="o">.</span><span class="n">toFasta</span><span class="p">()</span>
+<span class="go">&gt;my_gene</span>
+<span class="go">MHW</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">pep</span><span class="p">)</span>
+<span class="go">&lt;class &#39;cogent.core.sequence.ProteinSequence&#39;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="or-we-can-just-grab-the-correct-slice-from-the-dnasequence-object">
+<h2>Or we can just grab the correct slice from the <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> object<a class="headerlink" href="#or-we-can-just-grab-the-correct-slice-from-the-dnasequence-object" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span><span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;CAAATGTATTAA&#39;</span><span class="p">,</span><span class="s">&#39;my_gene&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pep</span> <span class="o">=</span> <span class="n">my_seq</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">()</span><span class="o">.</span><span class="n">toFasta</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pep</span>
+<span class="go">&gt;my_gene</span>
+<span class="go">QMY</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="news">
+<table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
+</tr></table></div>
+
+    
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting a genetic code</a></li>
+<li><a class="reference internal" href="#translate-dna-sequences">Translate DNA sequences</a></li>
+<li><a class="reference internal" href="#translate-all-six-frames">Translate all six frames</a></li>
+<li><a class="reference internal" href="#find-out-how-many-stops-in-a-frame">Find out how many stops in a frame</a></li>
+<li><a class="reference internal" href="#translate-a-codon">Translate a codon</a></li>
+<li><a class="reference internal" href="#look-up-the-amino-acid-corresponding-to-a-single-codon">Look up the amino acid corresponding to a single codon</a></li>
+<li><a class="reference internal" href="#or-get-all-the-codons-for-one-amino-acid">Or get all the codons for one amino acid</a></li>
+<li><a class="reference internal" href="#for-a-group-of-amino-acids">For a group of amino acids</a></li>
+<li><a class="reference internal" href="#converting-the-codonalphabet-to-codon-series">Converting the <tt class="docutils literal"><span class="pre">CodonAlphabet</span></tt> to codon series</a></li>
+<li><a class="reference internal" href="#obtaining-the-codons-from-a-dnasequence-object">Obtaining the codons from a <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> object</a><ul>
+<li><a class="reference internal" href="#remove-the-stop-codon-first">Remove the stop codon first</a></li>
+<li><a class="reference internal" href="#or-we-can-just-grab-the-correct-slice-from-the-dnasequence-object">Or we can just grab the correct slice from the <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> object</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="annotations.html"
+                        title="previous chapter">Annotations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simple_trees.html"
+                        title="next chapter">Trees</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/genetic_code.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="simple_trees.html" title="Trees"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="annotations.html" title="Annotations"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
+          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, PyCogent Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
