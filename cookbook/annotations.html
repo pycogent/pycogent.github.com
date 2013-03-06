@@ -78,6 +78,30 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="customising-annotation-construction-from-reading-a-genbank-file">
+<h2>Customising annotation construction from reading a genbank file<a class="headerlink" href="#customising-annotation-construction-from-reading-a-genbank-file" title="Permalink to this headline">¶</a></h2>
+<p>You can write your own code to construct annotation objects. One reason you might do this is some genbank files do not have a <tt class="docutils literal"><span class="pre">/gene</span></tt> tag on gene related features, instead only possessing a <tt class="docutils literal"><span class="pre">/locus_tag</span></tt>. For illustrating the approach we only create annotations for <tt class="docutils literal"><span class="pre">CDS</span></tt> features. We write a custom callback function that uses the <tt class="docutils literal"><span class="pre">locus_tag</span></tt> as the <tt class="docutils literal"><span class="pre">Feature</span></tt> name.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.annotation</span> <span class="kn">import</span> <span class="n">Feature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add_annotation</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">spans</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">type_</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">type_</span> <span class="o">!=</span> <span class="s">&#39;CDS&#39;</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span>
+<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;locus_tag&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">seq</span><span class="o">.</span><span class="n">addAnnotation</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">spans</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">RichGenbankParser</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/ST_genome_part.gb&#39;</span><span class="p">),</span>
+<span class="gp">... </span>         <span class="n">add_annotation</span><span class="o">=</span><span class="n">add_annotation</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">accession</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">parser</span><span class="p">:</span> <span class="c"># just reading one accession,sequence</span>
+<span class="gp">... </span>    <span class="k">break</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s">&#39;CDS&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">genes</span>
+<span class="go">[CDS &quot;STM0001&quot; at [189:255]/10020, CDS &quot;STM0002&quot; at [336:2799]/10020...</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="creating-directly-on-a-sequence">
 <h2>Creating directly on a sequence<a class="headerlink" href="#creating-directly-on-a-sequence" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span>
@@ -615,6 +639,7 @@
 <li><a class="reference internal" href="#">Annotations</a></li>
 <li><a class="reference internal" href="#annotations-with-coordinates">Annotations with coordinates</a><ul>
 <li><a class="reference internal" href="#automated-introduction-from-reading-genbank-files">Automated introduction from reading genbank files</a></li>
+<li><a class="reference internal" href="#customising-annotation-construction-from-reading-a-genbank-file">Customising annotation construction from reading a genbank file</a></li>
 <li><a class="reference internal" href="#creating-directly-on-a-sequence">Creating directly on a sequence</a></li>
 <li><a class="reference internal" href="#via">Via</a><ul>
 <li><a class="reference internal" href="#addannotation"><tt class="docutils literal"><span class="pre">addAnnotation</span></tt></a></li>
