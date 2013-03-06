@@ -160,7 +160,7 @@
 </pre></div>
 </div>
 <p>We then obtain an alignment of the DNA sequences from the alignment of their translation.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_DNA</span> <span class="o">=</span> <span class="n">aligned_aa</span><span class="o">.</span><span class="n">replaceSeqs</span><span class="p">(</span><span class="n">unaligned_DNA</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aligned_DNA</span> <span class="o">=</span> <span class="n">aligned_aa</span><span class="o">.</span><span class="n">replaceSeqs</span><span class="p">(</span><span class="n">unaligned_DNA</span><span class="p">,</span> <span class="n">aa_to_codons</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">aligned_DNA</span>
 <span class="go">&gt;hum</span>
 <span class="go">AAGCAGATCCAGGAAAGCAGCGAGAATGGCAGCCTGGCCGCGCGCCAGGAGAGGCAGGCCCAGGTCAACCTCACT</span>
@@ -170,6 +170,7 @@
 <span class="go">CTGAACAAGCAG------------------CCACTTTCA---------------------------AACAAGAAA</span>
 </pre></div>
 </div>
+<p>Setting the argument <tt class="docutils literal"><span class="pre">aa_to_codons=False</span></tt> is only useful when the sequences have exactly the length. One use case is to allow introducing the gaps onto another copy of the alignment where there are annotations.</p>
 </div>
 </div>
 
