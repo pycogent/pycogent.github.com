@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Make a neighbor joining tree &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Make a neighbor joining tree &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Make a UPGMA cluster" href="calculate_UPGMA_cluster.html" />
     <link rel="prev" title="Calculate pairwise distances between sequences" href="calculate_pairwise_distances.html" />     
@@ -33,56 +31,57 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="calculate_UPGMA_cluster.html" title="Make a UPGMA cluster"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="calculate_pairwise_distances.html" title="Calculate pairwise distances between sequences"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="calculate_UPGMA_cluster.html" title="Make a UPGMA cluster"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="make-a-neighbor-joining-tree">
 <h1>Make a neighbor joining tree<a class="headerlink" href="#make-a-neighbor-joining-tree" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Gavin Huttley</em></p>
 <p>An example of how to calculate the pairwise distances for a set of sequences.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.phylo</span> <span class="kn">import</span> <span class="n">distance</span><span class="p">,</span> <span class="n">nj</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.phylo</span> <span class="k">import</span> <span class="n">distance</span><span class="p">,</span> <span class="n">nj</span>
 </pre></div>
 </div>
 <p>Import a substitution model (or create your own)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="k">import</span> <span class="n">HKY85</span>
 </pre></div>
 </div>
 <p>Load the alignment.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s2">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Create a pairwise distances object calculator for the alignment, providing a substitution model instance.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">EstimateDistances</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">submodel</span><span class="o">=</span> <span class="n">HKY85</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">EstimateDistances</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">submodel</span><span class="o">=</span> <span class="n">HKY85</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Now use this matrix to build a neighbour joining tree.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mytree</span> <span class="o">=</span> <span class="n">nj</span><span class="o">.</span><span class="n">nj</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">getPairwiseDistances</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mytree</span> <span class="o">=</span> <span class="n">nj</span><span class="o">.</span><span class="n">nj</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">getPairwiseDistances</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>We can visualise this tree by <tt class="docutils literal"><span class="pre">print</span> <span class="pre">mytree.asciiArt()</span></tt>, which generates the equivalent of:</p>
-<div class="highlight-python"><div class="highlight"><pre>                    <span class="o">/-</span><span class="n">Human</span>
+<p>We can visualise this tree by <code class="docutils literal"><span class="pre">print</span> <span class="pre">mytree.asciiArt()</span></code>, which generates the equivalent of:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>                    <span class="o">/-</span><span class="n">Human</span>
           <span class="o">/</span><span class="n">edge</span><span class="o">.</span><span class="mi">0</span><span class="o">--|</span>
          <span class="o">|</span>          \<span class="o">-</span><span class="n">HowlerMon</span>
          <span class="o">|</span>
@@ -94,7 +93,7 @@
 </pre></div>
 </div>
 <p>We can save this tree to file.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mytree</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s">&#39;test_nj.tree&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mytree</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">(</span><span class="s1">&#39;test_nj.tree&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -103,62 +102,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
+</ul>
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="calculate_pairwise_distances.html"
-                        title="previous chapter">Calculate pairwise distances between sequences</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="calculate_UPGMA_cluster.html"
-                        title="next chapter">Make a UPGMA cluster</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/calculate_neigbourjoining_tree.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="calculate_UPGMA_cluster.html" title="Make a UPGMA cluster"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="calculate_pairwise_distances.html" title="Calculate pairwise distances between sequences"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="calculate_pairwise_distances.html" title="Calculate pairwise distances between sequences"
+              >previous</a> |
+            <a href="calculate_UPGMA_cluster.html" title="Make a UPGMA cluster"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/calculate_neigbourjoining_tree.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

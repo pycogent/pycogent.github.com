@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyCogent Cookbook &mdash; PyCogent 1.5.3 documentation</title>
+    <title>PyCogent Cookbook &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,34 +23,36 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="next" title="Introduction" href="introduction.html" />
     <link rel="prev" title="Making a phylogenetic tree from a protein sequence alignment" href="../examples/maketree_from_proteinseqs.html" />     
 <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="introduction.html" title="Introduction"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="../examples/maketree_from_proteinseqs.html" title="Making a phylogenetic tree from a protein sequence alignment"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="introduction.html" title="Introduction"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pycogent-cookbook">
 <h1>PyCogent Cookbook<a class="headerlink" href="#pycogent-cookbook" title="Permalink to this headline">¶</a></h1>
@@ -71,14 +71,13 @@
 <li class="toctree-l1"><a class="reference internal" href="manipulating_biological_data.html">Manipulating biological data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="manipulating_biological_data.html#sequences">Sequences</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="loading_sequences.html">Loading nucleotide, protein sequences</a></li>
-<li class="toctree-l3"><a class="reference internal" href="moltypesequence.html">Using the <tt class="docutils literal"><span class="pre">MolType</span></tt> and <tt class="docutils literal"><span class="pre">Sequence</span></tt> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moltypesequence.html">Using the <code class="docutils literal"><span class="pre">MolType</span></code> and <code class="docutils literal"><span class="pre">Sequence</span></code> objects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="alphabet.html">Alphabets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="DNA_and_RNA_sequences.html">DNA and RNA sequences</a></li>
 <li class="toctree-l3"><a class="reference internal" href="protein_sequences.html">Protein sequences</a></li>
 <li class="toctree-l3"><a class="reference internal" href="alignments.html">Collections and Alignments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="annotations.html">Annotations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="annotations.html#annotations-with-coordinates">Annotations with coordinates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="annotations.html#generic-metadata">Generic metadata</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="manipulating_biological_data.html#genetic-code">Genetic code</a><ul>
@@ -90,14 +89,13 @@
 <li class="toctree-l3"><a class="reference internal" href="genetic_code.html#look-up-the-amino-acid-corresponding-to-a-single-codon">Look up the amino acid corresponding to a single codon</a></li>
 <li class="toctree-l3"><a class="reference internal" href="genetic_code.html#or-get-all-the-codons-for-one-amino-acid">Or get all the codons for one amino acid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="genetic_code.html#for-a-group-of-amino-acids">For a group of amino acids</a></li>
-<li class="toctree-l3"><a class="reference internal" href="genetic_code.html#converting-the-codonalphabet-to-codon-series">Converting the <tt class="docutils literal"><span class="pre">CodonAlphabet</span></tt> to codon series</a></li>
-<li class="toctree-l3"><a class="reference internal" href="genetic_code.html#obtaining-the-codons-from-a-dnasequence-object">Obtaining the codons from a <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="genetic_code.html#converting-the-codonalphabet-to-codon-series">Converting the <code class="docutils literal"><span class="pre">CodonAlphabet</span></code> to codon series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="genetic_code.html#obtaining-the-codons-from-a-dnasequence-object">Obtaining the codons from a <code class="docutils literal"><span class="pre">DnaSequence</span></code> object</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="manipulating_biological_data.html#trees">Trees</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="simple_trees.html">Trees</a></li>
 <li class="toctree-l3"><a class="reference internal" href="phylonodes.html">Phylonodes Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="managing_trees.html">Managing Trees</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="manipulating_biological_data.html#tables">Tables</a><ul>
@@ -118,13 +116,6 @@
 <li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#for-sequences">For sequences</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="accessing_databases.html#kegg">KEGG</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#complete-genomes">Complete genomes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#orthologs">Orthologs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#functional-assignments">Functional assignments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#pathway-assignments">Pathway assignments</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="accessing_databases.html#ensembl">Ensembl</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#connecting">Connecting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#species-to-be-queried">Species to be queried</a></li>
@@ -138,14 +129,6 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="accessing_databases.html#pdb">PDB</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#for-structures">For structures</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="accessing_databases.html#rfam">Rfam</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#for-rna-secondary-structures-alignments-functions">For RNA secondary structures, alignments, functions</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="accessing_databases.html#goldenpath-not-yet-implemented">GoldenPath (not yet implemented)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="accessing_databases.html#whole-genome-alignments-orthologs-annotation-tracks">Whole-genome alignments, orthologs, annotation tracks</a></li>
 </ul>
 </li>
 </ul>
@@ -163,40 +146,20 @@
 <li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#non-overlapping-dinucleotide-content">Non-overlapping Dinucleotide Content</a></li>
 <li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#id1">&#8216;3-1&#8217; Dinucleotide Content</a></li>
 <li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#comparing-dinucleotide-usages">Comparing dinucleotide usages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#k-words">k-words</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="analysis_of_sequence_composition.html#codon-usage-analyses">Codon usage analyses</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#relative-synonymous-codon-usage">Relative Synonymous Codon Usage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#pr2-bias">PR2 bias</a></li>
-<li class="toctree-l3"><a class="reference internal" href="analysis_of_sequence_composition.html#fingerprint-analysis">Fingerprint analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="analysis_of_sequence_composition.html#amino-acid-usage">Amino Acid Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="analysis_of_sequence_composition.html#profiles">Profiles</a></li>
-<li class="toctree-l2"><a class="reference internal" href="analysis_of_sequence_composition.html#visualisation">Visualisation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sequence_similarity_search.html">Sequence similarity search</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sequence_similarity_search.html#exact-pattern">Exact pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sequence_similarity_search.html#weight-matrix">Weight matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sequence_similarity_search.html#blast">BLAST</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sequence_similarity_search.html#hmmer">hmmer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sequence_similarity_search.html#infernal">infernal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sequence_similarity_search.html#orthologs-vs-paralogs">Orthologs vs paralogs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="controlling_third_party_applications.html">Controlling third party applications</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="controlling_third_party_applications.html#existing-supported-apps">Existing supported apps</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="controlling_third_party_applications.html#alignment-apps">Alignment apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="controlling_third_party_applications.html#blast">BLAST</a></li>
-<li class="toctree-l3"><a class="reference internal" href="controlling_third_party_applications.html#phylo-apps">Phylo apps</a></li>
-<li class="toctree-l3"><a class="reference internal" href="controlling_third_party_applications.html#rna-structure-apps">RNA structure apps</a></li>
-<li class="toctree-l3"><a class="reference internal" href="controlling_third_party_applications.html#visualisation">Visualisation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="controlling_third_party_applications.html#adding-new-apps">Adding new apps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="controlling_third_party_applications.html#pipelining-3rd-party-apps">Pipelining 3rd party apps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="blast.html">Controlling BLAST</a><ul>
@@ -285,11 +248,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sequence_simulation.html">Sequence simulation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sequence_simulation.html#by-ml">By ML</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sequence_simulation.html#by-seqsim">By Seqsim</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="standard_statistical_analyses.html">Standard statistical analyses</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#random-numbers">Random Numbers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#summary-statistics">Summary statistics</a><ul>
@@ -310,16 +268,13 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#permutations">Permutations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="standard_statistical_analyses.html#random">Random</a></li>
-<li class="toctree-l3"><a class="reference internal" href="standard_statistical_analyses.html#ordered">Ordered</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#differences-in-means">Differences in means</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#t-tests">t-Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#sign-test">Sign test</a></li>
-<li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#differences-in-proportions">Differences in proportions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#association">Association</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#correlation">Correlation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#differences-in-variances">Differences in variances</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#chi-squared-test">Chi-Squared test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#scatterplots">Scatterplots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="standard_statistical_analyses.html#histograms">Histograms</a></li>
@@ -336,9 +291,6 @@
 <li class="toctree-l1"><a class="reference internal" href="community_analysis.html">Community analysis</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="community_analysis.html#alpha-diversity">alpha diversity</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="community_analysis.html#phylogenetic-diversity-pd">Phylogenetic Diversity (PD)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="community_analysis.html#rarefaction">Rarefaction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="community_analysis.html#parametric-methods">Parametric methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="community_analysis.html#nonparametric-methods">Nonparametric methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="community_analysis.html#beta-diversity">beta diversity</a><ul>
@@ -351,7 +303,6 @@
 <li class="toctree-l3"><a class="reference internal" href="community_analysis.html#taxon-based">Taxon-based</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="community_analysis.html#taxonomy">Taxonomy</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dealing_with_hts_data.html">Dealing with HTS data</a><ul>
@@ -363,18 +314,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hpc_environments.html">HPC environments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="parallel_tasks_with_mpi.html">Distribution of tasks across multiple CPUs using <tt class="docutils literal"><span class="pre">mpi</span></tt></a></li>
-<li class="toctree-l2"><a class="reference internal" href="parallel_tasks_with_multiprocess.html">Distribution of tasks across multiple CPUs using <tt class="docutils literal"><span class="pre">multiprocess</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_tasks_with_mpi.html">Distribution of tasks across multiple CPUs using <code class="docutils literal"><span class="pre">mpi</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_tasks_with_multiprocess.html">Distribution of tasks across multiple CPUs using <code class="docutils literal"><span class="pre">multiprocess</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpointing_long_running.html">Checkpointing optimisation runs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpointing_long_running.html#checkpointing-phylogenetic-optimisation-runs">Checkpointing phylogenetic optimisation runs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="useful_utilities.html">Useful Utilities</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="useful_utilities.html#using-pycogent-s-optimisers-for-your-own-functions">Using PyCogent&#8217;s optimisers for your own functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="useful_utilities.html#fitting-a-function-to-a-giving-set-of-x-and-y-values">Fitting a function to a giving set of x and y values</a></li>
-<li class="toctree-l2"><a class="reference internal" href="useful_utilities.html#cartesian-products">Cartesian products</a></li>
-<li class="toctree-l2"><a class="reference internal" href="useful_utilities.html#miscellaneous-functions">Miscellaneous functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#index-0">Identity testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="useful_utilities.html#fitting-a-function-to-a-giving-set-of-x-and-y-values">Fitting a function to a giving set of x and y values</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#identity-testing">Identity testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#one-line-if-else-statement">One-line if/else statement</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#force-a-variable-to-be-iterable">Force a variable to be iterable</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#obtain-the-index-of-the-largest-item">Obtain the index of the largest item</a></li>
@@ -389,7 +338,7 @@
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#test-to-see-if-an-object-is-iterable">Test to see if an object is iterable</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#test-to-see-if-an-object-is-a-single-char">Test to see if an object is a single char</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#flatten-a-deeply-nested-iterable">Flatten a deeply nested iterable</a></li>
-<li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#test-to-determine-if-list-of-tuple">Test to determine if <tt class="docutils literal"><span class="pre">list</span></tt> of <tt class="docutils literal"><span class="pre">tuple</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#test-to-determine-if-list-of-tuple">Test to determine if <code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuple</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#unflatten-items-to-row-width">Unflatten items to row-width</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#unzip-items">Unzip items</a></li>
 <li class="toctree-l3"><a class="reference internal" href="useful_utilities.html#select-items-in-order">Select items in order</a></li>
@@ -415,13 +364,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="code_development.html">Code development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code_development.html#testing-code">Testing code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="code_development.html#tests-for-stochastic-functions">Tests for stochastic functions</a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </div>
 </div>
@@ -430,61 +372,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
+</ul>
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../examples/maketree_from_proteinseqs.html"
-                        title="previous chapter">Making a phylogenetic tree from a protein sequence alignment</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="introduction.html"
-                        title="next chapter">Introduction</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="introduction.html" title="Introduction"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../examples/maketree_from_proteinseqs.html" title="Making a phylogenetic tree from a protein sequence alignment"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../examples/maketree_from_proteinseqs.html" title="Making a phylogenetic tree from a protein sequence alignment"
+              >previous</a> |
+            <a href="introduction.html" title="Introduction"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/cookbook/index.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

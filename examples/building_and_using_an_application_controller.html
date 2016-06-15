@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Building and using a new application controller &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Building and using a new application controller &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Using alignment application controllers to align unaligned sequences" href="alignment_app_controllers.html" />
     <link rel="prev" title="Application Controller Documentation" href="application_controller_framework.html" />     
@@ -33,178 +31,173 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="alignment_app_controllers.html" title="Using alignment application controllers to align unaligned sequences"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="application_controller_framework.html" title="Application Controller Documentation"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="alignment_app_controllers.html" title="Using alignment application controllers to align unaligned sequences"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="building-and-using-a-new-application-controller">
-<h1>Building and using a new application controller<a class="headerlink" href="#building-and-using-a-new-application-controller" title="Permalink to this headline">¶</a></h1>
+<span id="new-app-controller"></span><h1>Building and using a new application controller<a class="headerlink" href="#building-and-using-a-new-application-controller" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Greg Caporaso</em></p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>This document provides an example for defining and using a new application controller <a class="footnote-reference" href="#attribution" id="id1">[1]</a>. We&#8217;ll look at wrapping the <tt class="docutils literal"><span class="pre">formatdb</span></tt> application from the BLAST 2.2.20 package <a class="reference external" href="http://www.ncbi.nlm.nih.gov/BLAST/download.shtml">available from NCBI</a>. (Note this is what NCBI now refers to as <em>legacy BLAST</em>, not BLAST+.)</p>
-<p>This document was developed in the process of writing the full <tt class="docutils literal"><span class="pre">formatdb</span></tt> application controller in PyCogent. You can find that file in your PyCogent directory at: <tt class="docutils literal"><span class="pre">cogent/app/formatdb.py</span></tt>. After you work through this example, you should refer to that file to see what the full application controller and convenience wrappers look like.</p>
-<p>A more complete reference on <a class="reference external" href="./application_controller_framework.html">PyCogent Application Controllers can be found here</a>.</p>
+<p>This document provides an example for defining and using a new application controller. We&#8217;ll look at wrapping the <code class="docutils literal"><span class="pre">formatdb</span></code> application from the BLAST 2.2.20 package <a class="reference external" href="http://www.ncbi.nlm.nih.gov/BLAST/download.shtml">available from NCBI</a>. (Note this is what NCBI now refers to as <em>legacy BLAST</em>, not BLAST+.)</p>
+<p>This document was developed in the process of writing the full <code class="docutils literal"><span class="pre">formatdb</span></code> application controller in PyCogent. You can find that file in your PyCogent directory at: <code class="docutils literal"><span class="pre">cogent/app/formatdb.py</span></code>. After you work through this example, you should refer to that file to see what the full application controller and convenience wrappers look like.</p>
+<p>A more complete reference on <cite>PyCogent Application Controllers can be found in :ref:`app-controllers</cite>.</p>
 </div>
 <div class="section" id="building-a-formatdb-application-controller">
 <h2>Building a formatdb application controller<a class="headerlink" href="#building-a-formatdb-application-controller" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="step-0-decide-which-application-you-want-to-support-and-which-version">
 <h3>Step 0. Decide which application you want to support, and which version.<a class="headerlink" href="#step-0-decide-which-application-you-want-to-support-and-which-version" title="Permalink to this headline">¶</a></h3>
 <p>Decide what version of the program you want to support and install the application. Check out the features, and decide what functionality you want to support:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">formatdb</span> <span class="o">--</span><span class="n">help</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">formatdb</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>For the sake of brevity in this example, we&#8217;ll support only the basic functionality: creating nucleic acid or protein blast databases in the default format, and with default names (i.e., named based on the names of the input file).</p>
-<p>So, we&#8217;ll support the <tt class="docutils literal"><span class="pre">-i</span></tt>, <tt class="docutils literal"><span class="pre">-o</span></tt>, and <tt class="docutils literal"><span class="pre">-p</span></tt> parameters.</p>
+<p>So, we&#8217;ll support the <code class="docutils literal"><span class="pre">-i</span></code>, <code class="docutils literal"><span class="pre">-o</span></code>, and <code class="docutils literal"><span class="pre">-p</span></code> parameters.</p>
 </div>
 <div class="section" id="step-1-define-the-class-and-the-class-variables">
 <h3>Step 1. Define the class and the class variables.<a class="headerlink" href="#step-1-define-the-class-and-the-class-variables" title="Permalink to this headline">¶</a></h3>
-<p>First, create a new file called <tt class="docutils literal"><span class="pre">minimal_formatdb.py</span></tt>. Open this in a text editor, and add the following header lines:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<p>First, create a new file called <code class="docutils literal"><span class="pre">minimal_formatdb.py</span></code>. Open this in a text editor, and add the following header lines:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 
-<span class="kn">from</span> <span class="nn">cogent.app.util</span> <span class="kn">import</span> <span class="n">CommandLineApplication</span><span class="p">,</span> <span class="n">ResultPath</span>
-<span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="kn">import</span> <span class="n">ValuedParameter</span>
+<span class="kn">from</span> <span class="nn">cogent.app.util</span> <span class="k">import</span> <span class="n">CommandLineApplication</span><span class="p">,</span> <span class="n">ResultPath</span>
+<span class="kn">from</span> <span class="nn">cogent.app.parameters</span> <span class="k">import</span> <span class="n">ValuedParameter</span>
 </pre></div>
 </div>
-<p>This imports some classes that we&#8217;ll be using from PyCogent. For this to function correctly, <tt class="docutils literal"><span class="pre">cogent</span></tt> must be in your <tt class="docutils literal"><span class="pre">$PYTHONPATH</span></tt>. Next define your class, <tt class="docutils literal"><span class="pre">MinimalFormatDb</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MinimalFormatDb</span><span class="p">(</span><span class="n">CommandLineApplication</span><span class="p">):</span>
+<p>This imports some classes that we&#8217;ll be using from PyCogent. For this to function correctly, <code class="docutils literal"><span class="pre">cogent</span></code> must be in your <code class="docutils literal"><span class="pre">$PYTHONPATH</span></code>. Next define your class, <code class="docutils literal"><span class="pre">MinimalFormatDb</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MinimalFormatDb</span><span class="p">(</span><span class="n">CommandLineApplication</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Example APPC for the formatdb program in the blast package &quot;&quot;&quot;</span>
 </pre></div>
 </div>
-<p>Note that you&#8217;re defining this class to inherit from <tt class="docutils literal"><span class="pre">CommandLineApplication</span></tt>. This is where most of the heavy lifting is done.</p>
+<p>Note that you&#8217;re defining this class to inherit from <code class="docutils literal"><span class="pre">CommandLineApplication</span></code>. This is where most of the heavy lifting is done.</p>
 <p>We&#8217;ll next want to define the following class variables:</p>
 <blockquote>
 <div><ul class="simple">
-<li><tt class="docutils literal"><span class="pre">_command</span></tt>: the command called to start the application</li>
-<li><tt class="docutils literal"><span class="pre">_parameters</span></tt>: the parameters to be passed (we&#8217;ll select a few that we&#8217;re going to support)</li>
-<li><tt class="docutils literal"><span class="pre">_input_handler</span></tt>: function describing how to convert a single parameter passed to the app controller object into input for the function</li>
-<li><tt class="docutils literal"><span class="pre">_suppress_stdout</span></tt>: (if other than False)</li>
-<li><tt class="docutils literal"><span class="pre">_suppress_stderr</span></tt>: (if other than False)</li>
+<li><code class="docutils literal"><span class="pre">_command</span></code>: the command called to start the application</li>
+<li><code class="docutils literal"><span class="pre">_parameters</span></code>: the parameters to be passed (we&#8217;ll select a few that we&#8217;re going to support)</li>
+<li><code class="docutils literal"><span class="pre">_input_handler</span></code>: function describing how to convert a single parameter passed to the app controller object into input for the function</li>
+<li><code class="docutils literal"><span class="pre">_suppress_stdout</span></code>: (if other than False)</li>
+<li><code class="docutils literal"><span class="pre">_suppress_stderr</span></code>: (if other than False)</li>
 </ul>
 </div></blockquote>
 <p>This is done by adding the following lines:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">_command</span> <span class="o">=</span> <span class="s">&quot;formatdb&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">_command</span> <span class="o">=</span> <span class="s2">&quot;formatdb&quot;</span>
 <span class="n">_parameters</span> <span class="o">=</span> <span class="p">{</span>\
-    <span class="s">&#39;-i&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="n">IsPath</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
-    <span class="s">&#39;-o&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">),</span>
-    <span class="s">&#39;-p&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s">&#39;F&#39;</span><span class="p">)</span>
+    <span class="s1">&#39;-i&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">IsPath</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s1">&#39;-o&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s1">&#39;T&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;-p&#39;</span><span class="p">:</span><span class="n">ValuedParameter</span><span class="p">(</span><span class="n">Prefix</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">Name</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="n">Delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
 <span class="p">}</span>
-<span class="n">_input_handler</span> <span class="o">=</span> <span class="s">&quot;_input_as_parameter&quot;</span>
+<span class="n">_input_handler</span> <span class="o">=</span> <span class="s2">&quot;_input_as_parameter&quot;</span>
 </pre></div>
 </div>
-<p>You&#8217;ll see here that we&#8217;re only defining the <tt class="docutils literal"><span class="pre">-i</span></tt>, <tt class="docutils literal"><span class="pre">-o</span></tt>, and <tt class="docutils literal"><span class="pre">-p</span></tt> parameters, hence the name of this call being <tt class="docutils literal"><span class="pre">MinimalFormatDb</span></tt>. An important variable to note here is <tt class="docutils literal"><span class="pre">_input_handler</span></tt>. We&#8217;ll come back to that next.</p>
-<p>An addition thing to note here is that I&#8217;m setting Value for <tt class="docutils literal"><span class="pre">-p</span></tt> to <tt class="docutils literal"><span class="pre">F</span></tt> instead of the default of <tt class="docutils literal"><span class="pre">T</span></tt>. This is because I usually build nucleotide databases (specified by <tt class="docutils literal"><span class="pre">-p</span> <span class="pre">F</span></tt>), not protein databases (which is the default, and specified by <tt class="docutils literal"><span class="pre">-p</span> <span class="pre">T</span></tt>).</p>
+<p>You&#8217;ll see here that we&#8217;re only defining the <code class="docutils literal"><span class="pre">-i</span></code>, <code class="docutils literal"><span class="pre">-o</span></code>, and <code class="docutils literal"><span class="pre">-p</span></code> parameters, hence the name of this call being <code class="docutils literal"><span class="pre">MinimalFormatDb</span></code>. An important variable to note here is <code class="docutils literal"><span class="pre">_input_handler</span></code>. We&#8217;ll come back to that next.</p>
+<p>An addition thing to note here is that I&#8217;m setting Value for <code class="docutils literal"><span class="pre">-p</span></code> to <code class="docutils literal"><span class="pre">F</span></code> instead of the default of <code class="docutils literal"><span class="pre">T</span></code>. This is because I usually build nucleotide databases (specified by <code class="docutils literal"><span class="pre">-p</span> <span class="pre">F</span></code>), not protein databases (which is the default, and specified by <code class="docutils literal"><span class="pre">-p</span> <span class="pre">T</span></code>).</p>
 </div>
 <div class="section" id="step-2-overwrite-methods-as-necessary">
 <h3>Step 2. Overwrite methods as necessary.<a class="headerlink" href="#step-2-overwrite-methods-as-necessary" title="Permalink to this headline">¶</a></h3>
-<p>We&#8217;ll next create a non-default input handler. The input handler takes the input that you&#8217;ll eventually provide when calling an instance of <tt class="docutils literal"><span class="pre">MinimalFormatDb</span></tt>, and prepares it be passed to the actual command line application that you&#8217;re calling. <tt class="docutils literal"><span class="pre">formatdb</span></tt> requires that you pass a fasta files via the <tt class="docutils literal"><span class="pre">-i</span></tt> parameters, so we&#8217;ll define a new function <tt class="docutils literal"><span class="pre">_input_as_parameter</span></tt>, here:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_input_as_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+<p>We&#8217;ll next create a non-default input handler. The input handler takes the input that you&#8217;ll eventually provide when calling an instance of <code class="docutils literal"><span class="pre">MinimalFormatDb</span></code>, and prepares it be passed to the actual command line application that you&#8217;re calling. <code class="docutils literal"><span class="pre">formatdb</span></code> requires that you pass a fasta files via the <code class="docutils literal"><span class="pre">-i</span></code> parameters, so we&#8217;ll define a new function <code class="docutils literal"><span class="pre">_input_as_parameter</span></code>, here:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_input_as_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Set -i to data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-i&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s">&#39;&#39;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s1">&#39;-i&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
-<p>Input handlers return a string that gets appended to the command, but turning parameters on also caused them to be added to the command. For that reason, this input handler returns an empty string &#8211; otherwise <tt class="docutils literal"><span class="pre">-i</span></tt> would end up being passed twice to <tt class="docutils literal"><span class="pre">formatdb</span></tt>.</p>
-<p>Finally, we&#8217;ll define the <tt class="docutils literal"><span class="pre">_get_result_paths</span></tt>, which is the function that tells the application controller what files it should expect to be written, and under what circumstances. Our <tt class="docutils literal"><span class="pre">MinimalFormatDb</span></tt> application controller writes a log file under all circumstances, and nucleotide databases when <tt class="docutils literal"><span class="pre">-p</span></tt> is set to <tt class="docutils literal"><span class="pre">F</span></tt> or protein databases when <tt class="docutils literal"><span class="pre">-p</span></tt> is set to <tt class="docutils literal"><span class="pre">T</span></tt>. We return the resulting files as a dict of ResultPath objects:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_get_result_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+<p>Input handlers return a string that gets appended to the command, but turning parameters on also caused them to be added to the command. For that reason, this input handler returns an empty string &#8211; otherwise <code class="docutils literal"><span class="pre">-i</span></code> would end up being passed twice to <code class="docutils literal"><span class="pre">formatdb</span></code>.</p>
+<p>Finally, we&#8217;ll define the <code class="docutils literal"><span class="pre">_get_result_paths</span></code>, which is the function that tells the application controller what files it should expect to be written, and under what circumstances. Our <code class="docutils literal"><span class="pre">MinimalFormatDb</span></code> application controller writes a log file under all circumstances, and nucleotide databases when <code class="docutils literal"><span class="pre">-p</span></code> is set to <code class="docutils literal"><span class="pre">F</span></code> or protein databases when <code class="docutils literal"><span class="pre">-p</span></code> is set to <code class="docutils literal"><span class="pre">T</span></code>. We return the resulting files as a dict of ResultPath objects:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_result_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="n">result</span><span class="p">[</span><span class="s">&#39;log&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ResultPath</span><span class="p">(</span>\
-     <span class="n">Path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WorkingDir</span><span class="o">+</span><span class="s">&#39;formatdb.log&#39;</span><span class="p">,</span><span class="n">IsWritten</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;log&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ResultPath</span><span class="p">(</span>\
+     <span class="n">Path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WorkingDir</span><span class="o">+</span><span class="s1">&#39;formatdb.log&#39;</span><span class="p">,</span><span class="n">IsWritten</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Value</span> <span class="o">==</span> <span class="s">&#39;F&#39;</span><span class="p">:</span>
-        <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;nhr&#39;</span><span class="p">,</span><span class="s">&#39;nin&#39;</span><span class="p">,</span><span class="s">&#39;nsi&#39;</span><span class="p">,</span><span class="s">&#39;nsq&#39;</span><span class="p">,</span><span class="s">&#39;nsd&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s1">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Value</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+        <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nhr&#39;</span><span class="p">,</span><span class="s1">&#39;nin&#39;</span><span class="p">,</span><span class="s1">&#39;nsi&#39;</span><span class="p">,</span><span class="s1">&#39;nsq&#39;</span><span class="p">,</span><span class="s1">&#39;nsd&#39;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;phr&#39;</span><span class="p">,</span><span class="s">&#39;pin&#39;</span><span class="p">,</span><span class="s">&#39;psi&#39;</span><span class="p">,</span><span class="s">&#39;psq&#39;</span><span class="p">,</span><span class="s">&#39;psd&#39;</span><span class="p">]</span>
+        <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;phr&#39;</span><span class="p">,</span><span class="s1">&#39;pin&#39;</span><span class="p">,</span><span class="s1">&#39;psi&#39;</span><span class="p">,</span><span class="s1">&#39;psq&#39;</span><span class="p">,</span><span class="s1">&#39;psd&#39;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
         <span class="n">result</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">ResultPath</span><span class="p">(</span>\
-         <span class="n">Path</span><span class="o">=</span><span class="n">data</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">extension</span><span class="p">,</span>\
-         <span class="n">IsWritten</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+         <span class="n">Path</span><span class="o">=</span><span class="n">data</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">extension</span><span class="p">,</span>\
+         <span class="n">IsWritten</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 </div>
-<p>At this stage, you&#8217;ve created an application controller which supports interacting with a few features of the <tt class="docutils literal"><span class="pre">formatdb</span></tt> command line application controller. In the next step, we&#8217;ll look at how to use your new application controller.</p>
+<p>At this stage, you&#8217;ve created an application controller which supports interacting with a few features of the <code class="docutils literal"><span class="pre">formatdb</span></code> command line application controller. In the next step, we&#8217;ll look at how to use your new application controller.</p>
 </div>
 </div>
 <div class="section" id="using-the-new-formatdb-application-controller">
 <h2>Using the new formatdb application controller<a class="headerlink" href="#using-the-new-formatdb-application-controller" title="Permalink to this headline">¶</a></h2>
-<p>Next we&#8217;ll import the new <tt class="docutils literal"><span class="pre">minimal_formatdb</span></tt> application controller, and test it out. For the following examples, you need to access some files that are in your <tt class="docutils literal"><span class="pre">cogent/doc/data</span></tt> directory. For simplicity, we&#8217;ll assume that on your system this directory is <tt class="docutils literal"><span class="pre">/home/pycogent_user/PyCogent/cogent/doc/data</span></tt>. You should always replace this directory with the path as it exists on your machine.</p>
-<p>Open a python interpreter in the directory where you created your <tt class="docutils literal"><span class="pre">minimal_formatdb.py</span></tt> and enter the following commands:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">minimal_formatdb</span>
+<p>Next we&#8217;ll import the new <code class="docutils literal"><span class="pre">minimal_formatdb</span></code> application controller, and test it out. For the following examples, you need to access some files that are in your <code class="docutils literal"><span class="pre">cogent/doc/data</span></code> directory. For simplicity, we&#8217;ll assume that on your system this directory is <code class="docutils literal"><span class="pre">/home/pycogent_user/PyCogent/cogent/doc/data</span></code>. You should always replace this directory with the path as it exists on your machine.</p>
+<p>Open a python interpreter in the directory where you created your <code class="docutils literal"><span class="pre">minimal_formatdb.py</span></code> and enter the following commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">minimal_formatdb</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span> <span class="o">=</span> <span class="n">minimal_formatdb</span><span class="o">.</span><span class="n">MinimalFormatDb</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fdb</span><span class="p">(</span><span class="s">&#39;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fdb</span><span class="p">(</span><span class="s1">&#39;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span>
 </pre></div>
 </div>
-<p>You&#8217;ll see that you&#8217;ve created a new protein BLAST database &#8211; you can tell because you have the nucleotide database files in the result object (i.e., they begin with <tt class="docutils literal"><span class="pre">n</span></tt>).</p>
+<p>You&#8217;ll see that you&#8217;ve created a new protein BLAST database &#8211; you can tell because you have the nucleotide database files in the result object (i.e., they begin with <code class="docutils literal"><span class="pre">n</span></code>).</p>
 <p>Next clean up your the files that were created:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Next we&#8217;ll change some parameters settings, and confirm the changes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span> <span class="o">=</span> <span class="n">minimal_formatdb</span><span class="o">.</span><span class="n">MinimalFormatDb</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#39;T&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isOn</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span> <span class="o">=</span> <span class="n">minimal_formatdb</span><span class="o">.</span><span class="n">MinimalFormatDb</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s1">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s1">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isOn</span><span class="p">()</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s1">&#39;-p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Value</span>
 <span class="go">&#39;T&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s">&#39;-p&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">fdb</span><span class="o">.</span><span class="n">Parameters</span><span class="p">[</span><span class="s1">&#39;-p&#39;</span><span class="p">])</span>
 <span class="go">&#39;-p T&#39;</span>
 </pre></div>
 </div>
-<p>We&#8217;ve just set the -p parameter to F, indicating that a protein database should be built instead of a nucleotide database. Note that the database files now begin with <tt class="docutils literal"><span class="pre">p</span></tt>. Run the appc and investigate the results:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fdb</span><span class="p">(</span><span class="s">&#39;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&#39;</span><span class="p">)</span>
+<p>We&#8217;ve just set the -p parameter to F, indicating that a protein database should be built instead of a nucleotide database. Note that the database files now begin with <code class="docutils literal"><span class="pre">p</span></code>. Run the appc and investigate the results:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fdb</span><span class="p">(</span><span class="s1">&#39;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span>
 </pre></div>
 </div>
 <p>Next clean up your the files that were created:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">cleanUp</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="tips-and-tricks-when-writing-applications-controllers">
 <h2>Tips and tricks when writing applications controllers<a class="headerlink" href="#tips-and-tricks-when-writing-applications-controllers" title="Permalink to this headline">¶</a></h2>
 <p>One of the most useful features of application controller object when building and debugging is the HALT_EXEC parameter that can be passed to the constructor. This will cause the program to halt just before executing, and print the command that would have been run. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span> <span class="o">=</span> <span class="n">minimal_formatdb</span><span class="o">.</span><span class="n">MinimalFormatDb</span><span class="p">(</span><span class="n">HALT_EXEC</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fdb</span><span class="p">(</span><span class="s">&#39;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fdb</span> <span class="o">=</span> <span class="n">minimal_formatdb</span><span class="o">.</span><span class="n">MinimalFormatDb</span><span class="p">(</span><span class="n">HALT_EXEC</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">fdb</span><span class="p">(</span><span class="s1">&#39;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&#39;</span><span class="p">)</span>
 <span class="go">[Traceback omitted]</span>
 <span class="go">Halted exec with command:</span>
 <span class="go">cd &quot;/home/pycogent_user/&quot;; formatdb -o T -i &quot;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&quot; -p F &gt; &quot;/tmp/tmpBpMUXE0ksEhzIZA1SSbS.txt&quot; 2&gt; &quot;/tmp/tmpSKc0PRhTl47SZfkxY0g1.txt&quot;</span>
 </pre></div>
 </div>
-<p>You can then leave the interpreter and paste this command onto the command line, and see directly what happens if this command is called. It&#8217;s usually useful to remove the stdout and stderr redirects (i.e., everything after and including the first <tt class="docutils literal"><span class="pre">&gt;</span></tt>). For example:</p>
-<div class="highlight-python"><pre>cd "/home/pycogent_user/"; formatdb -o T -i "/home/pycogent_user/PyCogent/doc/data/refseqs.fasta"</pre>
+<p>You can then leave the interpreter and paste this command onto the command line, and see directly what happens if this command is called. It&#8217;s usually useful to remove the stdout and stderr redirects (i.e., everything after and including the first <code class="docutils literal"><span class="pre">&gt;</span></code>). For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="s2">&quot;/home/pycogent_user/&quot;</span><span class="p">;</span> <span class="n">formatdb</span> <span class="o">-</span><span class="n">o</span> <span class="n">T</span> <span class="o">-</span><span class="n">i</span> <span class="s2">&quot;/home/pycogent_user/PyCogent/doc/data/refseqs.fasta&quot;</span>
+</pre></div>
 </div>
-<p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="attribution" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>This document was modified from Greg Caporaso&#8217;s PyCogent lecture. You can also grab the <a class="reference external" href="http://www.caporaso.us/presentations/caporaso_pycogent_lecture.zip">full lecture materials</a>.</td></tr>
-</tbody>
-</table>
 </div>
 </div>
 
@@ -212,78 +205,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Building and using a new application controller</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#building-a-formatdb-application-controller">Building a formatdb application controller</a><ul>
-<li><a class="reference internal" href="#step-0-decide-which-application-you-want-to-support-and-which-version">Step 0. Decide which application you want to support, and which version.</a></li>
-<li><a class="reference internal" href="#step-1-define-the-class-and-the-class-variables">Step 1. Define the class and the class variables.</a></li>
-<li><a class="reference internal" href="#step-2-overwrite-methods-as-necessary">Step 2. Overwrite methods as necessary.</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#using-the-new-formatdb-application-controller">Using the new formatdb application controller</a></li>
-<li><a class="reference internal" href="#tips-and-tricks-when-writing-applications-controllers">Tips and tricks when writing applications controllers</a></li>
-</ul>
-</li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="application_controller_framework.html"
-                        title="previous chapter">Application Controller Documentation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="alignment_app_controllers.html"
-                        title="next chapter">Using alignment application controllers to align unaligned sequences</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/building_and_using_an_application_controller.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="alignment_app_controllers.html" title="Using alignment application controllers to align unaligned sequences"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="application_controller_framework.html" title="Application Controller Documentation"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="application_controller_framework.html" title="Application Controller Documentation"
+              >previous</a> |
+            <a href="alignment_app_controllers.html" title="Using alignment application controllers to align unaligned sequences"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/building_and_using_an_application_controller.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

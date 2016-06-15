@@ -324,10 +324,6 @@ Random
     [0 3 2 4 1]
     [4 0 1 2 3]
 
-Ordered
--------
-
-*To be written.*
 
 Differences in means
 ====================
@@ -427,10 +423,6 @@ This is essentially just a test using the binomial distribution where the probab
     >>> sign_test(40, 100)
     0.056...
 
-Differences in proportions
-==========================
-
-*To be written.*
 
 Association
 ===========
@@ -514,10 +506,6 @@ And finally, the residual error for each point from the linear regression
     >>> error
     ['-0.98', '0.44', '-0.41'...
 
-Differences in variances
-========================
-
-*To be written.*
 
 Chi-Squared test
 ================
@@ -599,12 +587,10 @@ The plotting code uses matplotlib_.
     >>> import matplotlib.pyplot as plt
     >>> fig = plt.figure()
     >>> ax = fig.add_subplot(111)
-    >>> ax.scatter(arr[0],arr[1],s=250,color='b',marker='s')
-    <matplotlib.collections.RegularPolyCollection object...
-    >>> ax.scatter(rotated_x,rotated_y,s=250,color='r',marker='o')
-    <matplotlib.collections.CircleCollection object...
+    >>> sc = ax.scatter(arr[0],arr[1],s=250,color='b',marker='s')
+    >>> sc = ax.scatter(rotated_x,rotated_y,s=250,color='r',marker='o')
     >>> plt.axis('equal')
-    (0.0, 12.0, -2.0, 8.0)
+    (-2.0, 12.0, -2.0, 8.0)
 
 Plot the least squares regression lines too
 
@@ -690,7 +676,7 @@ The plot code
     >>> plt.pcolormesh(data)
     <matplotlib.collections.QuadMesh object ...
     >>> plt.colorbar()
-    <matplotlib.colorbar.Colorbar instance ...
+    <matplotlib.colorbar.Colorbar object ...
     >>> plt.savefig('heatmap_example.png')
 
 .. doctest::

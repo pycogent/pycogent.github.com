@@ -2,6 +2,14 @@
 Changelog
 *********
 
+Cogent 1.5.3 - 1.9
+==================
+
+NOTE: There have been so many changes since the 1.5.3 release that it is not
+viable to list themn all! Suffice it to say, many new features added and many bugs
+have been squashed. The best way to see them is using either git or mercurial
+to examine the commit logs.
+
 Cogent 1.5.2 - 1.5.3
 ====================
 

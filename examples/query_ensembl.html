@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Querying Ensembl &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Querying Ensembl &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Manipulation of Tree Node Objects" href="manipulating_tree_nodes.html" />
     <link rel="prev" title="Querying NCBI for VWF" href="query_ncbi.html" />     
@@ -33,53 +31,54 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="manipulating_tree_nodes.html" title="Manipulation of Tree Node Objects"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="query_ncbi.html" title="Querying NCBI for VWF"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="manipulating_tree_nodes.html" title="Manipulation of Tree Node Objects"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="querying-ensembl">
 <span id="query-ensembl"></span><h1>Querying Ensembl<a class="headerlink" href="#querying-ensembl" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Gavin Huttley, Hua Ying</em></p>
-<p>We begin this documentation with a note on dependencies, performance and code status. <a class="reference external" href="http://www.ensembl.org">Ensembl</a> makes their data available via MySQL servers, so the <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt> module has additional dependencies of <a class="reference external" href="http://sourceforge.net/projects/mysql-python">MySQL-python</a> and <a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a>. You can use <tt class="docutils literal"><span class="pre">easy_install</span></tt> to install the latter, but the former is more involved. If you experience trouble, please create a new issue on the <a class="reference external" href="https://github.com/pycogent/pycogent/issues">issue tracker</a> and tag it with the <em>question</em> tag. Regarding performance, significant queries to the UK servers from Australia are very slow. The examples in this documentation, for instance, take ~15 minutes to run when pointed at the UK servers. Running against a local installation, however, is ~50 times faster. On status, the <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt> module should be considered beta level code. We still strongly advise users to check results for a subset of their analyses against the data from the UK Ensembl web site.</p>
-<p>The major components of <a class="reference external" href="http://www.ensembl.org">Ensembl</a> are compara and individual genomes. In all cases extracting data requires connecting to MySQL databases on a server and the server may be located remotely or locally. For convenience, the critical objects you&#8217;ll need to query a database are provided in the top-level module import, ie immediately under <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt>.</p>
+<p>We begin this documentation with a note on dependencies, performance and code status. <a class="reference external" href="http://www.ensembl.org">Ensembl</a> makes their data available via MySQL servers, so the <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code> module has additional dependencies of <a class="reference external" href="https://pypi.python.org/pypi/mysql-connector-python">mysql-connector-python</a> or <a class="reference external" href="http://sourceforge.net/projects/mysql-python">MySQL-python</a> and <a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a>. You can use <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a> to install both <cite>mysql-connector-python</cite> and <a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a>, but MySQL-python is more involved. If you experience trouble, please create a new issue on the <a class="reference external" href="https://github.com/pycogent/pycogent/issues">issue tracker</a> and tag it with the <em>question</em> tag. Regarding performance, significant queries to the UK servers from Australia are very slow. The examples in this documentation, for instance, take ~15 minutes to run when pointed at the UK servers. Running against a local installation, however, is ~50 times faster. On status, the <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code> module should be considered beta level code. We still strongly advise users to check results for a subset of their analyses against the data from the UK Ensembl web site.</p>
+<p>The major components of <a class="reference external" href="http://www.ensembl.org">Ensembl</a> are compara and individual genomes. In all cases extracting data requires connecting to MySQL databases on a server and the server may be located remotely or locally. For convenience, the critical objects you&#8217;ll need to query a database are provided in the top-level module import, ie immediately under <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code>.</p>
 <div class="section" id="specifying-a-host-and-account">
 <h2>Specifying a Host and Account<a class="headerlink" href="#specifying-a-host-and-account" title="Permalink to this headline">¶</a></h2>
-<p>So the first step is to specify what host and account are to be used. On my lab&#8217;s machines, I have set an environment variable with the username and password for our local installation of the <a class="reference external" href="http://www.ensembl.org">Ensembl</a> MySQL databases, e.g. <tt class="docutils literal"><span class="pre">ENSEMBL_ACCOUNT=&quot;username</span> <span class="pre">password&quot;</span></tt>. So I&#8217;ll check for that (since the documentation runs much quicker when this is true) and if it&#8217;s absent, we just set <tt class="docutils literal"><span class="pre">account=None</span></tt> and the account used defaults to the UK <a class="reference external" href="http://www.ensembl.org">Ensembl</a> service. I also define which release of ensembl we&#8217;ll use in one place to allow easier updating of this documentation.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Release</span> <span class="o">=</span> <span class="mi">67</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">HostAccount</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s">&#39;ENSEMBL_ACCOUNT&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;ENSEMBL_ACCOUNT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<p>So the first step is to specify what host and account are to be used. On my lab&#8217;s machines, I have set an environment variable with the username and password for our local installation of the <a class="reference external" href="http://www.ensembl.org">Ensembl</a> MySQL databases, e.g. <code class="docutils literal"><span class="pre">ENSEMBL_ACCOUNT=&quot;host</span> <span class="pre">username</span> <span class="pre">password&quot;</span></code>. So I&#8217;ll check for that (since the documentation runs much quicker when this is true) and if it&#8217;s absent, we just set <code class="docutils literal"><span class="pre">account=None</span></code> and the account used defaults to the UK <a class="reference external" href="http://www.ensembl.org">Ensembl</a> service. I also define which release of ensembl we&#8217;ll use in one place to allow easier updating of this documentation.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Release</span> <span class="o">=</span> <span class="mi">81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="k">import</span> <span class="n">HostAccount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s1">&#39;ENSEMBL_ACCOUNT&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;ENSEMBL_ACCOUNT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">account</span> <span class="o">=</span> <span class="n">HostAccount</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">account</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="gp">... </span>    <span class="n">account</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="what-species-are-available">
 <h2>What Species Are Available?<a class="headerlink" href="#what-species-are-available" title="Permalink to this headline">¶</a></h2>
-<p>Another key element, of course, is the species available. Included as part of <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt> is the module <tt class="docutils literal"><span class="pre">species</span></tt>. This module contains a class that translates between latin names, common names and ensembl database prefixes. The species listed are guaranteed to be incomplete, given Ensembl&#8217;s update schedule, so it&#8217;s possible to dynamically add to this listing, or even change the common name for a given latin name.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Species</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Species</span>
+<p>Another key element, of course, is the species available. Included as part of <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code> is the module <code class="docutils literal"><span class="pre">species</span></code>. This module contains a class that translates between latin names, common names and ensembl database prefixes. The species listed are guaranteed to be incomplete, given Ensembl&#8217;s update schedule, so it&#8217;s possible to dynamically add to this listing, or even change the common name for a given latin name.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="k">import</span> <span class="n">Species</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">Species</span>
 <span class="go">================================================================================</span>
 <span class="go">       Common Name                   Species Name              Ensembl Db Prefix</span>
 <span class="go">--------------------------------------------------------------------------------</span>
@@ -88,223 +87,219 @@
 </pre></div>
 </div>
 <p>In Australia, the common name for <em>Gallus gallus</em> is chook, so I&#8217;ll modify that.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">amendSpecies</span><span class="p">(</span><span class="s">&#39;Gallus gallus&#39;</span><span class="p">,</span> <span class="s">&#39;chook&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Species</span><span class="o">.</span><span class="n">getCommonName</span><span class="p">(</span><span class="s">&#39;Gallus gallus&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;chook&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">amendSpecies</span><span class="p">(</span><span class="s1">&#39;Gallus gallus&#39;</span><span class="p">,</span> <span class="s1">&#39;chook&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Species</span><span class="o">.</span><span class="n">getCommonName</span><span class="p">(</span><span class="s1">&#39;Gallus gallus&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;chook&#39;</span>
 </pre></div>
 </div>
-<p>You can also add new species for when they become available using <tt class="docutils literal"><span class="pre">Species.amendSpecies</span></tt>.</p>
-<p>Species common names are used to construct attributes on PyCogent <tt class="docutils literal"><span class="pre">Compara</span></tt> instances). You can get the name that will be using the <tt class="docutils literal"><span class="pre">getComparaName</span></tt> method. For species with a real common name</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getComparaName</span><span class="p">(</span><span class="s">&#39;Procavia capensis&#39;</span><span class="p">)</span>
+<p>You can also add new species for when they become available using <code class="docutils literal"><span class="pre">Species.amendSpecies</span></code>.</p>
+<p>Species common names are used to construct attributes on PyCogent <code class="docutils literal"><span class="pre">Compara</span></code> instances). You can get the name that will be using the <code class="docutils literal"><span class="pre">getComparaName</span></code> method. For species with a real common name</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getComparaName</span><span class="p">(</span><span class="s1">&#39;Procavia capensis&#39;</span><span class="p">)</span>
 <span class="go">&#39;RockHyrax&#39;</span>
 </pre></div>
 </div>
 <p>or with a shortened species name</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getComparaName</span><span class="p">(</span><span class="s">&#39;Caenorhabditis remanei&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Species</span><span class="o">.</span><span class="n">getComparaName</span><span class="p">(</span><span class="s1">&#39;Caenorhabditis remanei&#39;</span><span class="p">)</span>
 <span class="go">&#39;Cremanei&#39;</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">Species</span></tt> class is basically used to translate between latin names and ensembl&#8217;s database naming scheme. It also serves to allow the user to simply enter the common name for a species in order to reference it&#8217;s genome databases. The queries are case-insensitive.</p>
+<p>The <code class="docutils literal"><span class="pre">Species</span></code> class is basically used to translate between latin names and ensembl&#8217;s database naming scheme. It also serves to allow the user to simply enter the common name for a species in order to reference it&#8217;s genome databases. The queries are case-insensitive.</p>
 </div>
 <div class="section" id="interrogating-a-genome">
 <h2>Interrogating a Genome<a class="headerlink" href="#interrogating-a-genome" title="Permalink to this headline">¶</a></h2>
-<p>As implied above, Ensembl databases are versioned, hence you must explicitly state what release you want. Aside from that, getting an object for querying a genome is simply a matter of importing the <tt class="docutils literal"><span class="pre">HostAccount</span></tt> and <tt class="docutils literal"><span class="pre">Genome</span></tt> classes. Here I&#8217;m going to use the <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt> level imports.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">HostAccount</span><span class="p">,</span> <span class="n">Genome</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="n">Species</span><span class="o">=</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">human</span>
-<span class="go">Genome(Species=&#39;Homo sapiens&#39;; Release=&#39;67&#39;)</span>
+<p>As implied above, Ensembl databases are versioned, hence you must explicitly state what release you want. Aside from that, getting an object for querying a genome is simply a matter of importing the <code class="docutils literal"><span class="pre">HostAccount</span></code> and <code class="docutils literal"><span class="pre">Genome</span></code> classes. Here I&#8217;m going to use the <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code> level imports.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="k">import</span> <span class="n">HostAccount</span><span class="p">,</span> <span class="n">Genome</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">human</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="n">Species</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">human</span>
+<span class="go">Genome(Species=&#39;Homo sapiens&#39;; Release=&#39;81&#39;)</span>
 </pre></div>
 </div>
-<p>Notice I used the common name rather than full name. The <tt class="docutils literal"><span class="pre">Genome</span></tt> provides an interface to obtaining different attributes. It&#8217;s primary role is to allow selection of genomic regions according to some search criteria. The type of region is presently limited to <tt class="docutils literal"><span class="pre">Gene</span></tt>, <tt class="docutils literal"><span class="pre">Est</span></tt>, <tt class="docutils literal"><span class="pre">CpGisland</span></tt>, <tt class="docutils literal"><span class="pre">Repeat</span></tt> and <tt class="docutils literal"><span class="pre">Variation</span></tt>. There&#8217;s also a <tt class="docutils literal"><span class="pre">GenericRegion</span></tt>. The specific types are also capable of identifying information related to themselves, as we will demonstrate below.</p>
+<p>Notice I used the common name rather than full name. The <code class="docutils literal"><span class="pre">Genome</span></code> provides an interface to obtaining different attributes. It&#8217;s primary role is to allow selection of genomic regions according to some search criteria. The type of region is presently limited to <code class="docutils literal"><span class="pre">Gene</span></code>, <code class="docutils literal"><span class="pre">Est</span></code>, <code class="docutils literal"><span class="pre">CpGisland</span></code>, <code class="docutils literal"><span class="pre">Repeat</span></code> and <code class="docutils literal"><span class="pre">Variation</span></code>. There&#8217;s also a <code class="docutils literal"><span class="pre">GenericRegion</span></code>. The specific types are also capable of identifying information related to themselves, as we will demonstrate below.</p>
 <div class="section" id="a-note-on-coordinate-systems">
 <h3>A Note on Coordinate Systems<a class="headerlink" href="#a-note-on-coordinate-systems" title="Permalink to this headline">¶</a></h3>
-<p>The positions employed on Ensembl&#8217;s web-site, and in their MySQL database differ from those used internally by <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt>. In all cases where you are querying <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt> objects directly inputting nucleotide positions you can indicate you are using Ensembl coordinates by setting <tt class="docutils literal"><span class="pre">ensembl_coord=True</span></tt>. If you are explicitly passing in a <tt class="docutils literal"><span class="pre">cogent.db.ensembl</span></tt> region, that argument has no effect.</p>
+<p>The positions employed on Ensembl&#8217;s web-site, and in their MySQL database differ from those used internally by <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code>. In all cases where you are querying <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code> objects directly inputting nucleotide positions you can indicate you are using Ensembl coordinates by setting <code class="docutils literal"><span class="pre">ensembl_coord=True</span></code>. If you are explicitly passing in a <code class="docutils literal"><span class="pre">cogent.db.ensembl</span></code> region, that argument has no effect.</p>
 </div>
 <div class="section" id="selecting-gene-s">
 <h3>Selecting Gene&#8217;s<a class="headerlink" href="#selecting-gene-s" title="Permalink to this headline">¶</a></h3>
-<p>The genome can be queried for gene&#8217;s in a number of ways. You can search for genes using the <tt class="docutils literal"><span class="pre">Genome.getGeneByStableId</span></tt> method which requires you know the Ensembl stable id.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">brca1</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000012048&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca1</span><span class="o">.</span><span class="n">Description</span>
+<p>The genome can be queried for gene&#8217;s in a number of ways. You can search for genes using the <code class="docutils literal"><span class="pre">Genome.getGeneByStableId</span></code> method which requires you know the Ensembl stable id.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brca1</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s1">&#39;ENSG00000012048&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca1</span><span class="o">.</span><span class="n">Description</span>
 <span class="go">breast cancer 1, early onset...</span>
 </pre></div>
 </div>
-<p>Alternatively, you can query using the <tt class="docutils literal"><span class="pre">Genome.getGenesMatching</span></tt> method. This method allows querying for gene(s) by the following identifiers: HGNC symbol; Ensembl <tt class="docutils literal"><span class="pre">stable_id</span></tt>; description; or coding type.</p>
+<p>Alternatively, you can query using the <code class="docutils literal"><span class="pre">Genome.getGenesMatching</span></code> method. This method allows querying for gene(s) by the following identifiers: HGNC symbol; Ensembl <code class="docutils literal"><span class="pre">stable_id</span></code>; description; or coding type.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">When querying by description, you can specify that the exact words in the query must be present in the description by setting the argument <tt class="docutils literal"><span class="pre">like=True</span></tt>. The default is <tt class="docutils literal"><span class="pre">like=False</span></tt>.</p>
+<p class="last">When querying by description, you can specify that the exact words in the query must be present in the description by setting the argument <code class="docutils literal"><span class="pre">like=True</span></code>. The default is <code class="docutils literal"><span class="pre">like=False</span></code>.</p>
 </div>
 <p>In general for such queries, case shouldn&#8217;t matter. For instance, find the <em>BRCA2</em> gene by it&#8217;s HGNC symbol.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">Symbol</span><span class="o">=</span><span class="s">&#39;brca2&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">Symbol</span><span class="o">=</span><span class="s1">&#39;brca2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Because there can be multiple hits from a <tt class="docutils literal"><span class="pre">getGenesMatching</span></tt> query, and because we wish to not spend time doing things (like talking to the database) unnecessarily, the result of the query is a python generator. This acts like a series and allows you to iterate over the database hits until you find the one you want and then terminate the record collection.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">gene</span><span class="o">.</span><span class="n">Symbol</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;brca2&#39;</span><span class="p">:</span>
+<p>Because there can be multiple hits from a <code class="docutils literal"><span class="pre">getGenesMatching</span></code> query, and because we wish to not spend time doing things (like talking to the database) unnecessarily, the result of the query is a python generator. This acts like a series and allows you to iterate over the database hits until you find the one you want and then terminate the record collection.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">genes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">gene</span><span class="o">.</span><span class="n">Symbol</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;brca2&#39;</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">break</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">gene</span> <span class="c"># so we keep track of this reference for later on</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Symbol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">gene</span> <span class="c1"># so we keep track of this reference for later on</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Symbol</span>
 <span class="go">BRCA2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Description</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Description</span>
 <span class="go">breast cancer 2...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span>
 <span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;breast...</span>
 </pre></div>
 </div>
-<p>This code serves to illustrate a few things. First, the sorts of properties that exist on the object. These can be directly accessed as illustrated above. Secondly, that the argument names to <tt class="docutils literal"><span class="pre">getGenesMatching</span></tt> match the properties.</p>
+<p>This code serves to illustrate a few things. First, the sorts of properties that exist on the object. These can be directly accessed as illustrated above. Secondly, that the argument names to <code class="docutils literal"><span class="pre">getGenesMatching</span></code> match the properties.</p>
 <p>Gene&#8217;s also have a location. The length of a gene is the difference between its start and end location.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Unfortunately all gene coordinates can vary between genome builds. So start, end and length can all differ between Ensembl releases for the same gene.</p>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Location</span>
-<span class="go">Homo sapiens:chromosome:13:32889610...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">brca2</span><span class="p">)</span>
-<span class="go">84195</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Location</span>
+<span class="go">Homo sapiens:chromosome:13:32315473...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">brca2</span><span class="p">)</span>
+<span class="go">84793</span>
 </pre></div>
 </div>
 <p>Each location is directly tied to the parent genome and the coordinate above also shows the coordinates&#8217; <em>type</em> (chromosome in this case), name (13), start, end and strand. The start and end positions are python indices and will differ from the Ensembl indices in that start will be the Ensembl index - 1. This is because python counts from 0, not 1. In querying for regions using a specific set of coordinates, it is possible to put in the Ensembl coordinates (demonstrated below).</p>
-<p><tt class="docutils literal"><span class="pre">Gene</span></tt> has several useful properties, including the ability to directly get their own DNA sequence and their <tt class="docutils literal"><span class="pre">CanonicalTranscript</span></tt> and <tt class="docutils literal"><span class="pre">Transcripts</span></tt>. <tt class="docutils literal"><span class="pre">CanonicalTranscript</span></tt> is the characteristic transcript for a gene, as defined by Ensembl. <tt class="docutils literal"><span class="pre">Transcripts</span></tt> is a tuple attribute containing individual region instances of type <tt class="docutils literal"><span class="pre">Transcript</span></tt>. A <tt class="docutils literal"><span class="pre">Transcript</span></tt> has <tt class="docutils literal"><span class="pre">Exons</span></tt>, <tt class="docutils literal"><span class="pre">Introns</span></tt>, a <tt class="docutils literal"><span class="pre">Cds</span></tt> and, if the <tt class="docutils literal"><span class="pre">BioType</span></tt> is protein coding, a protein sequence. In the following we grab the cannonical transcript from <tt class="docutils literal"><span class="pre">brca2</span></tt></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">BioType</span>
+<p><code class="docutils literal"><span class="pre">Gene</span></code> has several useful properties, including the ability to directly get their own DNA sequence and their <code class="docutils literal"><span class="pre">CanonicalTranscript</span></code> and <code class="docutils literal"><span class="pre">Transcripts</span></code>. <code class="docutils literal"><span class="pre">CanonicalTranscript</span></code> is the characteristic transcript for a gene, as defined by Ensembl. <code class="docutils literal"><span class="pre">Transcripts</span></code> is a <code class="docutils literal"><span class="pre">tuple</span></code> attribute containing individual region instances of type <code class="docutils literal"><span class="pre">Transcript</span></code>. A <code class="docutils literal"><span class="pre">Transcript</span></code> has <code class="docutils literal"><span class="pre">Exons</span></code>, <code class="docutils literal"><span class="pre">Introns</span></code>, a <code class="docutils literal"><span class="pre">Cds</span></code> and, if the <code class="docutils literal"><span class="pre">BioType</span></code> is protein coding, a protein sequence. In the following we grab the cannonical transcript from <code class="docutils literal"><span class="pre">brca2</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">BioType</span>
 <span class="go">protein_coding</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Seq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Seq</span>
 <span class="go">GGGCTTGTGGCGC...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Cds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Cds</span>
 <span class="go">ATGCCTATTGGATC...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">ProteinSeq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">ProteinSeq</span>
 <span class="go">MPIGSKERPTF...</span>
 </pre></div>
 </div>
 <p>It is also possible to iterate over a transcript&#8217;s exons, over their translated exons, or to obtain their coding DNA sequence. We grab the second transcript for this.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Transcripts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Transcripts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">exon</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Exons</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">exon</span><span class="p">,</span> <span class="n">exon</span><span class="o">.</span><span class="n">Location</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">exon</span><span class="p">,</span> <span class="n">exon</span><span class="o">.</span><span class="n">Location</span>
 <span class="go">Exon(StableId=ENSE00001184784, Rank=1) Homo sapiens:chromosome:13:...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">exon</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">TranslatedExons</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">exon</span><span class="p">,</span> <span class="n">exon</span><span class="o">.</span><span class="n">Location</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">exon</span><span class="p">,</span> <span class="n">exon</span><span class="o">.</span><span class="n">Location</span>
 <span class="go">Exon(StableId=ENSE00001484009, Rank=2) Homo sapiens:chromosome:13:...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Cds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Cds</span>
 <span class="go">ATGCCTATTGGATCCAAA...</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">Cds</span></tt> sequence includes the stop-codon, if present. The reason for this is there are many annotated transcripts in the Ensembl database the length of whose transcribed exons are not divisible by 3. Hence we leave it to the user to decide how to deal with that, but mention here that determining the number of complete codons is trivial and you can slice the <tt class="docutils literal"><span class="pre">Cds</span></tt> so that it&#8217;s length is divisible by 3.</p>
-<p>The <tt class="docutils literal"><span class="pre">Exons</span></tt> and <tt class="docutils literal"><span class="pre">TranslatedExons</span></tt> properties are tuples that are evaluated on demand and can be sliced. Each <tt class="docutils literal"><span class="pre">Exon/TranslatedExon</span></tt> is itself a region, with all of the properties of generic regions (like having a <tt class="docutils literal"><span class="pre">Seq</span></tt> attribute). Similar descriptions apply to the <tt class="docutils literal"><span class="pre">Introns</span></tt> property and <tt class="docutils literal"><span class="pre">Intron</span></tt> class. We show just for the canonical transcript.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">intron</span> <span class="ow">in</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Introns</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">intron</span>
+<p>The <code class="docutils literal"><span class="pre">Cds</span></code> sequence includes the stop-codon, if present. The reason for this is there are many annotated transcripts in the Ensembl database the length of whose transcribed exons are not divisible by 3. Hence we leave it to the user to decide how to deal with that, but mention here that determining the number of complete codons is trivial and you can slice the <code class="docutils literal"><span class="pre">Cds</span></code> so that it&#8217;s length is divisible by 3.</p>
+<p>The <code class="docutils literal"><span class="pre">Exons</span></code> and <code class="docutils literal"><span class="pre">TranslatedExons</span></code> properties are tuples that are evaluated on demand and can be sliced. Each <code class="docutils literal"><span class="pre">Exon/TranslatedExon</span></code> is itself a region, with all of the properties of generic regions (like having a <code class="docutils literal"><span class="pre">Seq</span></code> attribute). Similar descriptions apply to the <code class="docutils literal"><span class="pre">Introns</span></code> property and <code class="docutils literal"><span class="pre">Intron</span></code> class. We show just for the canonical transcript.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">intron</span> <span class="ow">in</span> <span class="n">brca2</span><span class="o">.</span><span class="n">CanonicalTranscript</span><span class="o">.</span><span class="n">Introns</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">intron</span>
 <span class="go">Intron(TranscriptId=ENST00000380152, Rank=1)</span>
 <span class="go">Intron(TranscriptId=ENST00000380152, Rank=2)</span>
 <span class="go">Intron(TranscriptId=ENST00000380152, Rank=3)...</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">Gene</span></tt> region also has convenience methods for examining properties of it&#8217;s transcripts, in presenting the <tt class="docutils literal"><span class="pre">Cds</span></tt> lengths and getting the <tt class="docutils literal"><span class="pre">Transcript</span></tt> encoding the longest <tt class="docutils literal"><span class="pre">Cds</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">getCdsLengths</span><span class="p">()</span>
-<span class="go">[10257, 1807, 10257]</span>
+<p>The <code class="docutils literal"><span class="pre">Gene</span></code> region also has convenience methods for examining properties of it&#8217;s transcripts, in presenting the <code class="docutils literal"><span class="pre">Cds</span></code> lengths and getting the <code class="docutils literal"><span class="pre">Transcript</span></code> encoding the longest <code class="docutils literal"><span class="pre">Cds</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span><span class="o">.</span><span class="n">getCdsLengths</span><span class="p">()</span>
+<span class="go">[10257, 10257]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">longest</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">getLongestCdsTranscript</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">longest</span><span class="o">.</span><span class="n">Cds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">longest</span><span class="o">.</span><span class="n">Cds</span>
 <span class="go">ATGCCTATTGGATCCAAA...</span>
 </pre></div>
 </div>
-<p>All Regions have a <tt class="docutils literal"><span class="pre">getFeatures</span></tt> method which differs from that on genome only in that the genomic coordinates are automatically entered for you. Regions also have the ability to return their sequence as an annotated <tt class="docutils literal"><span class="pre">cogent</span></tt> sequence. The method on <tt class="docutils literal"><span class="pre">Gene</span></tt> simply queries the parent genome using the gene&#8217;s own location as the coordinate for the currently supported region types. We will query <tt class="docutils literal"><span class="pre">brca2</span></tt> asking for gene features, the end-result will be a <tt class="docutils literal"><span class="pre">cogent</span></tt> sequence that can be used to obtain the CDS, for instance, using the standard <tt class="docutils literal"><span class="pre">cogent</span></tt> annotation capabilities.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">annot_brca2</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">getAnnotatedSeq</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;gene&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cds</span> <span class="o">=</span> <span class="n">annot_brca2</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s">&#39;CDS&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cds</span>
+<p>All Regions have a <code class="docutils literal"><span class="pre">getFeatures</span></code> method which differs from that on genome only in that the genomic coordinates are automatically entered for you. Regions also have the ability to return their sequence as an annotated <code class="docutils literal"><span class="pre">cogent</span></code> sequence. The method on <code class="docutils literal"><span class="pre">Gene</span></code> simply queries the parent genome using the gene&#8217;s own location as the coordinate for the currently supported region types. We will query <code class="docutils literal"><span class="pre">brca2</span></code> asking for gene features, the end-result will be a <code class="docutils literal"><span class="pre">cogent</span></code> sequence that can be used to obtain the CDS, for instance, using the standard <code class="docutils literal"><span class="pre">cogent</span></code> annotation capabilities.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">annot_brca2</span> <span class="o">=</span> <span class="n">brca2</span><span class="o">.</span><span class="n">getAnnotatedSeq</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s1">&#39;gene&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cds</span> <span class="o">=</span> <span class="n">annot_brca2</span><span class="o">.</span><span class="n">getAnnotationsMatching</span><span class="p">(</span><span class="s1">&#39;CDS&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getSlice</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">cds</span>
 <span class="go">ATGCCTATTGGATCCAAA...</span>
 </pre></div>
 </div>
-<p>Those are the properties of a <tt class="docutils literal"><span class="pre">Gene</span></tt>, at present, of direct interest to end-users.</p>
-<p>There are obviously different types of genes, and the <tt class="docutils literal"><span class="pre">Genome</span></tt> object provides an ability to establish exactly what distinct types are defined in Ensembl.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">human</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s">&#39;BioType&#39;</span><span class="p">)</span>
-<span class="go">[&#39;rRNA&#39;, &#39;lincRNA&#39;, &#39;IG_C_pseudogene&#39;, ...</span>
+<p>Those are the properties of a <code class="docutils literal"><span class="pre">Gene</span></code>, at present, of direct interest to end-users.</p>
+<p>There are obviously different types of genes, and the <code class="docutils literal"><span class="pre">Genome</span></code> object provides an ability to establish exactly what distinct types are defined in Ensembl.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">human</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s1">&#39;BioType&#39;</span><span class="p">)</span>
+<span class="go">[&#39;unitary_pseudogene&#39;, &#39;rRNA&#39;, &#39;lincRNA&#39;,...</span>
 </pre></div>
 </div>
-<p>The genome can be queried for any of these types, for instance we&#8217;ll query for <tt class="docutils literal"><span class="pre">rRNA</span></tt>. We&#8217;ll get the first few records and then exit.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rRNA_genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">BioType</span><span class="o">=</span><span class="s">&#39;rRNA&#39;</span><span class="p">)</span>
+<p>The genome can be queried for any of these types, for instance we&#8217;ll query for <code class="docutils literal"><span class="pre">rRNA</span></code>. We&#8217;ll get the first few records and then exit.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rRNA_genes</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getGenesMatching</span><span class="p">(</span><span class="n">BioType</span><span class="o">=</span><span class="s1">&#39;rRNA&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">rRNA_genes</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">gene</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">gene</span>
 <span class="gp">... </span>    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">break</span>
 <span class="gp">...</span>
-<span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;Mt_rRNA&#39;; ...</span>
+<span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;Mt_rRNA&#39;; Description=&#39;mitochondrially encoded 12S...</span>
 </pre></div>
 </div>
-<p>This has the effect of returning any gene whose <tt class="docutils literal"><span class="pre">BioType</span></tt> includes the phrase <tt class="docutils literal"><span class="pre">rRNA</span></tt>. If a gene is not a protein coding gene, as in the current case, then it&#8217;s <tt class="docutils literal"><span class="pre">Transcripts</span></tt> will have <tt class="docutils literal"><span class="pre">ProteinSeq==None</span></tt> and <tt class="docutils literal"><span class="pre">TranslatedExons==None</span></tt>, but it will have <tt class="docutils literal"><span class="pre">Exons</span></tt> and a <tt class="docutils literal"><span class="pre">Cds</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">gene</span><span class="o">.</span><span class="n">Transcripts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">transcript</span><span class="o">.</span><span class="n">ProteinSeq</span> <span class="o">==</span> <span class="bp">None</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">transcript</span><span class="o">.</span><span class="n">TranslatedExons</span> <span class="o">==</span> <span class="bp">None</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Cds</span> <span class="o">!=</span> <span class="bp">None</span>
+<p>This has the effect of returning any gene whose <code class="docutils literal"><span class="pre">BioType</span></code> includes the phrase <code class="docutils literal"><span class="pre">rRNA</span></code>. If a gene is not a protein coding gene, as in the current case, then it&#8217;s <code class="docutils literal"><span class="pre">Transcripts</span></code> will have <code class="docutils literal"><span class="pre">ProteinSeq==None</span></code> and <code class="docutils literal"><span class="pre">TranslatedExons==None</span></code>, but it will have <code class="docutils literal"><span class="pre">Exons</span></code> and a <code class="docutils literal"><span class="pre">Cds</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transcript</span> <span class="o">=</span> <span class="n">gene</span><span class="o">.</span><span class="n">Transcripts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">transcript</span><span class="o">.</span><span class="n">ProteinSeq</span> <span class="o">==</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">transcript</span><span class="o">.</span><span class="n">TranslatedExons</span> <span class="o">==</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">transcript</span><span class="o">.</span><span class="n">Cds</span> <span class="o">!=</span> <span class="kc">None</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="getting-ests">
 <h3>Getting ESTs<a class="headerlink" href="#getting-ests" title="Permalink to this headline">¶</a></h3>
-<p>Ensembl&#8217;s <tt class="docutils literal"><span class="pre">otherfeatures</span></tt> database mirrors the structure of the <tt class="docutils literal"><span class="pre">core</span></tt> database and contains EST information. Hence, the <tt class="docutils literal"><span class="pre">Est</span></tt> region inherits directly from <tt class="docutils literal"><span class="pre">Gene</span></tt> (ie has many of the same properties). <tt class="docutils literal"><span class="pre">est</span></tt> is a supported <tt class="docutils literal"><span class="pre">feature_types</span></tt> for the <tt class="docutils literal"><span class="pre">getFeatures</span></tt> method. You can also directly query for an EST using Ensembl&#8217;s <tt class="docutils literal"><span class="pre">StableID</span></tt>. Here, however, we&#8217;ll just query for <tt class="docutils literal"><span class="pre">Est</span></tt> that map to the <tt class="docutils literal"><span class="pre">brca2</span></tt> region.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ests</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;est&#39;</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">brca2</span><span class="p">)</span>
+<p>Ensembl&#8217;s <code class="docutils literal"><span class="pre">otherfeatures</span></code> database mirrors the structure of the <code class="docutils literal"><span class="pre">core</span></code> database and contains EST information. Hence, the <code class="docutils literal"><span class="pre">Est</span></code> region inherits directly from <code class="docutils literal"><span class="pre">Gene</span></code> (ie has many of the same properties). <code class="docutils literal"><span class="pre">est</span></code> is a supported <code class="docutils literal"><span class="pre">feature_types</span></code> for the <code class="docutils literal"><span class="pre">getFeatures</span></code> method. You can also directly query for an EST using Ensembl&#8217;s <code class="docutils literal"><span class="pre">StableID</span></code>. Here, however, we&#8217;ll just query for <code class="docutils literal"><span class="pre">Est</span></code> that map to the <code class="docutils literal"><span class="pre">brca2</span></code> region.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ests</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s1">&#39;est&#39;</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">brca2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">est</span> <span class="ow">in</span> <span class="n">ests</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">est</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">est</span>
 <span class="go">Est(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;None&#39;;...</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="getting-variation">
 <h3>Getting Variation<a class="headerlink" href="#getting-variation" title="Permalink to this headline">¶</a></h3>
-<p><tt class="docutils literal"><span class="pre">Variation</span></tt> regions also have distinctive properties worthy of additional mention. As for genes, there are distinct types stored in Ensembl that may be of interest. Those types can likewise be discovered from the genome,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">human</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s">&#39;Effect&#39;</span><span class="p">)</span>
-<span class="go">[&#39;3_prime_UTR_variant&#39;, &#39;splice_acceptor_variant&#39;, &#39;intergenic_variant&#39;...</span>
+<p><code class="docutils literal"><span class="pre">Variation</span></code> regions also have distinctive properties worthy of additional mention. As for genes, there are distinct types stored in Ensembl that may be of interest. Those types can likewise be discovered from the genome,</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">human</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s1">&#39;Effect&#39;</span><span class="p">)</span>
+<span class="go">[&#39;incomplete_terminal_codon_variant&#39;, &#39;splice_acceptor_variant&#39;, &#39;intergenic_variant&#39;...</span>
 </pre></div>
 </div>
 <p>and that information can be used to query the genome for all variation of that effect.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">What we term <tt class="docutils literal"><span class="pre">effect</span></tt>, Ensembl terms consequence. We use <tt class="docutils literal"><span class="pre">effect</span></tt> because it&#8217;s shorter.</p>
+<p class="last">What we term <code class="docutils literal"><span class="pre">effect</span></code>, Ensembl terms consequence. We use <code class="docutils literal"><span class="pre">effect</span></code> because it&#8217;s shorter.</p>
 </div>
-<p>We allow the query to be an inexact match by setting <tt class="docutils literal"><span class="pre">like=True</span></tt>. Again we&#8217;ll just iterate over the first few.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nsyn_variants</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getVariation</span><span class="p">(</span><span class="n">Effect</span><span class="o">=</span><span class="s">&#39;non_synonymous_codon&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                            <span class="n">like</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<p>We allow the query to be an inexact match by setting <code class="docutils literal"><span class="pre">like=True</span></code>. Again we&#8217;ll just iterate over the first few.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nsyn_variants</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getVariation</span><span class="p">(</span><span class="n">Effect</span><span class="o">=</span><span class="s1">&#39;missense_variant&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">nsyn_variant</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nsyn_variants</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">Effect</span> <span class="o">==</span> <span class="s1">&#39;missense_variant&#39;</span> <span class="ow">and</span>\
+<span class="gp">... </span>                         <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">AlleleFreqs</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">break</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">nsyn_variant</span> <span class="ow">in</span> <span class="n">nsyn_variants</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">break</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nsyn_variant</span>
-<span class="go">Variation(Symbol=&#39;rs180965628&#39;; Effect=&#39;non_synonymous_codon&#39;; Alleles=&#39;G/A&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">AlleleFreqs</span>
-<span class="go">=============================</span>
-<span class="go">allele      freq    sample_id</span>
-<span class="go">-----------------------------</span>
-<span class="go">     A    0.0000       113559</span>
-<span class="go">     G    1.0000       113559</span>
-<span class="go">     A    0.0013       113560</span>
-<span class="go">     G    0.9987       113560</span>
-<span class="go">     A    0.0000       113561</span>
-<span class="go">     G    1.0000       113561</span>
-<span class="go">     A    0.0005       113562</span>
-<span class="go">     G    0.9995       113562</span>
-<span class="go">     A    0.0000       113563</span>
-<span class="go">     G    1.0000       113563</span>
-<span class="go">-----------------------------</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">nsyn_variant</span>
+<span class="go">Variation(Symbol=&#39;rs17852242&#39;; Effect=&#39;missense_variant&#39;; Alleles=&#39;A/T&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">AlleleFreqs</span>
+<span class="go">=================================</span>
+<span class="go">allele      freq    population_id</span>
+<span class="go">---------------------------------</span>
+<span class="go">     A    0.8620            12951</span>
+<span class="go">     T    0.1380            12951</span>
+<span class="go">---------------------------------</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">Variation</span></tt> objects also have other useful properties, such as a location, the number of alleles and the allele frequencies. The length of a <tt class="docutils literal"><span class="pre">Variation</span></tt> instance is the length of it&#8217;s longest allele.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">nsyn_variant</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">Location</span>
-<span class="go">Homo sapiens:chromosome:17:6068-6069:1</span>
+<p><code class="docutils literal"><span class="pre">Variation</span></code> objects also have other useful properties, such as a location, the number of alleles and the allele frequencies. The length of a <code class="docutils literal"><span class="pre">Variation</span></code> instance is the length of it&#8217;s longest allele.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">nsyn_variant</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">Location</span>
+<span class="go">Homo sapiens:chromosome:CHR_HSCHR12_1_CTG1:70987-70988:1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">NumAlleles</span> <span class="o">==</span> <span class="mi">2</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">Variation</span></tt> objects have <tt class="docutils literal"><span class="pre">FlankingSeq</span></tt> and <tt class="docutils literal"><span class="pre">Seq</span></tt> attributes which, of course, in the case of a SNP is a single nucleotide long and should correspond to one of the alleles. In the latter case, this property is a tuple with the 0th entry being the 5&#8217;- 300 nucleotides and the 1st entry being the 3&#8217; nucleotides.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">FlankingSeq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">ACTAATACCTG...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">FlankingSeq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="go">CACGATGCCTA...</span>
+<p><code class="docutils literal"><span class="pre">Variation</span></code> objects have <code class="docutils literal"><span class="pre">FlankingSeq</span></code> and <code class="docutils literal"><span class="pre">Seq</span></code> attributes which in the case of a SNP is a single nucleotide long and should correspond to one of the alleles. In the latter case, this property is a tuple with the 0th entry being the 5&#8217;- 300 nucleotides and the 1st entry being the 3&#8217; nucleotides.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The flanking sequence is only returned when the SNPs flank matches reference (according to Ensembl).</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">FlankingSeq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">GTGGGGTGGGG...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">FlankingSeq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">CCCAGCGAGAG...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">nsyn_variant</span><span class="o">.</span><span class="n">Seq</span><span class="p">)</span> <span class="ow">in</span> <span class="n">nsyn_variant</span><span class="o">.</span><span class="n">Alleles</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nsyn_variant</span><span class="o">.</span><span class="n">Seq</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As a standard feature, <tt class="docutils literal"><span class="pre">Variation</span></tt> within a specific interval can also be obtained. Using the <tt class="docutils literal"><span class="pre">brca2</span></tt> gene region instance created above, we can find all the genetic variants using the <tt class="docutils literal"><span class="pre">Variants</span></tt> property of genome regions. We use this example to also demonstrate the <tt class="docutils literal"><span class="pre">PeptideAlleles</span></tt> and <tt class="docutils literal"><span class="pre">TranslationLocation</span></tt> attributes. <tt class="docutils literal"><span class="pre">PeptideAlleles</span></tt> is the amino-acid variation resulting from the nucleotide variation while <tt class="docutils literal"><span class="pre">TranslationLocation</span></tt> is the position in the translated peptide of the variant. If a variant does not affect protein coding sequence (either it&#8217;s not exonic or it&#8217;s a synonymous variant) then these properties have the value <tt class="docutils literal"><span class="pre">None</span></tt>.
+<p>As a standard feature, <code class="docutils literal"><span class="pre">Variation</span></code> within a specific interval can also be obtained. Using the <code class="docutils literal"><span class="pre">brca2</span></code> gene region instance created above, we can find all the genetic variants using the <code class="docutils literal"><span class="pre">Variants</span></code> property of genome regions. We use this example to also demonstrate the <code class="docutils literal"><span class="pre">PeptideAlleles</span></code> and <code class="docutils literal"><span class="pre">TranslationLocation</span></code> attributes. <code class="docutils literal"><span class="pre">PeptideAlleles</span></code> is the amino-acid variation resulting from the nucleotide variation while <code class="docutils literal"><span class="pre">TranslationLocation</span></code> is the position in the translated peptide of the variant. If a variant does not affect protein coding sequence (either it&#8217;s not exonic or it&#8217;s a synonymous variant) then these properties have the value <code class="docutils literal"><span class="pre">None</span></code>.
 We illustrate their use.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Variants</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">variant</span><span class="o">.</span><span class="n">PeptideAlleles</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">brca2</span><span class="o">.</span><span class="n">Variants</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">variant</span><span class="o">.</span><span class="n">PeptideAlleles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">continue</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">variant</span><span class="o">.</span><span class="n">PeptideAlleles</span><span class="p">,</span> <span class="n">variant</span><span class="o">.</span><span class="n">TranslationLocation</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">variant</span><span class="o">.</span><span class="n">PeptideAlleles</span><span class="p">,</span> <span class="n">variant</span><span class="o">.</span><span class="n">TranslationLocation</span>
 <span class="go">P/L 1...</span>
 </pre></div>
 </div>
@@ -312,105 +307,105 @@ We illustrate their use.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">These are Python coordinates, add 1 to get the Ensembl value.</p>
 </div>
-<p>We can also use a slightly more involved query to find all variants within the gene of a specific type. (Of course, you could also simply iterate over the <tt class="docutils literal"><span class="pre">Variants</span></tt> attribute to grab these out too.)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">brca2_snps</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;variation&#39;</span><span class="p">,</span>
+<p>We can also use a slightly more involved query to find all variants within the gene of a specific type. (Of course, you could also simply iterate over the <code class="docutils literal"><span class="pre">Variants</span></code> attribute to grab these out too.)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brca2_snps</span> <span class="o">=</span> <span class="n">human</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s1">&#39;variation&#39;</span><span class="p">,</span>
 <span class="gp">... </span>                     <span class="n">region</span><span class="o">=</span><span class="n">brca2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">snp</span> <span class="ow">in</span> <span class="n">brca2_snps</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="s">&#39;non_synonymous_codon&#39;</span> <span class="ow">in</span> <span class="n">snp</span><span class="o">.</span><span class="n">Effect</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s1">&#39;missense_variant&#39;</span> <span class="ow">in</span> <span class="n">snp</span><span class="o">.</span><span class="n">Effect</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">break</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">snp</span>
-<span class="go">Variation(Symbol=&#39;rs80358836&#39;; Effect=[&#39;2KB_upstream_variant&#39;, &#39;5KB_upstream_variant&#39;, &#39;non_synonymous_codon&#39;]; Alleles=&#39;C/T&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">snp</span><span class="o">.</span><span class="n">Location</span>
-<span class="go">Homo sapiens:chromosome:13:32890601-32890602:1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">snp</span>
+<span class="go">Variation(Symbol=&#39;rs80358836&#39;; Effect=[&#39;non_coding_transcript_exon_variant&#39;, &#39;missense_variant&#39;...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">snp</span><span class="o">.</span><span class="n">Location</span>
+<span class="go">Homo sapiens:chromosome:13:32316464-32316465:1</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="other-region-types">
 <h3>Other Region Types<a class="headerlink" href="#other-region-types" title="Permalink to this headline">¶</a></h3>
-<p>These can be obtained from the genome instance using the genomes <tt class="docutils literal"><span class="pre">getFeatures</span></tt> method. At present, only repeats, CpG islands, variation, EST&#8217;s and genes can be obtained through this method. There&#8217;s also <tt class="docutils literal"><span class="pre">GenericRegion</span></tt>, which is precisely that.</p>
+<p>These can be obtained from the genome instance using the genomes <code class="docutils literal"><span class="pre">getFeatures</span></code> method. At present, only repeats, CpG islands, variation, EST&#8217;s and genes can be obtained through this method. There&#8217;s also <code class="docutils literal"><span class="pre">GenericRegion</span></code>, which is precisely that.</p>
 <p>In Ensembl&#8217;s databases, each type of feature may be recorded at multiple coordinate levels. Accordingly, each level is checked to obtain full information of that feature.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chicken</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="n">Species</span><span class="o">=</span><span class="s">&#39;chook&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">chicken</span><span class="o">.</span><span class="n">FeatureCoordLevels</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chicken</span> <span class="o">=</span> <span class="n">Genome</span><span class="p">(</span><span class="n">Species</span><span class="o">=</span><span class="s1">&#39;chook&#39;</span><span class="p">,</span> <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">chicken</span><span class="o">.</span><span class="n">FeatureCoordLevels</span>
 <span class="go">Gallus gallus</span>
-<span class="go">============================================</span>
-<span class="go">     Type                             Levels</span>
-<span class="go">--------------------------------------------</span>
-<span class="go">     gene                         chromosome</span>
-<span class="go">   repeat                             contig</span>
-<span class="go">      est                         chromosome</span>
-<span class="go">variation                         chromosome</span>
-<span class="go">      cpg    chromosome, supercontig, contig</span>
-<span class="go">--------------------------------------------</span>
+<span class="go">=================================</span>
+<span class="go">     Type                  Levels</span>
+<span class="go">---------------------------------</span>
+<span class="go">     gene    chromosome, scaffold</span>
+<span class="go">   repeat    chromosome, scaffold</span>
+<span class="go">      est    chromosome, scaffold</span>
+<span class="go">variation              chromosome</span>
+<span class="go">      cpg    chromosome, scaffold</span>
+<span class="go">---------------------------------</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="comparative-analyses">
 <h2>Comparative Analyses<a class="headerlink" href="#comparative-analyses" title="Permalink to this headline">¶</a></h2>
-<p>The Ensembl compara database is represented by <tt class="docutils literal"><span class="pre">cogent.db.ensembl.compara.Compara</span></tt>. This object provides a means for querying for relationships among genomes and obtaining multiple alignments. For convenience the class is made available through the top-level module for importing  (i.e. <tt class="docutils literal"><span class="pre">cogent.db.ensembl.Compara</span></tt>). Instantiating <tt class="docutils literal"><span class="pre">Compara</span></tt> requires, as before, the ensembl release, the series of species of interest and optionally an account (we also use our local account for speed). For the purpose of illustration we&#8217;ll use the human, mouse and rat genomes.</p>
+<p>The Ensembl compara database is represented by <code class="docutils literal"><span class="pre">cogent.db.ensembl.compara.Compara</span></code>. This object provides a means for querying for relationships among genomes and obtaining multiple alignments. For convenience the class is made available through the top-level module for importing  (i.e. <code class="docutils literal"><span class="pre">cogent.db.ensembl.Compara</span></code>). Instantiating <code class="docutils literal"><span class="pre">Compara</span></code> requires, as before, the ensembl release, the series of species of interest and optionally an account (we also use our local account for speed). For the purpose of illustration we&#8217;ll use the human, mouse and rat genomes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Any queries on this instance of compara will only return results for the indicated species. If you want to query about other species, create another instance.</p>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="kn">import</span> <span class="n">Compara</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s">&#39;human&#39;</span><span class="p">,</span> <span class="s">&#39;mouse&#39;</span><span class="p">,</span> <span class="s">&#39;rat&#39;</span><span class="p">],</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.ensembl</span> <span class="k">import</span> <span class="n">Compara</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compara</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s1">&#39;human&#39;</span><span class="p">,</span> <span class="s1">&#39;mouse&#39;</span><span class="p">,</span> <span class="s1">&#39;rat&#39;</span><span class="p">],</span> <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">,</span>
 <span class="gp">... </span>                 <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compara</span>
-<span class="go">Compara(Species=(&#39;Homo sapiens&#39;, &#39;Mus musculus&#39;, &#39;Rattus norvegicus&#39;); Release=67...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">compara</span>
+<span class="go">Compara(Species=(&#39;Homo sapiens&#39;, &#39;Mus musculus&#39;, &#39;Rattus norvegicus&#39;); Release=81...</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">Compara</span></tt> object loads the corresponding <tt class="docutils literal"><span class="pre">Genome</span></tt>&#8216;s and attaches them to itself as named attributes (use <tt class="docutils literal"><span class="pre">Species.getComparaName</span></tt> to find out what the attribute will be). The genome instances are named according to their common name in CamelCase, or Scase. For instance, if we had created a <tt class="docutils literal"><span class="pre">Compara</span></tt> instance with the American pika species included, then that genome would be accessed as <tt class="docutils literal"><span class="pre">compara.AmericanPika</span></tt>. Common names containing a &#8216;.&#8217; are treated differently. For instance, the common name for <em>Caenorhabditis remanei</em> is <tt class="docutils literal"><span class="pre">C.remanei</span></tt> which becomes <tt class="docutils literal"><span class="pre">compara.Cremanei</span></tt>. We access the human genome in this <tt class="docutils literal"><span class="pre">Compara</span></tt> instance and conduct a gene search.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">Human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">brca2</span>
+<p>The <code class="docutils literal"><span class="pre">Compara</span></code> object loads the corresponding <code class="docutils literal"><span class="pre">Genome</span></code>&#8216;s and attaches them to itself as named attributes (use <code class="docutils literal"><span class="pre">Species.getComparaName</span></code> to find out what the attribute will be). The genome instances are named according to their common name in CamelCase, or Scase. For instance, if we had created a <code class="docutils literal"><span class="pre">Compara</span></code> instance with the American pika species included, then that genome would be accessed as <code class="docutils literal"><span class="pre">compara.AmericanPika</span></code>. Common names containing a &#8216;.&#8217; are treated differently. For instance, the common name for <em>Caenorhabditis remanei</em> is <code class="docutils literal"><span class="pre">C.remanei</span></code> which becomes <code class="docutils literal"><span class="pre">compara.Cremanei</span></code>. We access the human genome in this <code class="docutils literal"><span class="pre">Compara</span></code> instance and conduct a gene search.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brca2</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">Human</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s1">&#39;ENSG00000139618&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">brca2</span>
 <span class="go">Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;breast...</span>
 </pre></div>
 </div>
-<p>We can now use this result to search compara for related genes. We note here that like <tt class="docutils literal"><span class="pre">Genome</span></tt>, <tt class="docutils literal"><span class="pre">Compara</span></tt> has the <tt class="docutils literal"><span class="pre">getDistinct</span></tt> method to assist in identifying appropriate search criteria. What are the distinct types of gene relationships recorded in Ensembl, for instance?</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">relationships</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s">&#39;relationship&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">relationships</span>
-<span class="go">[u&#39;ortholog_one2many&#39;, u&#39;contiguous_gene_split&#39;, u&#39;ortholog_one2one&#39;,...</span>
+<p>We can now use this result to search compara for related genes. We note here that like <code class="docutils literal"><span class="pre">Genome</span></code>, <code class="docutils literal"><span class="pre">Compara</span></code> has the <code class="docutils literal"><span class="pre">getDistinct</span></code> method to assist in identifying appropriate search criteria. What are the distinct types of gene relationships recorded in Ensembl, for instance?</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">relationships</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getDistinct</span><span class="p">(</span><span class="s1">&#39;relationship&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">relationships</span>
+<span class="go">[u&#39;gene_split&#39;, u&#39;alt_allele&#39;, u&#39;ortholog_one2many&#39;, u&#39;ortholog_one2one&#39;...</span>
 </pre></div>
 </div>
-<p>So we use the <tt class="docutils literal"><span class="pre">brca2</span></tt> instance above and search for orthologs among the human, mouse, rat genomes.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">orthologs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">gene_region</span><span class="o">=</span><span class="n">brca2</span><span class="p">,</span>
-<span class="gp">... </span>                <span class="n">Relationship</span><span class="o">=</span><span class="s">&#39;ortholog_one2one&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span>
+<p>So we use the <code class="docutils literal"><span class="pre">brca2</span></code> instance above and search for orthologs among the human, mouse, rat genomes.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">orthologs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">gene_region</span><span class="o">=</span><span class="n">brca2</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">Relationship</span><span class="o">=</span><span class="s1">&#39;ortholog_one2one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">orthologs</span>
 <span class="go">RelatedGenes:</span>
 <span class="go"> Relationships=ortholog_one2one</span>
-<span class="go">  Gene(Species=&#39;Rattus norvegicus&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;Breast cancer ...</span>
+<span class="go">  Gene(Species=&#39;Rattus norvegicus&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;breast cancer ...</span>
 </pre></div>
 </div>
-<p>I could also have done that query using a <tt class="docutils literal"><span class="pre">StableId</span></tt>, which I now do using the Ensembl mouse identifier for <em>Brca2</em>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">orthologs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSMUSG00000041147&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                <span class="n">Relationship</span><span class="o">=</span><span class="s">&#39;ortholog_one2one&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span>
+<p>I could also have done that query using a <code class="docutils literal"><span class="pre">StableId</span></code>, which I now do using the Ensembl mouse identifier for <em>Brca2</em>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">orthologs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s1">&#39;ENSMUSG00000041147&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">Relationship</span><span class="o">=</span><span class="s1">&#39;ortholog_one2one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">orthologs</span>
 <span class="go">RelatedGenes:</span>
 <span class="go"> Relationships=ortholog_one2one</span>
-<span class="go">  Gene(Species=&#39;Rattus norvegicus&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;Breast cancer...</span>
+<span class="go">  Gene(Species=&#39;Rattus norvegicus&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;breast cancer...</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">RelatedGenes</span></tt> object has a number of properties allowing you to get access to data. A <tt class="docutils literal"><span class="pre">Members</span></tt> attribute holds each of the <tt class="docutils literal"><span class="pre">Gene</span></tt> instances displayed above. The length of this attribute tells you how many hits there were, while each member has all of the capabilities described for <tt class="docutils literal"><span class="pre">Gene</span></tt> above, eg. a <tt class="docutils literal"><span class="pre">Cds</span></tt> property. There is also a <tt class="docutils literal"><span class="pre">getSeqLengths</span></tt> method which returns the vector of sequence lengths for the members. This method returns just the lengths of the individual genes.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">Members</span>
+<p>The <code class="docutils literal"><span class="pre">RelatedGenes</span></code> object has a number of properties allowing you to get access to data. A <code class="docutils literal"><span class="pre">Members</span></code> attribute holds each of the <code class="docutils literal"><span class="pre">Gene</span></code> instances displayed above. The length of this attribute tells you how many hits there were, while each member has all of the capabilities described for <code class="docutils literal"><span class="pre">Gene</span></code> above, eg. a <code class="docutils literal"><span class="pre">Cds</span></code> property. There is also a <code class="docutils literal"><span class="pre">getSeqLengths</span></code> method which returns the vector of sequence lengths for the members. This method returns just the lengths of the individual genes.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">Members</span>
 <span class="go">(Gene(Species=&#39;Rattus norvegicus&#39;; BioType=&#39;protein_coding&#39;; Descr...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getSeqLengths</span><span class="p">()</span>
-<span class="go">[40742, 47117, 84195]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getSeqLengths</span><span class="p">()</span>
+<span class="go">[40742, 84793, 47700]</span>
 </pre></div>
 </div>
-<p>In addition there&#8217;s a <tt class="docutils literal"><span class="pre">getMaxCdsLengths</span></tt> method for returning the lengths of the longest <tt class="docutils literal"><span class="pre">Cds</span></tt> from each member.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getMaxCdsLengths</span><span class="p">()</span>
-<span class="go">[10032, 9990, 10257]</span>
+<p>In addition there&#8217;s a <code class="docutils literal"><span class="pre">getMaxCdsLengths</span></code> method for returning the lengths of the longest <code class="docutils literal"><span class="pre">Cds</span></code> from each member.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getMaxCdsLengths</span><span class="p">()</span>
+<span class="go">[10032, 10257, 9990]</span>
 </pre></div>
 </div>
-<p>You can also obtain the sequences as a <tt class="docutils literal"><span class="pre">cogent</span></tt> <tt class="docutils literal"><span class="pre">SequenceCollection</span></tt> (unaligned), with the ability to have those sequences annotated as described above. The sequences are named in accordance with their genomic coordinates.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getSeqCollection</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s">&#39;gene&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">seqs</span><span class="o">.</span><span class="n">Names</span>
-<span class="go">[&#39;Rattus norvegicus:chromosome:12:428...</span>
+<p>You can also obtain the sequences as a <code class="docutils literal"><span class="pre">cogent</span></code> <code class="docutils literal"><span class="pre">SequenceCollection</span></code> (unaligned), with the ability to have those sequences annotated as described above. The sequences are named in accordance with their genomic coordinates.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="n">orthologs</span><span class="o">.</span><span class="n">getSeqCollection</span><span class="p">(</span><span class="n">feature_types</span><span class="o">=</span><span class="s1">&#39;gene&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">seqs</span><span class="o">.</span><span class="n">Names</span>
+<span class="go">[&#39;Rattus norvegicus:chromosome:12:504...</span>
 </pre></div>
 </div>
 <p>We can also search for other relationship types, which we do here for a histone.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">paralogs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSG00000164032&#39;</span><span class="p">,</span>
-<span class="gp">... </span>            <span class="n">Relationship</span><span class="o">=</span><span class="s">&#39;within_species_paralog&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">paralogs</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paralogs</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getRelatedGenes</span><span class="p">(</span><span class="n">StableId</span><span class="o">=</span><span class="s1">&#39;ENSG00000164032&#39;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">Relationship</span><span class="o">=</span><span class="s1">&#39;within_species_paralog&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">paralogs</span>
 <span class="go">RelatedGenes:</span>
 <span class="go"> Relationships=within_species_paralog</span>
 <span class="go">  Gene(Species=&#39;Homo sapiens&#39;; BioType=&#39;protein_coding&#39;; Description=&#39;H2A...</span>
@@ -418,70 +413,68 @@ We illustrate their use.</p>
 </div>
 <div class="section" id="getting-comparative-alignments">
 <h3>Getting Comparative Alignments<a class="headerlink" href="#getting-comparative-alignments" title="Permalink to this headline">¶</a></h3>
-<p>Ensembl stores multiple sequence alignments for selected species. For a given group of species, you can examine what alignments are available by printing the <tt class="docutils literal"><span class="pre">method_species_links</span></tt> attribute of <tt class="docutils literal"><span class="pre">Compara</span></tt>. This will return something like</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compara</span><span class="o">.</span><span class="n">method_species_links</span>
-<span class="go">Align Methods/Clades</span>
-<span class="go">=============================================================================...</span>
-<span class="go">method_link_species_set_id  method_link_id  species_set_id      align_method ...</span>
-<span class="go">-----------------------------------------------------------------------------...</span>
-<span class="go">                       580              10           34468             PECAN ...</span>
-<span class="go">                       578              13           34466               EPO ...</span>
-<span class="go">                       582              14           34697  EPO_LOW_COVERAGE ...</span>
-<span class="go">-----------------------------------------------------------------------------...</span>
-</pre></div>
-</div>
-<p>The <tt class="docutils literal"><span class="pre">align_method</span></tt> and <tt class="docutils literal"><span class="pre">align_clade</span></tt> columns can be used as arguments to <tt class="docutils literal"><span class="pre">getSyntenicRegions</span></tt>. This method is responsible for returning <tt class="docutils literal"><span class="pre">SyntenicRegions</span></tt> instances for a given coordinate from a species. As it&#8217;s possible that multiple records may be found from the multiple alignment for a given set of coordinates, the result of calling this method is a python generator. The returned regions have a length, defined by the full set of aligned sequences. If the <tt class="docutils literal"><span class="pre">omit_redundant</span></tt> argument is used, then positions with gaps in all sampled species will be removed in the alignment to be returned. The length of the syntenic region, however, is the length of the unfiltered alignment.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">It&#8217;s important to realise that multiple alignments are from these clades. Hence, sequence regions that you might expect would result in a contiguous alignment in the species subset of interest may be returned as separate <tt class="docutils literal"><span class="pre">SyntenicRegions</span></tt> due to the influence on the alignment of the other species.</p>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">syntenic_regions</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getSyntenicRegions</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">brca2</span><span class="p">,</span>
-<span class="gp">... </span>                     <span class="n">align_method</span><span class="o">=</span><span class="s">&#39;EPO&#39;</span><span class="p">,</span> <span class="n">align_clade</span><span class="o">=</span><span class="s">&#39;eutherian&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">syntenic_region</span> <span class="ow">in</span> <span class="n">syntenic_regions</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">syntenic_region</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">syntenic_region</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">syntenic_region</span><span class="o">.</span><span class="n">getAlignment</span><span class="p">(</span><span class="n">omit_redundant</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
-<span class="go">SyntenicRegions:</span>
-<span class="go">  Coordinate(Human,chro...,13,32889610-32907347,1)</span>
-<span class="go">  Coordinate(Mouse,chro...,5,151325195-151339535,-1)</span>
-<span class="go">  Coordinate(Rat,chro...,12,4313281-4324025,1)</span>
-<span class="go">54774</span>
-<span class="go">3 x 54774 dna alignment: Homo sapiens:chromosome:13:32889610-32907347...</span>
-</pre></div>
-</div>
-<p>We consider a species for which pairwise alignments are available &#8211; the bush baby.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">compara_pair</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;Bushbaby&#39;</span><span class="p">],</span> <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">,</span>
-<span class="gp">... </span>                       <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compara_pair</span>
-<span class="go">Compara(Species=(&#39;Homo sapiens&#39;, &#39;Otolemur garnettii&#39;); Release=67; connected=True)</span>
-</pre></div>
-</div>
-<p>Printing the <tt class="docutils literal"><span class="pre">method_species_links</span></tt> table provides all the necessary information for specifying selection conditions.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compara_pair</span><span class="o">.</span><span class="n">method_species_links</span>
+<p>Ensembl stores multiple sequence alignments for selected species. For a given group of species, you can examine what alignments are available by printing the <code class="docutils literal"><span class="pre">method_species_links</span></code> attribute of <code class="docutils literal"><span class="pre">Compara</span></code>. This will return something like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">compara</span><span class="o">.</span><span class="n">method_species_links</span>
 <span class="go">Align Methods/Clades</span>
 <span class="go">============================================================================...</span>
 <span class="go">method_link_species_set_id  method_link_id  species_set_id      align_method...</span>
 <span class="go">----------------------------------------------------------------------------...</span>
-<span class="go">                       582              14           34697  EPO_LOW_COVERAGE...</span>
-<span class="go">                       545              16           34112         LASTZ_NET...</span>
+<span class="go">                       788              10           36176             PECAN...</span>
+<span class="go">                       780              13           36102               EPO...</span>
+<span class="go">                       781              14           36103  EPO_LOW_COVERAGE...</span>
 <span class="go">----------------------------------------------------------------------------...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span> <span class="o">=</span> <span class="n">compara_pair</span><span class="o">.</span><span class="n">Bushbaby</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span>
-<span class="gp">... </span>                            <span class="n">StableId</span><span class="o">=</span><span class="s">&#39;ENSOGAG00000003166&#39;</span>
-<span class="gp">... </span>                            <span class="p">)</span>
+<p>The <code class="docutils literal"><span class="pre">align_method</span></code> and <code class="docutils literal"><span class="pre">align_clade</span></code> columns can be used as arguments to <code class="docutils literal"><span class="pre">getSyntenicRegions</span></code>. This method is responsible for returning <code class="docutils literal"><span class="pre">SyntenicRegions</span></code> instances for a given coordinate from a species. As it&#8217;s possible that multiple records may be found from the multiple alignment for a given set of coordinates, the result of calling this method is a python generator. The returned regions have a length, defined by the full set of aligned sequences. If the <code class="docutils literal"><span class="pre">omit_redundant</span></code> argument is used, then positions with gaps in all sampled species will be removed in the alignment to be returned. The length of the syntenic region, however, is the length of the unfiltered alignment.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It&#8217;s important to realise that multiple alignments are from these clades. Hence, sequence regions that you might expect would result in a contiguous alignment in the species subset of interest may be returned as separate <code class="docutils literal"><span class="pre">SyntenicRegions</span></code> due to the influence on the alignment of the other species.</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">syntenic_regions</span> <span class="o">=</span> <span class="n">compara</span><span class="o">.</span><span class="n">getSyntenicRegions</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">brca2</span><span class="p">,</span>
+<span class="gp">... </span>                     <span class="n">align_method</span><span class="o">=</span><span class="s1">&#39;EPO&#39;</span><span class="p">,</span> <span class="n">align_clade</span><span class="o">=</span><span class="s1">&#39;eutherian&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">syntenic_region</span> <span class="ow">in</span> <span class="n">syntenic_regions</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">syntenic_region</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">syntenic_region</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">syntenic_region</span><span class="o">.</span><span class="n">getAlignment</span><span class="p">(</span><span class="n">omit_redundant</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">SyntenicRegions:</span>
+<span class="go">  Coordinate(Human,chro...,13,32315473-32316418,1)</span>
+<span class="go">  Coordinate(Mouse,chro...,5,150522620-150523171,1)</span>
+<span class="go">1365</span>
+<span class="go">2 x 1365 dna alignment: Homo sapiens:chromosome:13:32315473-32316418...</span>
+</pre></div>
+</div>
+<p>We consider a species for which pairwise alignments are available &#8211; the bush baby.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compara_pair</span> <span class="o">=</span> <span class="n">Compara</span><span class="p">([</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;Bushbaby&#39;</span><span class="p">],</span> <span class="n">Release</span><span class="o">=</span><span class="n">Release</span><span class="p">,</span>
+<span class="gp">... </span>                       <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">compara_pair</span>
+<span class="go">Compara(Species=(&#39;Homo sapiens&#39;, &#39;Otolemur garnettii&#39;); Release=81; connected=True)</span>
+</pre></div>
+</div>
+<p>Printing the <code class="docutils literal"><span class="pre">method_species_links</span></code> table provides all the necessary information for specifying selection conditions.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">compara_pair</span><span class="o">.</span><span class="n">method_species_links</span>
+<span class="go">Align Methods/Clades</span>
+<span class="go">============================================================================...</span>
+<span class="go">method_link_species_set_id  method_link_id  species_set_id      align_method...</span>
+<span class="go">----------------------------------------------------------------------------...</span>
+<span class="go">                       781              14           36103  EPO_LOW_COVERAGE...</span>
+<span class="go">                       682              16           35678         LASTZ_NET...</span>
+<span class="go">----------------------------------------------------------------------------...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span> <span class="o">=</span> <span class="n">compara_pair</span><span class="o">.</span><span class="n">Bushbaby</span><span class="o">.</span><span class="n">getGeneByStableId</span><span class="p">(</span>
+<span class="gp">... </span>                            <span class="n">StableId</span><span class="o">=</span><span class="s1">&#39;ENSOGAG00000003166&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">gene</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">gene</span>
 <span class="go">Gene(Species=&#39;Otolemur garnettii&#39;; BioType=&#39;protein_coding&#39;...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">syntenic</span> <span class="o">=</span> <span class="n">compara_pair</span><span class="o">.</span><span class="n">getSyntenicRegions</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">gene</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">align_method</span><span class="o">=</span><span class="s">&#39;LASTZ_NET&#39;</span><span class="p">,</span> <span class="n">align_clade</span><span class="o">=</span><span class="s">&#39;H.sap-O.gar&#39;</span><span class="p">)</span>
+<span class="gp">... </span>         <span class="n">align_method</span><span class="o">=</span><span class="s1">&#39;LASTZ_NET&#39;</span><span class="p">,</span> <span class="n">align_clade</span><span class="o">=</span><span class="s1">&#39;H.sap-O.gar&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">syntenic</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">region</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">region</span>
 <span class="gp">... </span>    <span class="k">break</span>
 <span class="go">SyntenicRegions:</span>
 <span class="go">  Coordinate(Bushbaby,scaf...,GL87...,8624867-8626121,1)</span>
-<span class="go">  Coordinate(Human,chro...,7,135410894-135412244,1)</span>
+<span class="go">  Coordinate(Human,chro...,7,135726146-135727496,1)</span>
 </pre></div>
 </div>
 </div>
@@ -492,83 +485,71 @@ We illustrate their use.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Querying Ensembl</a><ul>
-<li><a class="reference internal" href="#specifying-a-host-and-account">Specifying a Host and Account</a></li>
-<li><a class="reference internal" href="#what-species-are-available">What Species Are Available?</a></li>
-<li><a class="reference internal" href="#interrogating-a-genome">Interrogating a Genome</a><ul>
-<li><a class="reference internal" href="#a-note-on-coordinate-systems">A Note on Coordinate Systems</a></li>
-<li><a class="reference internal" href="#selecting-gene-s">Selecting Gene&#8217;s</a></li>
-<li><a class="reference internal" href="#getting-ests">Getting ESTs</a></li>
-<li><a class="reference internal" href="#getting-variation">Getting Variation</a></li>
-<li><a class="reference internal" href="#other-region-types">Other Region Types</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#comparative-analyses">Comparative Analyses</a><ul>
-<li><a class="reference internal" href="#getting-comparative-alignments">Getting Comparative Alignments</a></li>
-</ul>
-</li>
-</ul>
-</li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="query_ncbi.html"
-                        title="previous chapter">Querying NCBI for VWF</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="manipulating_tree_nodes.html"
-                        title="next chapter">Manipulation of Tree Node Objects</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/query_ensembl.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="manipulating_tree_nodes.html" title="Manipulation of Tree Node Objects"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="query_ncbi.html" title="Querying NCBI for VWF"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="query_ncbi.html" title="Querying NCBI for VWF"
+              >previous</a> |
+            <a href="manipulating_tree_nodes.html" title="Manipulation of Tree Node Objects"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/query_ensembl.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

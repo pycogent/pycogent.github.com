@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Protein sequences &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Protein sequences &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
     <link rel="next" title="Collections and Alignments" href="alignments.html" />
     <link rel="prev" title="DNA and RNA sequences" href="DNA_and_RNA_sequences.html" />     
@@ -33,36 +31,36 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="alignments.html" title="Collections and Alignments"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
-          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="alignments.html" title="Collections and Alignments"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="protein-sequences">
 <h1>Protein sequences<a class="headerlink" href="#protein-sequences" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="creating-a-proteinsequence-with-a-name">
 <h2>Creating a ProteinSequence with a name<a class="headerlink" href="#creating-a-proteinsequence-with-a-name" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">PROTEIN</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s">&#39;THISISAPRQTEIN&#39;</span><span class="p">,</span><span class="s">&#39;myProtein&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">PROTEIN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">makeSequence</span><span class="p">(</span><span class="s1">&#39;THISISAPRQTEIN&#39;</span><span class="p">,</span><span class="s1">&#39;myProtein&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 <span class="go">&lt;class &#39;cogent.core.sequence.ProteinSequence&#39;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
@@ -72,21 +70,21 @@
 </div>
 <div class="section" id="converting-a-dna-sequence-string-to-protein-sequence-string">
 <h2>Converting a DNA sequence string to protein sequence string<a class="headerlink" href="#converting-a-dna-sequence-string-to-protein-sequence-string" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s">&#39;TTTGCAAAC&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="k">import</span> <span class="n">DEFAULT</span> <span class="k">as</span> <span class="n">standard_code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_code</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;TTTGCAAAC&#39;</span><span class="p">)</span>
 <span class="go">&#39;FAN&#39;</span>
 </pre></div>
 </div>
-<p>Conversion to a <tt class="docutils literal"><span class="pre">ProteinSequence</span></tt> from a <tt class="docutils literal"><span class="pre">DnaSequence</span></tt> is shown in <a class="reference internal" href="DNA_and_RNA_sequences.html#translation"><em>Translate a DnaSequence to protein</em></a>.</p>
+<p>Conversion to a <code class="docutils literal"><span class="pre">ProteinSequence</span></code> from a <code class="docutils literal"><span class="pre">DnaSequence</span></code> is shown in <a class="reference internal" href="DNA_and_RNA_sequences.html#translation"><span class="std std-ref">Translate a DnaSequence to protein</span></a>.</p>
 </div>
 <div class="section" id="loading-protein-sequences-from-a-phylip-file">
 <h2>Loading protein sequences from a Phylip file<a class="headerlink" href="#loading-protein-sequences-from-a-phylip-file" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/abglobin_aa.phylip&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">aligned</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s1">&#39;data/abglobin_aa.phylip&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">aligned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Loading other formats, or collections of sequences is shown in <a class="reference internal" href="loading_sequences.html#load-seqs"><em>Loading nucleotide, protein sequences</em></a>.</p>
+<p>Loading other formats, or collections of sequences is shown in <a class="reference internal" href="loading_sequences.html#load-seqs"><span class="std std-ref">Loading nucleotide, protein sequences</span></a>.</p>
 </div>
 </div>
 
@@ -94,73 +92,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Protein sequences</a><ul>
-<li><a class="reference internal" href="#creating-a-proteinsequence-with-a-name">Creating a ProteinSequence with a name</a></li>
-<li><a class="reference internal" href="#converting-a-dna-sequence-string-to-protein-sequence-string">Converting a DNA sequence string to protein sequence string</a></li>
-<li><a class="reference internal" href="#loading-protein-sequences-from-a-phylip-file">Loading protein sequences from a Phylip file</a></li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
-</li>
-</ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="DNA_and_RNA_sequences.html"
-                        title="previous chapter">DNA and RNA sequences</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="alignments.html"
-                        title="next chapter">Collections and Alignments</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/protein_sequences.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="alignments.html" title="Collections and Alignments"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
-          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
+              >previous</a> |
+            <a href="alignments.html" title="Collections and Alignments"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/cookbook/protein_sequences.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

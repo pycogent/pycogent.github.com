@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Data Manipulation using Table" href="handling_tabular_data.html" />
     <link rel="prev" title="Creating and manipulating alignment profiles" href="aln_profile.html" />     
@@ -33,45 +31,46 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="handling_tabular_data.html" title="Data Manipulation using Table"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="aln_profile.html" title="Creating and manipulating alignment profiles"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="handling_tabular_data.html" title="Data Manipulation using Table"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="compute-the-effect-of-a-nucleotide-substitution-on-residue-polarity-in-two-different-genetic-codes-using-geneticcode-and-aaindex">
 <h1>Compute the effect of a nucleotide substitution on residue polarity in two different genetic codes using GeneticCode and AAIndex<a class="headerlink" href="#compute-the-effect-of-a-nucleotide-substitution-on-residue-polarity-in-two-different-genetic-codes-using-geneticcode-and-aaindex" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Greg Caporaso</em></p>
 <p>This document illustrates how to work with a genetic code object, and compare two different genetic codes. Here we compare the change in residue polarity, as judged by the Woese Polarity Requirement index (Woese 1973), resulting from a nucleotide substitution if the sequence is translated with the standard nuclear genetic code, or the vertebrate mitochondrial genetic code.</p>
 <p>First, we load the genetic code objects and look at how they differ from one another.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">GeneticCode</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s">&#39;FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="k">import</span> <span class="n">GeneticCode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">standard_nuclear_genetic_code</span> <span class="o">=</span> <span class="n">GeneticCode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s">&#39;FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSS**VVVVAAAADDEEGGGG&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSS**VVVVAAAADDEEGGGG&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vertebrate_mitochondrial_genetic_code</span> <span class="o">=</span> <span class="n">GeneticCode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">standard_nuclear_genetic_code</span> <span class="o">==</span> <span class="n">vertebrate_mitochondrial_genetic_code</span>
 <span class="go">False</span>
 </pre></div>
 </div>
 <p>We&#8217;ll make some synonyms for the objects for simplicity, and then look at the differences between the two codes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ngc</span> <span class="o">=</span> <span class="n">standard_nuclear_genetic_code</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ngc</span> <span class="o">=</span> <span class="n">standard_nuclear_genetic_code</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mgc</span> <span class="o">=</span> <span class="n">vertebrate_mitochondrial_genetic_code</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">differences</span> <span class="o">=</span> <span class="n">ngc</span><span class="o">.</span><span class="n">changes</span><span class="p">(</span><span class="n">mgc</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -80,26 +79,26 @@
 <span class="go">[(&#39;AGA&#39;, &#39;R*&#39;), (&#39;AGG&#39;, &#39;R*&#39;), (&#39;ATA&#39;, &#39;IM&#39;), (&#39;TGA&#39;, &#39;*W&#39;)]</span>
 </pre></div>
 </div>
-<p>Next, let&#8217;s load the Woese Polar Requirement <tt class="docutils literal"><span class="pre">AAIndex</span></tt> data, and find the effect of an ATA to ATG substitution with each of the two <tt class="docutils literal"><span class="pre">GeneticCode</span></tt> objects.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.aaindex</span> <span class="kn">import</span> <span class="n">getWoeseDistanceMatrix</span>
+<p>Next, let&#8217;s load the Woese Polar Requirement <code class="docutils literal"><span class="pre">AAIndex</span></code> data, and find the effect of an ATA to ATG substitution with each of the two <code class="docutils literal"><span class="pre">GeneticCode</span></code> objects.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.aaindex</span> <span class="k">import</span> <span class="n">getWoeseDistanceMatrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">woese_distance_matrix</span> <span class="o">=</span> <span class="n">getWoeseDistanceMatrix</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">woese_distance_matrix</span><span class="p">[</span><span class="n">ngc</span><span class="p">[</span><span class="s">&#39;ATA&#39;</span><span class="p">]][</span><span class="n">ngc</span><span class="p">[</span><span class="s">&#39;ATG&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">woese_distance_matrix</span><span class="p">[</span><span class="n">ngc</span><span class="p">[</span><span class="s1">&#39;ATA&#39;</span><span class="p">]][</span><span class="n">ngc</span><span class="p">[</span><span class="s1">&#39;ATG&#39;</span><span class="p">]]</span>
 <span class="go">0.39999999999999947</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">woese_distance_matrix</span><span class="p">[</span><span class="n">mgc</span><span class="p">[</span><span class="s">&#39;ATA&#39;</span><span class="p">]][</span><span class="n">mgc</span><span class="p">[</span><span class="s">&#39;ATG&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">woese_distance_matrix</span><span class="p">[</span><span class="n">mgc</span><span class="p">[</span><span class="s1">&#39;ATA&#39;</span><span class="p">]][</span><span class="n">mgc</span><span class="p">[</span><span class="s1">&#39;ATG&#39;</span><span class="p">]]</span>
 <span class="go">0.0</span>
 </pre></div>
 </div>
 <p>This illustrates that there is a difference in residue polarity associated with substitution only in the standard nuclear code (where ATA to ATG translates to an isoleucine to methionine substitution). In the vertebrate mitochondrial code, ATA to ATG is a synonymous substitution. Calculations of this type were central to <a class="footnote-reference" href="#id2" id="id1">[1]</a> which presents the study that these modules were initially developed for.</p>
-<p><tt class="docutils literal"><span class="pre">GeneticCode</span></tt> objects can also be used to translate DNA sequences (where asterisks in the results refer to stop-translation characters):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dna</span> <span class="o">=</span> <span class="s">&quot;AAACGCTGTGTGTGAGATGAAAAA&quot;</span>
+<p><code class="docutils literal"><span class="pre">GeneticCode</span></code> objects can also be used to translate DNA sequences (where asterisks in the results refer to stop-translation characters):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dna</span> <span class="o">=</span> <span class="s2">&quot;AAACGCTGTGTGTGAGATGAAAAA&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ngc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">dna</span><span class="p">)</span>
 <span class="go">&#39;KRCV*DEK&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mgc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">dna</span><span class="p">)</span>
 <span class="go">&#39;KRCVWDEK&#39;</span>
 </pre></div>
 </div>
-<p>The standard nuclear genetic code can also be loaded as <tt class="docutils literal"><span class="pre">DEFAULT</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="kn">import</span> <span class="n">DEFAULT</span>
+<p>The standard nuclear genetic code can also be loaded as <code class="docutils literal"><span class="pre">DEFAULT</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.genetic_code</span> <span class="k">import</span> <span class="n">DEFAULT</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">DEFAULT</span> <span class="o">==</span> <span class="n">standard_nuclear_genetic_code</span>
 <span class="go">True</span>
 </pre></div>
@@ -117,62 +116,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
+</ul>
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="aln_profile.html"
-                        title="previous chapter">Creating and manipulating alignment profiles</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="handling_tabular_data.html"
-                        title="next chapter">Data Manipulation using <tt class="docutils literal"><span class="pre">Table</span></tt></a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/genetic_code_aa_index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="handling_tabular_data.html" title="Data Manipulation using Table"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="aln_profile.html" title="Creating and manipulating alignment profiles"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="aln_profile.html" title="Creating and manipulating alignment profiles"
+              >previous</a> |
+            <a href="handling_tabular_data.html" title="Data Manipulation using Table"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/genetic_code_aa_index.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

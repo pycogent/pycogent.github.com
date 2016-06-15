@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Readme &mdash; PyCogent 1.5.3 documentation</title>
+    <title>The Readme &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1.5.3',
+        URL_ROOT:    './',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,34 +23,36 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="index.html" />
     <link rel="next" title="Coding guidelines" href="coding_guidelines.html" />
-    <link rel="prev" title="Quick installation" href="install.html" />     
+    <link rel="prev" title="Quick installation using pip" href="install.html" />     
 <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbW_pA971hrPgosv-Msv7hRQZ4X-jPDmWcshBrz2j7-fJvuUABRTGWmdiw2G89JpgztGlFGG8hDxRAw"></script>\
 <script type="text/javascript" src="_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="install.html" title="Quick installation using pip"
+             accesskey="P">previous</a> |
           <a href="coding_guidelines.html" title="Coding guidelines"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="install.html" title="Quick installation"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-readme">
 <h1>The Readme<a class="headerlink" href="#the-readme" title="Permalink to this headline">¶</a></h1>
@@ -60,9 +60,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://sourceforge.net/projects/pycogent">From sourceforge</a> or follow the <a class="reference internal" href="install.html#quick-install"><em>Quick installation</em></a> instructions.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Registration:</th><td class="field-body">To be informed of bugs and new releases, please subscribe to the <a class="reference external" href="http://pycogent.wordpress.com">News and Announcements Blog</a>.</td>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="https://github.com/pycogent/pycogent">From github</a> or follow the <a class="reference internal" href="install.html#quick-install"><span class="std std-ref">Quick installation using pip</span></a> instructions.</td>
 </tr>
 </tbody>
 </table>
@@ -78,7 +76,7 @@
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">On some linux platforms (like Ubuntu), you must specifically install a <tt class="docutils literal"><span class="pre">python-dev</span></tt> package so that the <a class="reference external" href="http://www.python.org">Python</a> header files required for building some external dependencies are available.</p>
+<p class="last">On some linux platforms (like Ubuntu), you must specifically install a <code class="docutils literal"><span class="pre">python-dev</span></code> package so that the <a class="reference external" href="http://www.python.org">Python</a> header files required for building some external dependencies are available.</p>
 </div>
 </div>
 <div class="section" id="optional">
@@ -88,35 +86,25 @@
 <li><a class="reference external" href="http://matplotlib.sourceforge.net">Matplotlib</a>: used to plot several kinds of graphs related to codon usage. For installation, see these instructions for <a class="reference external" href="http://sourceforge.net/projects/pycogent/forums/forum/651121/topic/5635916">compiling matplotlib</a>.</li>
 <li><a class="reference external" href="http://www.cython.org/">Cython</a>: This module is only necessary if you are a developer who wants to modify the *.pyx files.</li>
 <li><a class="reference external" href="http://code.google.com/p/mpi4py">mpi4py</a>: Message Passing Interface interface, required for parallel computation.</li>
-<li><a class="reference external" href="http://www.sqlalchemy.org">SQLAlchemy</a> and <a class="reference external" href="http://sourceforge.net/projects/mysql-python">MySQL-python</a>: These are required for the Ensembl querying code.</li>
+<li><a class="reference external" href="http://www.sqlalchemy.org">SQLAlchemy</a> and a mysql connector such as <a class="reference external" href="https://github.com/PyMySQL/PyMySQL">PyMySQL</a>: These are required for the Ensembl querying code.</li>
 </ul>
-<p>If you use the <a class="reference internal" href="install.html#quick-install"><em>Quick installation</em></a> approach, these are all specified in the requirements file.</p>
+<p>See the <a class="reference internal" href="install.html#quick-install"><span class="std std-ref">Quick installation using pip</span></a> approach for how these can be grabbed using the <code class="docutils literal"><span class="pre">all</span></code> option..</p>
 </div>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>If you don&#8217;t wish to use the <a class="reference internal" href="install.html#quick-install"><em>Quick installation</em></a> approach then the conventional *nix platform (including MacOS X) python package installation procedure applies. Download the software from <a class="reference external" href="http://sourceforge.net/projects/pycogent">here</a>. Uncompress the archive and change into the <tt class="docutils literal"><span class="pre">PyCogent</span></tt> directory and type:</p>
-<div class="highlight-python"><pre>$ python setup.py build</pre>
-</div>
-<p>This automatically compiles the modules. If you have administrative privileges type:</p>
-<div class="highlight-python"><pre>$ sudo python setup.py install</pre>
-</div>
-<p>This then places the entire package into your python/site-packages folder.</p>
-<p>If you do not have administrator privileges on your machine you can change the build approach to:</p>
-<div class="highlight-python"><pre>$ python setup.py build_ext -if</pre>
-</div>
-<p>which compiles the extensions in place (the <tt class="docutils literal"><span class="pre">i</span></tt> option) forcibly (the <tt class="docutils literal"><span class="pre">f</span></tt> option, ie even if they&#8217;ve already been compiled). Then move the cogent directory to where you want it (or leave it in place) and add this location to your python path using <tt class="docutils literal"><span class="pre">sys.path.insert(0,</span> <span class="pre">&quot;/your/path/to/PyCogent&quot;)</span></tt> in each script, or by setting shell environment variables (e.g. <tt class="docutils literal"><span class="pre">$</span> <span class="pre">export</span> <span class="pre">PYTHONPATH=/your/path/to/PyCogent:$PYTHONPATH</span></tt>)</p>
+<p>See the <a class="reference internal" href="install.html#quick-install"><span class="std std-ref">Quick installation using pip</span></a>.</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p><tt class="docutils literal"><span class="pre">PyCogent/tests</span></tt> contains all the tests (currently &gt;3100). You can most readily run the tests using the <tt class="docutils literal"><span class="pre">PyCogent/run_tests</span></tt> shell script. This is done by typing:</p>
-<div class="highlight-guess"><div class="highlight"><pre>$ <span class="n">sh</span> <span class="n">run_tests</span>
+<p><code class="docutils literal"><span class="pre">PyCogent/tests</span></code> contains all the tests. You can most readily run the tests using the <code class="docutils literal"><span class="pre">PyCogent/run_tests</span></code> shell script. This is done by typing:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span></span>$ sh run_tests
 </pre></div>
 </div>
-<p>which will automatically build extensions in place, set up the PYTHONPATH and run <tt class="docutils literal"><span class="pre">PyCogent/tests/alltests.py</span></tt>. Note that if certain optional applications are not installed this will be indicated in the output as &#8220;can&#8217;t find&#8221; or &#8220;not installed&#8221;. A &#8220;<cite>.</cite>&#8221; will be printed to screen for each test and if they all pass, you&#8217;ll see output like:</p>
-<div class="highlight-guess"><div class="highlight"><pre><span class="n">Ran</span> 3299 <span class="n">tests</span> <span class="n">in</span> 58<span class="p">.</span>128<span class="n">s</span>
+<p>which will automatically build extensions in place, set up the PYTHONPATH and run <code class="docutils literal"><span class="pre">PyCogent/tests/alltests.py</span></code>. Note that if certain optional applications are not installed this will be indicated in the output as &#8220;can&#8217;t find&#8221; or &#8220;not installed&#8221;. A &#8220;<cite>.</cite>&#8221; will be printed to screen for each test and if they all pass, you&#8217;ll see output like:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span></span>Ran 3299 tests in 58.128s
 
-<span class="n">OK</span>
+OK
 </pre></div>
 </div>
 </div>
@@ -124,14 +112,14 @@
 <h2>Tips for usage<a class="headerlink" href="#tips-for-usage" title="Permalink to this headline">¶</a></h2>
 <p>A good IDE can greatly simplify writing control scripts. Features such as code completion and definition look-up are extremely useful. For a complete list of <a class="reference external" href="http://www.python.org/cgi-bin/moinmoin/PythonEditors">editors go here</a>.</p>
 <p>To get help on attributes of an object in python, use</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="n">myalign</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="n">myalign</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>to list the attributes of <tt class="docutils literal"><span class="pre">myalign</span></tt> or</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">myalign</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">)</span>
+<p>to list the attributes of <code class="docutils literal"><span class="pre">myalign</span></code> or</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">myalign</span><span class="o">.</span><span class="n">writeToFile</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>to figure out how to use the <tt class="docutils literal"><span class="pre">myalign.writeToFile</span></tt> method. Also note that the directory structure of the package is similar to the import statements required to use a module &#8211; to see the contents of <tt class="docutils literal"><span class="pre">alignment.py</span></tt> or <tt class="docutils literal"><span class="pre">sequence.py</span></tt> you need to look in the directory <tt class="docutils literal"><span class="pre">cogent/core</span></tt> path, to use the classes in those files you specify <tt class="docutils literal"><span class="pre">cogent.core</span></tt> for importing.</p>
+<p>to figure out how to use the <code class="docutils literal"><span class="pre">myalign.writeToFile</span></code> method. Also note that the directory structure of the package is similar to the import statements required to use a module &#8211; to see the contents of <code class="docutils literal"><span class="pre">alignment.py</span></code> or <code class="docutils literal"><span class="pre">sequence.py</span></code> you need to look in the directory <code class="docutils literal"><span class="pre">cogent/core</span></code> path, to use the classes in those files you specify <code class="docutils literal"><span class="pre">cogent.core</span></code> for importing.</p>
 </div>
 </div>
 
@@ -139,76 +127,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">The Readme</a><ul>
-<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
-<li><a class="reference internal" href="#required">Required</a></li>
-<li><a class="reference internal" href="#optional">Optional</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#testing">Testing</a></li>
-<li><a class="reference internal" href="#tips-for-usage">Tips for usage</a></li>
-</ul>
-</li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Quick installation using pip</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChangeLog.html">Changelog</a></li>
 </ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="install.html"
-                        title="previous chapter">Quick installation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="coding_guidelines.html"
-                        title="next chapter">Coding guidelines</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/README.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="coding_guidelines.html" title="Coding guidelines"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="install.html" title="Quick installation"
-             >previous</a> |</li>
-        <li><a href="index.html">PyCogent 1.5.3 documentation</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="install.html" title="Quick installation using pip"
+              >previous</a> |
+            <a href="coding_guidelines.html" title="Coding guidelines"
+              >next</a> |
+            <a href="genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="_sources/README.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

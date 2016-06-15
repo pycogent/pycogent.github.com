@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Allowing substitution model parameters to differ between branches &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Allowing substitution model parameters to differ between branches &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Using codon models" href="codon_models.html" />
     <link rel="prev" title="A test of the neutral theory" href="neutral_test.html" />     
@@ -33,48 +31,49 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="codon_models.html" title="Using codon models"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="neutral_test.html" title="A test of the neutral theory"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="codon_models.html" title="Using codon models"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="allowing-substitution-model-parameters-to-differ-between-branches">
 <span id="scope-params-on-trees"></span><h1>Allowing substitution model parameters to differ between branches<a class="headerlink" href="#allowing-substitution-model-parameters-to-differ-between-branches" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Gavin Huttley</em></p>
 <p>A common task concerns assessing how substitution model exchangeability parameters differ between evolutionary lineages. This is most commonly of interest for the case of testing for natural selection. Here I&#8217;ll demonstrate the different ways of scoping parameters across trees for the codon model case and how these can be used for evolutionary modelling.</p>
 <p>We start with the standard imports, plus using a canned codon substitution model and then load the sample data set.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">MG94HKY</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&quot;data/test.tree&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="k">import</span> <span class="n">MG94HKY</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s2">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s2">&quot;data/test.tree&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We construct the substitution model and likelihood function and set the alignment.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">MG94HKY</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">MG94HKY</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>At this point we have a likelihood function with two exchangeability parameters from the substitution model (<tt class="docutils literal"><span class="pre">kappa</span></tt> the transition/transversion ratio; <tt class="docutils literal"><span class="pre">omega</span></tt> the nonsynonymous/synonymous ratio) plus branch lengths for all tree edges. To facilitate subsequent discussion I now display the tree</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
+<p>At this point we have a likelihood function with two exchangeability parameters from the substitution model (<code class="docutils literal"><span class="pre">kappa</span></code> the transition/transversion ratio; <code class="docutils literal"><span class="pre">omega</span></code> the nonsynonymous/synonymous ratio) plus branch lengths for all tree edges. To facilitate subsequent discussion I now display the tree</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">asciiArt</span><span class="p">()</span>
 <span class="go">                              /-Human</span>
 <span class="go">                    /edge.0--|</span>
 <span class="go">          /edge.1--|          \-HowlerMon</span>
@@ -86,20 +85,20 @@
 <span class="go">          \-DogFaced</span>
 </pre></div>
 </div>
-<p>In order to scope a parameter on a tree (meaning specifying a subset of edges for which the parameter is to be treated differently to the remainder of the tree) requires uniquely identifying the edges. We do this using the following arguments to the likelihood function <tt class="docutils literal"><span class="pre">setParamRule</span></tt> method:</p>
+<p>In order to scope a parameter on a tree (meaning specifying a subset of edges for which the parameter is to be treated differently to the remainder of the tree) requires uniquely identifying the edges. We do this using the following arguments to the likelihood function <code class="docutils literal"><span class="pre">setParamRule</span></code> method:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">tip_names</span></tt>: the name of two tips</li>
-<li><tt class="docutils literal"><span class="pre">outgroup_name</span></tt>: the name of a tip that is not part of the clade of interest</li>
-<li><tt class="docutils literal"><span class="pre">is_clade</span></tt>: if <tt class="docutils literal"><span class="pre">True</span></tt>, all lineages descended from the tree node identified by the <tt class="docutils literal"><span class="pre">tip_names</span></tt> and <tt class="docutils literal"><span class="pre">outgroup_name</span></tt> argument are affected by the other arguments. If <tt class="docutils literal"><span class="pre">False</span></tt>, then the <tt class="docutils literal"><span class="pre">is_stem</span></tt> argument must apply.</li>
-<li><tt class="docutils literal"><span class="pre">is_stem</span></tt>: Whether the edge leading to the node is included.</li>
+<li><code class="docutils literal"><span class="pre">tip_names</span></code>: the name of two tips</li>
+<li><code class="docutils literal"><span class="pre">outgroup_name</span></code>: the name of a tip that is not part of the clade of interest</li>
+<li><code class="docutils literal"><span class="pre">is_clade</span></code>: if <code class="docutils literal"><span class="pre">True</span></code>, all lineages descended from the tree node identified by the <code class="docutils literal"><span class="pre">tip_names</span></code> and <code class="docutils literal"><span class="pre">outgroup_name</span></code> argument are affected by the other arguments. If <code class="docutils literal"><span class="pre">False</span></code>, then the <code class="docutils literal"><span class="pre">is_stem</span></code> argument must apply.</li>
+<li><code class="docutils literal"><span class="pre">is_stem</span></code>: Whether the edge leading to the node is included.</li>
 </ul>
-<p>The next concepts include exactly what can be scoped and how. In the case of testing for distinctive periods of natural selection it is common to specify distinct values for <tt class="docutils literal"><span class="pre">omega</span></tt> for an edge. I&#8217;ll first illustrate some possible uses for the arguments above by setting <tt class="docutils literal"><span class="pre">omega</span></tt> to be distinctive for specific edges. I will set a value for omega so that printing the likelihood function illustrates what edges have been effected, but I won&#8217;t actually do any model fitting.</p>
+<p>The next concepts include exactly what can be scoped and how. In the case of testing for distinctive periods of natural selection it is common to specify distinct values for <code class="docutils literal"><span class="pre">omega</span></code> for an edge. I&#8217;ll first illustrate some possible uses for the arguments above by setting <code class="docutils literal"><span class="pre">omega</span></code> to be distinctive for specific edges. I will set a value for omega so that printing the likelihood function illustrates what edges have been effected, but I won&#8217;t actually do any model fitting.</p>
 <div class="section" id="specifying-a-clade">
 <h2>Specifying a clade<a class="headerlink" href="#specifying-a-clade" title="Permalink to this headline">¶</a></h2>
-<p>I&#8217;m going to cause <tt class="docutils literal"><span class="pre">omega</span></tt> to attain a different value for all branches aside from the primate clade and stem (<tt class="docutils literal"><span class="pre">HowlerMon</span></tt>, <tt class="docutils literal"><span class="pre">Human</span></tt>, <tt class="docutils literal"><span class="pre">edge.0</span></tt>).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;DogFaced&#39;</span><span class="p">,</span> <span class="s">&#39;Mouse&#39;</span><span class="p">],</span>
-<span class="gp">... </span>             <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<p>I&#8217;m going to cause <code class="docutils literal"><span class="pre">omega</span></code> to attain a different value for all branches aside from the primate clade and stem (<code class="docutils literal"><span class="pre">HowlerMon</span></code>, <code class="docutils literal"><span class="pre">Human</span></code>, <code class="docutils literal"><span class="pre">edge.0</span></code>).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;DogFaced&#39;</span><span class="p">,</span> <span class="s1">&#39;Mouse&#39;</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -127,19 +126,19 @@
 <span class="go">--------------</span>
 </pre></div>
 </div>
-<p>As you can see <tt class="docutils literal"><span class="pre">omega</span></tt> for the primate edges I listed above have the default parameter value (1.0), while the others have what I&#8217;ve assigned. In fact, you could omit the <tt class="docutils literal"><span class="pre">is_clade</span></tt> argument as this is the default, but I think for readability of scripts it&#8217;s best to be explicit.</p>
+<p>As you can see <code class="docutils literal"><span class="pre">omega</span></code> for the primate edges I listed above have the default parameter value (1.0), while the others have what I&#8217;ve assigned. In fact, you could omit the <code class="docutils literal"><span class="pre">is_clade</span></code> argument as this is the default, but I think for readability of scripts it&#8217;s best to be explicit.</p>
 </div>
 <div class="section" id="specifying-a-stem">
 <h2>Specifying a stem<a class="headerlink" href="#specifying-a-stem" title="Permalink to this headline">¶</a></h2>
 <p>This time I&#8217;ll specify the stem leading to the primates as the edge of interest.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">I need to reset the <tt class="docutils literal"><span class="pre">lf</span></tt> so all edges have the default value again. I&#8217;ll show this only for this example, but rest assured I&#8217;m doing it for all others too.</p>
+<p class="last">I need to reset the <code class="docutils literal"><span class="pre">lf</span></code> so all edges have the default value again. I&#8217;ll show this only for this example, but rest assured I&#8217;m doing it for all others too.</p>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">is_stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">is_stem</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -163,9 +162,9 @@
 <div class="section" id="specifying-clade-and-stem">
 <h2>Specifying clade and stem<a class="headerlink" href="#specifying-clade-and-stem" title="Permalink to this headline">¶</a></h2>
 <p>I&#8217;ll specify that both the primates and their stem are to be considered.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">is_stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">is_stem</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -188,45 +187,45 @@
 </div>
 <div class="section" id="alternate-arguments-for-specifying-edges">
 <h2>Alternate arguments for specifying edges<a class="headerlink" href="#alternate-arguments-for-specifying-edges" title="Permalink to this headline">¶</a></h2>
-<p>The likelihood function <tt class="docutils literal"><span class="pre">setParamRule</span></tt> method also has the arguments of <tt class="docutils literal"><span class="pre">edge</span></tt> and <tt class="docutils literal"><span class="pre">edges</span></tt>. These allow specific naming of the tree edge(s) to be affected by a rule. In general, however, the <tt class="docutils literal"><span class="pre">tip_names</span></tt> + <tt class="docutils literal"><span class="pre">outgroup_name</span></tt> combo is more robust.</p>
+<p>The likelihood function <code class="docutils literal"><span class="pre">setParamRule</span></code> method also has the arguments of <code class="docutils literal"><span class="pre">edge</span></code> and <code class="docutils literal"><span class="pre">edges</span></code>. These allow specific naming of the tree edge(s) to be affected by a rule. In general, however, the <code class="docutils literal"><span class="pre">tip_names</span></code> + <code class="docutils literal"><span class="pre">outgroup_name</span></code> combo is more robust.</p>
 </div>
 <div class="section" id="applications-of-scoped-parameters">
 <h2>Applications of scoped parameters<a class="headerlink" href="#applications-of-scoped-parameters" title="Permalink to this headline">¶</a></h2>
 <p>The general use-cases for which a tree scope can be applied are:</p>
 <ol class="arabic">
 <li><p class="first">constraining all edges identified by a rule to have a specific value which is constant and not modifiable</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">all edges identified by a rule have the same but different value to the rest of the tree</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">allowing all edges identified by a rule to have different values of the parameter with the remaining tree edges having the same value</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">allowing all edges to have a different value</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
 </ol>
-<p>I&#8217;ll demonstrate these cases sequentially as they involve gradually increasing the degrees of freedom in the model. First we&#8217;ll constrain <tt class="docutils literal"><span class="pre">omega</span></tt> to equal 1 on the primate edges. I&#8217;ll then optimise the model.</p>
+<p>I&#8217;ll demonstrate these cases sequentially as they involve gradually increasing the degrees of freedom in the model. First we&#8217;ll constrain <code class="docutils literal"><span class="pre">omega</span></code> to equal 1 on the primate edges. I&#8217;ll then optimise the model.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">here I&#8217;m specifying a constant value for the parameter and so I <strong>must</strong> use the argument <tt class="docutils literal"><span class="pre">value</span></tt> to set it. This not to be confused with the argument <tt class="docutils literal"><span class="pre">init</span></tt> that is used for providing initial (starting) values for fitting.</p>
+<p class="last">here I&#8217;m specifying a constant value for the parameter and so I <strong>must</strong> use the argument <code class="docutils literal"><span class="pre">value</span></code> to set it. This not to be confused with the argument <code class="docutils literal"><span class="pre">init</span></code> that is used for providing initial (starting) values for fitting.</p>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -252,17 +251,17 @@
 <span class="go">    A     0.37</span>
 <span class="go">    G     0.21</span>
 <span class="go">--------------</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="go">-8640.9...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 <span class="go">9</span>
 </pre></div>
 </div>
-<p>I&#8217;ll now free up <tt class="docutils literal"><span class="pre">omega</span></tt> on the primate clade, but making it a single value shared by all primate lineages.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<p>I&#8217;ll now free up <code class="docutils literal"><span class="pre">omega</span></code> on the primate clade, but making it a single value shared by all primate lineages.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -288,17 +287,17 @@
 <span class="go">    A     0.37</span>
 <span class="go">    G     0.21</span>
 <span class="go">--------------</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="go">-8639.7...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 <span class="go">10</span>
 </pre></div>
 </div>
-<p>Finally I&#8217;ll allow all primate edges to have different values of <tt class="docutils literal"><span class="pre">omega</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Human&#39;</span><span class="p">,</span> <span class="s">&#39;HowlerMon&#39;</span><span class="p">],</span>
-<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<p>Finally I&#8217;ll allow all primate edges to have different values of <code class="docutils literal"><span class="pre">omega</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span> <span class="s1">&#39;HowlerMon&#39;</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Mouse&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -324,16 +323,16 @@
 <span class="go">    A     0.37</span>
 <span class="go">    G     0.21</span>
 <span class="go">--------------</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="go">-8638.9...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 <span class="go">11</span>
 </pre></div>
 </div>
-<p>We now allow <tt class="docutils literal"><span class="pre">omega</span></tt> to be different on all edges.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<p>We now allow <code class="docutils literal"><span class="pre">omega</span></code> to be different on all edges.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_independent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">=====</span>
 <span class="go">kappa</span>
@@ -359,9 +358,9 @@
 <span class="go">    A     0.37</span>
 <span class="go">    G     0.21</span>
 <span class="go">--------------</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="go">-8636.1...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 <span class="go">15</span>
 </pre></div>
 </div>
@@ -372,74 +371,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Allowing substitution model parameters to differ between branches</a><ul>
-<li><a class="reference internal" href="#specifying-a-clade">Specifying a clade</a></li>
-<li><a class="reference internal" href="#specifying-a-stem">Specifying a stem</a></li>
-<li><a class="reference internal" href="#specifying-clade-and-stem">Specifying clade and stem</a></li>
-<li><a class="reference internal" href="#alternate-arguments-for-specifying-edges">Alternate arguments for specifying edges</a></li>
-<li><a class="reference internal" href="#applications-of-scoped-parameters">Applications of scoped parameters</a></li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
-</li>
-</ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="neutral_test.html"
-                        title="previous chapter">A test of the neutral theory</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="codon_models.html"
-                        title="next chapter">Using codon models</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/scope_model_params_on_trees.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="codon_models.html" title="Using codon models"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="neutral_test.html" title="A test of the neutral theory"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="neutral_test.html" title="A test of the neutral theory"
+              >previous</a> |
+            <a href="codon_models.html" title="Using codon models"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/scope_model_params_on_trees.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

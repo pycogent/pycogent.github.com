@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Working with macromolecular structures &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Working with macromolecular structures &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Selecting and grouping entities" href="entity_selection.html" />
     <link rel="prev" title="Data Manipulation using Table" href="handling_tabular_data.html" />     
@@ -33,28 +31,29 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="entity_selection.html" title="Selecting and grouping entities"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="handling_tabular_data.html" title="Data Manipulation using Table"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="entity_selection.html" title="Selecting and grouping entities"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="working-with-macromolecular-structures">
 <h1>Working with macromolecular structures<a class="headerlink" href="#working-with-macromolecular-structures" title="Permalink to this headline">¶</a></h1>
@@ -65,173 +64,173 @@
 <h2>Hierarchy and identity<a class="headerlink" href="#hierarchy-and-identity" title="Permalink to this headline">¶</a></h2>
 <p>A common way to describe macromolecular structures is the hierarchical representation. The hierarchy is made from entities (atoms, residues, chains, models, structures and crystals). In this hierarchical representation models are within structures (e.g. several NMR models of one protein structure or residues which are a collection of atoms). Hierarchical representations are unique i.e. each entity has to be uniquely identified for a given structure, which means that it has a unique identifier. We will refer to this identifier as the <em>full_id</em> in contrast with the <em>short_id</em> or just <em>id</em> which defines an entity uniquely only within it&#8217;s parent. Each entity has only a single parent, but can have multiple children e.g. a residue is part of only one peptide chain, but it will contain multiple atoms.</p>
 <p>An example of a <em>full_id</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># for an atom</span>
-<span class="p">(</span><span class="s">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;ARG&#39;</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;O&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">))</span>
-<span class="c"># for a residue</span>
-<span class="p">(</span><span class="s">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;ARG&#39;</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">))</span>
-<span class="c"># for a chain</span>
-<span class="p">(</span><span class="s">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># for an atom</span>
+<span class="p">(</span><span class="s1">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;ARG&#39;</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
+<span class="c1"># for a residue</span>
+<span class="p">(</span><span class="s1">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;ARG&#39;</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
+<span class="c1"># for a chain</span>
+<span class="p">(</span><span class="s1">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The first is the identifier for the oxygen atom from the peptide bond of the ARG131 residue in the &#8216;A&#8217; chain of the first model (0) in the structure available from the PDB as &#8216;4TSV&#8217;. A short version of an <em>id</em> which is specific only within a parent (i.e. for an atom within a residue) looks similar. In the example below we see the short id of the same atom. Of course this information is not enough to pin-point an atom in the structure but it is enough to identify different atoms within the same residue.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">((</span><span class="s">&#39;O&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">((</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),)</span>
 </pre></div>
 </div>
-<p>As you can see the <em>full_id</em> is a linear tuple of short id&#8217;s which can be either a tuple (e.g. (&#8216;O&#8217;, &#8216; &#8216;) for an oxygen atom) or a string (e.g. &#8216;A&#8217; for chain A). All strings within a short id have some special meaning for example the id of a residue has the following structure (&#8216;three letter AA name&#8217;, residue_id, &#8216;insertion code&#8217;). It should be noted that according to the RCSB the <tt class="docutils literal"><span class="pre">residue_id</span></tt> is the integer number which should be 1 for the first natural residue in a protein. Residues can have negative <tt class="docutils literal"><span class="pre">residue_ids</span></tt> e.g. residues of a N-terminal affinity tag.</p>
+<p>As you can see the <em>full_id</em> is a linear tuple of short id&#8217;s which can be either a tuple (e.g. (&#8216;O&#8217;, &#8216; &#8216;) for an oxygen atom) or a string (e.g. &#8216;A&#8217; for chain A). All strings within a short id have some special meaning for example the id of a residue has the following structure (&#8216;three letter AA name&#8217;, residue_id, &#8216;insertion code&#8217;). It should be noted that according to the RCSB the <code class="docutils literal"><span class="pre">residue_id</span></code> is the integer number which should be 1 for the first natural residue in a protein. Residues can have negative <code class="docutils literal"><span class="pre">residue_ids</span></code> e.g. residues of a N-terminal affinity tag.</p>
 </div>
 <div class="section" id="what-is-an-entity">
 <h2>What is an Entity?<a class="headerlink" href="#what-is-an-entity" title="Permalink to this headline">¶</a></h2>
-<p><tt class="docutils literal"><span class="pre">Entity</span></tt> is the most basic class to provide methods specific to macromolecular structures. The <tt class="docutils literal"><span class="pre">Atom</span></tt>, <tt class="docutils literal"><span class="pre">Residue</span></tt>, <tt class="docutils literal"><span class="pre">Chain</span></tt>, <tt class="docutils literal"><span class="pre">Model</span></tt> and <tt class="docutils literal"><span class="pre">Structure</span></tt> classes all inherit from the <tt class="docutils literal"><span class="pre">Entity</span></tt> class, yet there is some distinction between them. Only the <tt class="docutils literal"><span class="pre">Atom</span></tt> entity cannot contain other entities e.g. an instance of the <tt class="docutils literal"><span class="pre">Residue</span></tt> class can (and should) contain some <tt class="docutils literal"><span class="pre">Atom</span></tt> instances. The methods common to container entities are within the <tt class="docutils literal"><span class="pre">MultiEntity</span></tt> class which they all inherit from. The <tt class="docutils literal"><span class="pre">MultiEntity</span></tt> is also a subclass of the <tt class="docutils literal"><span class="pre">Entity</span></tt> class. It is important not to use the <tt class="docutils literal"><span class="pre">Entity</span></tt> and <tt class="docutils literal"><span class="pre">MultiEntity</span></tt> classes directly as some attributes (e.g. their position within the SMCRA hierarchy) have to be provided. In fact each entity is just a Python dictionary with almost all dictionary methods left untouched.</p>
-<p>Parsing a macromolecular structure e.g. a PDB file means to create a <tt class="docutils literal"><span class="pre">Structure</span></tt> entity or in other words to recursively fill it with atoms, residues and chains.</p>
+<p><code class="docutils literal"><span class="pre">Entity</span></code> is the most basic class to provide methods specific to macromolecular structures. The <code class="docutils literal"><span class="pre">Atom</span></code>, <code class="docutils literal"><span class="pre">Residue</span></code>, <code class="docutils literal"><span class="pre">Chain</span></code>, <code class="docutils literal"><span class="pre">Model</span></code> and <code class="docutils literal"><span class="pre">Structure</span></code> classes all inherit from the <code class="docutils literal"><span class="pre">Entity</span></code> class, yet there is some distinction between them. Only the <code class="docutils literal"><span class="pre">Atom</span></code> entity cannot contain other entities e.g. an instance of the <code class="docutils literal"><span class="pre">Residue</span></code> class can (and should) contain some <code class="docutils literal"><span class="pre">Atom</span></code> instances. The methods common to container entities are within the <code class="docutils literal"><span class="pre">MultiEntity</span></code> class which they all inherit from. The <code class="docutils literal"><span class="pre">MultiEntity</span></code> is also a subclass of the <code class="docutils literal"><span class="pre">Entity</span></code> class. It is important not to use the <code class="docutils literal"><span class="pre">Entity</span></code> and <code class="docutils literal"><span class="pre">MultiEntity</span></code> classes directly as some attributes (e.g. their position within the SMCRA hierarchy) have to be provided. In fact each entity is just a Python dictionary with almost all dictionary methods left untouched.</p>
+<p>Parsing a macromolecular structure e.g. a PDB file means to create a <code class="docutils literal"><span class="pre">Structure</span></code> entity or in other words to recursively fill it with atoms, residues and chains.</p>
 </div>
 <div class="section" id="working-with-entities">
 <h2>Working with entities<a class="headerlink" href="#working-with-entities" title="Permalink to this headline">¶</a></h2>
-<p>Our first task will be to parse and write a structure in a PDB file into an <tt class="docutils literal"><span class="pre">Entity</span></tt> hierarchy. This is quite easy and if you are familiar with the internals of PyCogent I hope it will also be obvious. You can use any PDB file the examples use the <tt class="docutils literal"><span class="pre">4TSV.pdb</span></tt> file in the doc/data directory.</p>
+<p>Our first task will be to parse and write a structure in a PDB file into an <code class="docutils literal"><span class="pre">Entity</span></code> hierarchy. This is quite easy and if you are familiar with the internals of PyCogent I hope it will also be obvious. You can use any PDB file the examples use the <code class="docutils literal"><span class="pre">4TSV.pdb</span></code> file in the doc/data directory.</p>
 <p>The easy way, but implicit way:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cogent</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span> <span class="o">=</span> <span class="n">cogent</span><span class="o">.</span><span class="n">LoadStructure</span><span class="p">(</span><span class="s">&#39;data/4TSV.pdb&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cogent</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span> <span class="o">=</span> <span class="n">cogent</span><span class="o">.</span><span class="n">LoadStructure</span><span class="p">(</span><span class="s1">&#39;data/4TSV.pdb&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This code involves quite a bit of magic, so let&#8217;s do everything manually.</p>
-<p>The <tt class="docutils literal"><span class="pre">cogent.LoadStructure</span></tt> method is a convenience method to get a structure object from a file in any of the supported formats. Right now PyCogent supports only the PDB file-format. Now let&#8217;s read and write the same PDB file by using the <tt class="docutils literal"><span class="pre">PDBParser</span></tt> and <tt class="docutils literal"><span class="pre">PDBWriter</span></tt> function directly. The new_structure argument can be any <tt class="docutils literal"><span class="pre">Entity</span></tt> (e.g. a <tt class="docutils literal"><span class="pre">Structure</span></tt> entity) or a container of entities (e.g. a list of <tt class="docutils literal"><span class="pre">Atom</span></tt> and <tt class="docutils literal"><span class="pre">Residue</span></tt> entities):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="kn">import</span> <span class="n">PDBParser</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.format.pdb</span> <span class="kn">import</span> <span class="n">PDBWriter</span>
+<p>The <code class="docutils literal"><span class="pre">cogent.LoadStructure</span></code> method is a convenience method to get a structure object from a file in any of the supported formats. Right now PyCogent supports only the PDB file-format. Now let&#8217;s read and write the same PDB file by using the <code class="docutils literal"><span class="pre">PDBParser</span></code> and <code class="docutils literal"><span class="pre">PDBWriter</span></code> function directly. The new_structure argument can be any <code class="docutils literal"><span class="pre">Entity</span></code> (e.g. a <code class="docutils literal"><span class="pre">Structure</span></code> entity) or a container of entities (e.g. a list of <code class="docutils literal"><span class="pre">Atom</span></code> and <code class="docutils literal"><span class="pre">Residue</span></code> entities):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="k">import</span> <span class="n">PDBParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.format.pdb</span> <span class="k">import</span> <span class="n">PDBWriter</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tempfile</span><span class="o">,</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/4TSV.pdb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/4TSV.pdb&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_structure</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">open_handle</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">open_handle</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_pdb_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span><span class="s">&#39;wb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_pdb_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PDBWriter</span><span class="p">(</span><span class="n">new_pdb_file</span><span class="p">,</span> <span class="n">new_structure</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_structure</span>
 <span class="go">&lt;Structure id=4TSV&gt;</span>
 </pre></div>
 </div>
-<p>In this code-listing we first import the PDB parser and PDB writer, open a PDB file and parse the structure. You can verify that the <tt class="docutils literal"><span class="pre">PDBParser</span></tt> does not close the open <tt class="docutils literal"><span class="pre">pdb_file</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="ow">not</span> <span class="n">pdb_file</span><span class="o">.</span><span class="n">closed</span>
+<p>In this code-listing we first import the PDB parser and PDB writer, open a PDB file and parse the structure. You can verify that the <code class="docutils literal"><span class="pre">PDBParser</span></code> does not close the open <code class="docutils literal"><span class="pre">pdb_file</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="ow">not</span> <span class="n">pdb_file</span><span class="o">.</span><span class="n">closed</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="ow">not</span> <span class="n">new_pdb_file</span><span class="o">.</span><span class="n">closed</span>
 </pre></div>
 </div>
-<p>Currently the <tt class="docutils literal"><span class="pre">PDBParser</span></tt> parses quite a lot information from the header of the PDB file and the atomic coordinates. It omits the anisotropic b-factors. Additional information is stored in the <tt class="docutils literal"><span class="pre">header</span></tt> attribute which is a dictionary.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">id</span> <span class="c"># the static id tuple.</span>
+<p>Currently the <code class="docutils literal"><span class="pre">PDBParser</span></code> parses quite a lot information from the header of the PDB file and the atomic coordinates. It omits the anisotropic b-factors. Additional information is stored in the <code class="docutils literal"><span class="pre">header</span></code> attribute which is a dictionary.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">id</span> <span class="c1"># the static id tuple.</span>
 <span class="go">(&#39;4TSV&#39;,)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="c"># the dynamic id tuple, use calls to get_id whenever possible.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="c1"># the dynamic id tuple, use calls to get_id whenever possible.</span>
 <span class="go">(&#39;4TSV&#39;,)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">getFull_id</span><span class="p">()</span> <span class="c"># only for the structure entity is the full_id identical to the id.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">getFull_id</span><span class="p">()</span> <span class="c1"># only for the structure entity is the full_id identical to the id.</span>
 <span class="go">(&#39;4TSV&#39;,)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="c"># the pdb header is parsed in to a dictionary as the header attribute</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="c1"># the pdb header is parsed in to a dictionary as the header attribute</span>
 <span class="go">[&#39;bio_cmx&#39;, &#39;uc_mxs&#39;,...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span> <span class="c"># this is the 4-char PDB ID parsed from the header and used to construct the structure.id</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="c1"># this is the 4-char PDB ID parsed from the header and used to construct the structure.id</span>
 <span class="go">&#39;4TSV&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;expdta&#39;</span><span class="p">]</span> <span class="c"># if this is &#39;X-RAY&#39; we probably deal with a x-ray structre and thus a lot crystallografic data is store in the header.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;expdta&#39;</span><span class="p">]</span> <span class="c1"># if this is &#39;X-RAY&#39; we probably deal with a x-ray structre and thus a lot crystallografic data is store in the header.</span>
 <span class="go">&#39;X-RAY&#39;</span>
 </pre></div>
 </div>
-<p>Not all information from the PDB header is currently parsed, If you are interested in some special data you can access the unparsed header through the <tt class="docutils literal"><span class="pre">raw_header</span></tt> attribute, the same is true for the trailer. If you manage to extract the data from the <tt class="docutils literal"><span class="pre">raw_header</span></tt> you are ready to modify the modular code of the <tt class="docutils literal"><span class="pre">PDBParser</span></tt> class, please submit a patch!</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">structure</span><span class="o">.</span><span class="n">raw_header</span>
+<p>Not all information from the PDB header is currently parsed, If you are interested in some special data you can access the unparsed header through the <code class="docutils literal"><span class="pre">raw_header</span></code> attribute, the same is true for the trailer. If you manage to extract the data from the <code class="docutils literal"><span class="pre">raw_header</span></code> you are ready to modify the modular code of the <code class="docutils literal"><span class="pre">PDBParser</span></code> class, please submit a patch!</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">structure</span><span class="o">.</span><span class="n">raw_header</span>
 <span class="n">structure</span><span class="o">.</span><span class="n">raw_trailer</span>
 </pre></div>
 </div>
 <p>The structure entity is a container for model entities, as you already know the structure is just a dictionary of models.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 <span class="go">[((0,), &lt;Model id=0&gt;)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 <span class="go">[&lt;Model id=0&gt;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 <span class="go">[(0,)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">first_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># we name the first(and only) model in the structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">first_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># we name the first(and only) model in the structure</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">first_model_id</span> <span class="o">=</span> <span class="n">first_model</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>But PyCogent provides more specific methods to work with entities. The one which is useful to access the contents of an entity is <tt class="docutils literal"><span class="pre">getChildren</span></tt>. The optional argument to the <tt class="docutils literal"><span class="pre">getChildren</span></tt> methods is a list of ids (e.g. to access only a subset of children) more concise and sophisticated methods to work with children will be introduced later</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">getChildren</span><span class="p">()</span> <span class="c"># the output should be the same as structure.values()</span>
+<p>But PyCogent provides more specific methods to work with entities. The one which is useful to access the contents of an entity is <code class="docutils literal"><span class="pre">getChildren</span></code>. The optional argument to the <code class="docutils literal"><span class="pre">getChildren</span></code> methods is a list of ids (e.g. to access only a subset of children) more concise and sophisticated methods to work with children will be introduced later</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">getChildren</span><span class="p">()</span> <span class="c1"># the output should be the same as structure.values()</span>
 <span class="go">[&lt;Model id=0&gt;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">children_list</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">getChildren</span><span class="p">([</span><span class="n">first_model_id</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>A typical way to change a property of all children in a MultiEntity would be to write a loop. In this example we change the name of every residue to &#8216;UNK&#8217;.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span> <span class="o">=</span> <span class="n">some_model</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">some_chain</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="n">residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;UNK&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s1">&#39;UNK&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 </pre></div>
 </div>
-<p>Pycogent allows to make it much shorter. Whenever a structure is created the top-level entity(i.e. the structure) gets pointer list to all the entities it contains stored as the <tt class="docutils literal"><span class="pre">table</span></tt> attribute. For example the structure entity will have a table with a list of all models, chains, residues and atoms that it contains. The keys of this table are <em>full_ids</em> the values the actual entities. The table is divided into sections based on the hierarchy i.e. there is a separate dictionary for residues, atoms, chains and models.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="c"># all the different entity levels in the table (which is a normal dictionary)</span>
+<p>Pycogent allows to make it much shorter. Whenever a structure is created the top-level entity(i.e. the structure) gets pointer list to all the entities it contains stored as the <code class="docutils literal"><span class="pre">table</span></code> attribute. For example the structure entity will have a table with a list of all models, chains, residues and atoms that it contains. The keys of this table are <em>full_ids</em> the values the actual entities. The table is divided into sections based on the hierarchy i.e. there is a separate dictionary for residues, atoms, chains and models.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="c1"># all the different entity levels in the table (which is a normal dictionary)</span>
 <span class="go">[&#39;A&#39;, &#39;C&#39;, &#39;M&#39;, &#39;R&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;C&#39;</span><span class="p">]</span> <span class="c"># this is a full_id to entity mapping for all chains inside the structures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span> <span class="c1"># this is a full_id to entity mapping for all chains inside the structures</span>
 <span class="go">{(&#39;4TSV&#39;, 0, &#39; &#39;): &lt;Chain id= &gt;, (&#39;4TSV&#39;, 0, &#39;A&#39;): &lt;Chain id=A&gt;}</span>
 </pre></div>
 </div>
 <p>The creation of such a table is quite expensive so it is created for the structure entity, but there is no reason why you should not create a table for e.g. a chain if you need it.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span> <span class="o">=</span> <span class="n">some_model</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># some_chain.table[&#39;R&#39;] # all the residues</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># some_chain.table[&#39;R&#39;] # all the residues</span>
 </pre></div>
 </div>
 <p>There is however a catch. Tables are not dynamic, this means that they are not magically updated whenever a child changes it&#8217;s id. This can be easily seen in following example where a new chain is created a residue moved into it. A table is created for the chain, but it does not update the key after the child changes it&#8217;s name.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.entity</span> <span class="kn">import</span> <span class="n">Chain</span> <span class="c"># the chain entity</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">(</span><span class="s">&#39;J&#39;</span><span class="p">)</span> <span class="c"># an ampty chain named &#39;J&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.entity</span> <span class="k">import</span> <span class="n">Chain</span> <span class="c1"># the chain entity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span> <span class="c1"># an ampty chain named &#39;J&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
 <span class="go">(&#39;J&#39;,)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;R&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># a semi-random residue from structure</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># a possible output: &lt;Residue UNK resseq=39 icode= &gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;001&#39;</span><span class="p">)</span> <span class="c"># change the name to &#39;001&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># some_residue.getId() # should return e.g. ((&#39;001&#39;, 39, &#39; &#39;),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># some_residue.getFull_id() # should return (&#39;4TSV&#39;, 0, &#39;A&#39;, (&#39;001&#39;, 39, &#39; &#39;))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">some_residue</span><span class="p">)</span> <span class="c"># move from chain &#39;A&#39; in 4TSV into chain &#39;J&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># new_chain.keys() # should return: [((&#39;001&#39;, 39, &#39; &#39;),)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># a semi-random residue from structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># a possible output: &lt;Residue UNK resseq=39 icode= &gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s1">&#39;001&#39;</span><span class="p">)</span> <span class="c1"># change the name to &#39;001&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># some_residue.getId() # should return e.g. ((&#39;001&#39;, 39, &#39; &#39;),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># some_residue.getFull_id() # should return (&#39;4TSV&#39;, 0, &#39;A&#39;, (&#39;001&#39;, 39, &#39; &#39;))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">some_residue</span><span class="p">)</span> <span class="c1"># move from chain &#39;A&#39; in 4TSV into chain &#39;J&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new_chain.keys() # should return: [((&#39;001&#39;, 39, &#39; &#39;),)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># new_chain.table[&#39;R&#39;].keys() # should return: [(&#39;J&#39;, (&#39;001&#39;, 39, &#39; &#39;))]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;002&#39;</span><span class="p">)</span> <span class="c"># change the name to &#39;002&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># new_chain.keys() # should return: [((&#39;002&#39;, 39, &#39; &#39;),)] # updated!</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># new_chain.table[&#39;R&#39;].keys() # should return [(&#39;J&#39;, (&#39;001&#39;, 39, &#39; &#39;))] not updated</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">(</span><span class="n">force</span> <span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c"># update table</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># new_chain.table[&#39;R&#39;].keys() # should return [(&#39;J&#39;, (&#39;002&#39;, 39, &#39; &#39;))] updated</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new_chain.table[&#39;R&#39;].keys() # should return: [(&#39;J&#39;, (&#39;001&#39;, 39, &#39; &#39;))]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s1">&#39;002&#39;</span><span class="p">)</span> <span class="c1"># change the name to &#39;002&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new_chain.keys() # should return: [((&#39;002&#39;, 39, &#39; &#39;),)] # updated!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new_chain.table[&#39;R&#39;].keys() # should return [(&#39;J&#39;, (&#39;001&#39;, 39, &#39; &#39;))] not updated</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">(</span><span class="n">force</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># update table</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new_chain.table[&#39;R&#39;].keys() # should return [(&#39;J&#39;, (&#39;002&#39;, 39, &#39; &#39;))] updated</span>
 </pre></div>
 </div>
 <p>It is important to realize that Python dictionaries are not sorted so the order of two equal dictionaries is not the same. Each time a child is changed in a way that affects the parent e.g. a part of it&#8217;s id changes the parent dictionary will be updated and the order might also. You should <strong>never</strong> assume that an entity has a particular order.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span> <span class="o">=</span> <span class="n">some_chain</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">old_id</span> <span class="o">=</span> <span class="n">some_residue</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="c"># e.g. ((&#39;ILE&#39;, 154, &#39; &#39;),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&#39;VAL&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_id</span> <span class="o">=</span> <span class="n">some_residue</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="c"># e.g. ((&#39;VAL&#39;, 154, &#39; &#39;),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">getChildren</span><span class="p">([</span><span class="n">old_id</span><span class="p">])</span> <span class="c"># nothin... not valid anymore</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span> <span class="o">=</span> <span class="n">some_chain</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">old_id</span> <span class="o">=</span> <span class="n">some_residue</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="c1"># e.g. ((&#39;ILE&#39;, 154, &#39; &#39;),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_residue</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s1">&#39;VAL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_id</span> <span class="o">=</span> <span class="n">some_residue</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="c1"># e.g. ((&#39;VAL&#39;, 154, &#39; &#39;),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">getChildren</span><span class="p">([</span><span class="n">old_id</span><span class="p">])</span> <span class="c1"># nothin... not valid anymore</span>
 <span class="go">[]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># some_chain.getChildren([new_id]) # e.g. [&lt;Residue VAL resseq=154 icode= &gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># some_chain.getChildren([new_id]) # e.g. [&lt;Residue VAL resseq=154 icode= &gt;]</span>
 </pre></div>
 </div>
 <p>But the the table of an entity is static and does not get updated.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_full_id</span> <span class="o">=</span> <span class="n">some_residue</span><span class="o">.</span><span class="n">getFull_id</span><span class="p">()</span> <span class="c"># entities in tables are stored using their full ids!!</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># some_chain.table[&#39;R&#39;][some_full_id] # should raise a KeyError</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">()</span> <span class="c"># we make a new table</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;R&#39;</span><span class="p">][</span><span class="n">some_full_id</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_full_id</span> <span class="o">=</span> <span class="n">some_residue</span><span class="o">.</span><span class="n">getFull_id</span><span class="p">()</span> <span class="c1"># entities in tables are stored using their full ids!!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># some_chain.table[&#39;R&#39;][some_full_id] # should raise a KeyError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">()</span> <span class="c1"># we make a new table</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">][</span><span class="n">some_full_id</span><span class="p">]</span>
 <span class="go">&lt;Residue VAL resseq=131 icode= &gt;</span>
 </pre></div>
 </div>
-<p>It is important to note that the table is a simple dictionary and the entity specific methods like <tt class="docutils literal"><span class="pre">getChildren</span></tt> are not available. You can figure out whether the table is up-to-date (or at least I hope I managed to code it right) using the <tt class="docutils literal"><span class="pre">modified</span></tt> attribute.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">modified</span>
+<p>It is important to note that the table is a simple dictionary and the entity specific methods like <code class="docutils literal"><span class="pre">getChildren</span></code> are not available. You can figure out whether the table is up-to-date (or at least I hope I managed to code it right) using the <code class="docutils literal"><span class="pre">modified</span></code> attribute.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">modified</span>
 <span class="go">False</span>
 </pre></div>
 </div>
-<p>If the result were <tt class="docutils literal"><span class="pre">True</span></tt> the residue has been modified and might require to use the <tt class="docutils literal"><span class="pre">setTable</span></tt>, or in some cases <tt class="docutils literal"><span class="pre">updateIds()</span></tt> methods.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">()</span>
+<p>If the result were <code class="docutils literal"><span class="pre">True</span></code> the residue has been modified and might require to use the <code class="docutils literal"><span class="pre">setTable</span></code>, or in some cases <code class="docutils literal"><span class="pre">updateIds()</span></code> methods.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">setTable</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">updateIds</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Do not run those methods if you do not need to as they take some time.</p>
 <p>The loop to run a child method can be implicitly omitted by using the dispatch method. It calls the method for every child.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">some_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_model</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span> <span class="o">=</span> <span class="n">some_model</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="s">&#39;setName&#39;</span><span class="p">,</span> <span class="s">&#39;UNK&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="s1">&#39;setName&#39;</span><span class="p">,</span> <span class="s1">&#39;UNK&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_chain</span><span class="o">.</span><span class="n">modified</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <p>The above method has exactly the same effect as the loop. All residues within the chain will have the name set to &#8216;UNK&#8217;. You can verify that the id&#8217;s and dictionary keys got updated.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">some_chain</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># output random e.g. ((&#39;UNK&#39;, 260, &#39; &#39;),)</span>
-<span class="n">some_chain</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># e.g. &lt;Residue UNK resseq=260 icode= &gt;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">some_chain</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># output random e.g. ((&#39;UNK&#39;, 260, &#39; &#39;),)</span>
+<span class="n">some_chain</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># e.g. &lt;Residue UNK resseq=260 icode= &gt;</span>
 </pre></div>
 </div>
 </div>
@@ -241,72 +240,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Working with macromolecular structures</a><ul>
-<li><a class="reference internal" href="#hierarchy-and-identity">Hierarchy and identity</a></li>
-<li><a class="reference internal" href="#what-is-an-entity">What is an Entity?</a></li>
-<li><a class="reference internal" href="#working-with-entities">Working with entities</a></li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
-</li>
-</ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="handling_tabular_data.html"
-                        title="previous chapter">Data Manipulation using <tt class="docutils literal docutils literal"><span class="pre">Table</span></tt></a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="entity_selection.html"
-                        title="next chapter">Selecting and grouping entities</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/handling_3dstructures.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="entity_selection.html" title="Selecting and grouping entities"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="handling_tabular_data.html" title="Data Manipulation using Table"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="handling_tabular_data.html" title="Data Manipulation using Table"
+              >previous</a> |
+            <a href="entity_selection.html" title="Selecting and grouping entities"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/handling_3dstructures.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

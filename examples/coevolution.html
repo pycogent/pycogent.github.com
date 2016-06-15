@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Perform a coevolutionary analysis on biological sequence alignments &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Perform a coevolutionary analysis on biological sequence alignments &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Analysis of rate heterogeneity" href="rate_heterogeneity.html" />
     <link rel="prev" title="Estimate parameter values using a sampling from a dataset" href="estimate_startingpoint.html" />     
@@ -33,88 +31,89 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="rate_heterogeneity.html" title="Analysis of rate heterogeneity"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="rate_heterogeneity.html" title="Analysis of rate heterogeneity"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="perform-a-coevolutionary-analysis-on-biological-sequence-alignments">
 <h1>Perform a coevolutionary analysis on biological sequence alignments<a class="headerlink" href="#perform-a-coevolutionary-analysis-on-biological-sequence-alignments" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Greg Caporaso</em></p>
-<p>This document describes how to perform a coevolutionary analysis on a <tt class="docutils literal"><span class="pre">DenseAlignment</span></tt> object. Coevolutionary analyses identify correlated substitution patterns between <tt class="docutils literal"><span class="pre">DenseAlignment</span></tt> positions (columns). Several coevolution detection methods are currently provided via the PyCogent coevolution module. <tt class="docutils literal"><span class="pre">DenseAlignment</span></tt> objects must always be used as input to these functions.</p>
+<p>This document describes how to perform a coevolutionary analysis on a <code class="docutils literal"><span class="pre">DenseAlignment</span></code> object. Coevolutionary analyses identify correlated substitution patterns between <code class="docutils literal"><span class="pre">DenseAlignment</span></code> positions (columns). Several coevolution detection methods are currently provided via the PyCogent coevolution module. <code class="docutils literal"><span class="pre">DenseAlignment</span></code> objects must always be used as input to these functions.</p>
 <p>Before using an alignment in a coevolutionary analysis, you should be confident in the alignment. Poorly aligned sequences can yield very misleading results. There can be no ambiguous residue/base codes (e.g., B/Z/X in protein alignments) &#8211; while some of the algorithms could tolerate them (e.g. Mutual Information), others which rely on information such as background residue frequencies (e.g. Statistical Coupling Analysis) cannot handle them. Some recoded amino acid alphabets will also not handle ambiguous residues. The best strategy is just to exclude ambiguous codes all together. To test for invalid characters before starting an analysis you can do the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">RNA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alignment</span> <span class="kn">import</span> <span class="n">DenseAlignment</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="kn">import</span> <span class="n">validate_alignment</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;1&#39;</span><span class="p">:</span><span class="s">&#39;GAA&#39;</span><span class="p">,</span><span class="s">&#39;2&#39;</span><span class="p">:</span><span class="s">&#39;CTA&#39;</span><span class="p">,</span> <span class="s">&#39;3&#39;</span><span class="p">:</span><span class="s">&#39;CTC&#39;</span><span class="p">,</span><span class="s">&#39;4&#39;</span><span class="p">:</span><span class="s">&#39;-TC&#39;</span><span class="p">},</span><span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="n">DenseAlignment</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">RNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alignment</span> <span class="k">import</span> <span class="n">DenseAlignment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="k">import</span> <span class="n">validate_alignment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span><span class="s1">&#39;GAA&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">:</span><span class="s1">&#39;CTA&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span><span class="s1">&#39;CTC&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">:</span><span class="s1">&#39;-TC&#39;</span><span class="p">},</span><span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="n">DenseAlignment</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">validate_alignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To run a coevolutionary analysis, first create a <tt class="docutils literal"><span class="pre">DenseAlignment</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">RNA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alignment</span> <span class="kn">import</span> <span class="n">DenseAlignment</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;1&#39;</span><span class="p">:</span><span class="s">&#39;AAA&#39;</span><span class="p">,</span><span class="s">&#39;2&#39;</span><span class="p">:</span><span class="s">&#39;CTA&#39;</span><span class="p">,</span> <span class="s">&#39;3&#39;</span><span class="p">:</span><span class="s">&#39;CTC&#39;</span><span class="p">,</span><span class="s">&#39;4&#39;</span><span class="p">:</span><span class="s">&#39;-TC&#39;</span><span class="p">},</span><span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="n">DenseAlignment</span><span class="p">)</span>
+<p>To run a coevolutionary analysis, first create a <code class="docutils literal"><span class="pre">DenseAlignment</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">PROTEIN</span><span class="p">,</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">RNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.alignment</span> <span class="k">import</span> <span class="n">DenseAlignment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span><span class="s1">&#39;AAA&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">:</span><span class="s1">&#39;CTA&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span><span class="s1">&#39;CTC&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">:</span><span class="s1">&#39;-TC&#39;</span><span class="p">},</span><span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="n">DenseAlignment</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Perform a coevolutionary analysis on a pair of positions in the alignment using mutual information (<tt class="docutils literal"><span class="pre">mi</span></tt>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="kn">import</span> <span class="n">coevolve_pair_functions</span><span class="p">,</span> <span class="n">coevolve_pair</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_pair</span><span class="p">(</span><span class="n">coevolve_pair_functions</span><span class="p">[</span><span class="s">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">,</span><span class="n">pos1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">pos2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<p>Perform a coevolutionary analysis on a pair of positions in the alignment using mutual information (<code class="docutils literal"><span class="pre">mi</span></code>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="k">import</span> <span class="n">coevolve_pair_functions</span><span class="p">,</span> <span class="n">coevolve_pair</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_pair</span><span class="p">(</span><span class="n">coevolve_pair_functions</span><span class="p">[</span><span class="s1">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">,</span><span class="n">pos1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">pos2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">0.31127...</span>
 </pre></div>
 </div>
-<p>Perform a coevolutionary analysis on a pair of positions in the alignment using statistical coupling analysis (<tt class="docutils literal"><span class="pre">sca</span></tt>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="kn">import</span> <span class="n">coevolve_pair_functions</span><span class="p">,</span> <span class="n">coevolve_pair</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_pair</span><span class="p">(</span><span class="n">coevolve_pair_functions</span><span class="p">[</span><span class="s">&#39;sca&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">,</span><span class="n">pos1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">pos2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<p>Perform a coevolutionary analysis on a pair of positions in the alignment using statistical coupling analysis (<code class="docutils literal"><span class="pre">sca</span></code>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="k">import</span> <span class="n">coevolve_pair_functions</span><span class="p">,</span> <span class="n">coevolve_pair</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_pair</span><span class="p">(</span><span class="n">coevolve_pair_functions</span><span class="p">[</span><span class="s1">&#39;sca&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">,</span><span class="n">pos1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">pos2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="go">0.98053...</span>
 </pre></div>
 </div>
-<p>Perform a coevolutionary analysis on one position and all other positions in the alignment using mutual information (<tt class="docutils literal"><span class="pre">mi</span></tt>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="kn">import</span> <span class="n">coevolve_position_functions</span><span class="p">,</span> <span class="n">coevolve_position</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_position</span><span class="p">(</span><span class="n">coevolve_position_functions</span><span class="p">[</span><span class="s">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">,</span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<p>Perform a coevolutionary analysis on one position and all other positions in the alignment using mutual information (<code class="docutils literal"><span class="pre">mi</span></code>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="k">import</span> <span class="n">coevolve_position_functions</span><span class="p">,</span> <span class="n">coevolve_position</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_position</span><span class="p">(</span><span class="n">coevolve_position_functions</span><span class="p">[</span><span class="s1">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">,</span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">array([        nan,  0.81127812,  0.31127812])</span>
 </pre></div>
 </div>
-<p>Perform a coevolutionary analysis on all pairs of positions in the alignment using mutual information (<tt class="docutils literal"><span class="pre">mi</span></tt>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="kn">import</span> <span class="n">coevolve_alignment_functions</span><span class="p">,</span> <span class="n">coevolve_alignment</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_alignment</span><span class="p">(</span><span class="n">coevolve_alignment_functions</span><span class="p">[</span><span class="s">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">)</span>
+<p>Perform a coevolutionary analysis on all pairs of positions in the alignment using mutual information (<code class="docutils literal"><span class="pre">mi</span></code>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="k">import</span> <span class="n">coevolve_alignment_functions</span><span class="p">,</span> <span class="n">coevolve_alignment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_alignment</span><span class="p">(</span><span class="n">coevolve_alignment_functions</span><span class="p">[</span><span class="s1">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln</span><span class="p">)</span>
 <span class="go">array([[        nan,         nan,         nan],</span>
 <span class="go">       [        nan,  0.81127812,  0.31127812],</span>
 <span class="go">       [        nan,  0.31127812,  1.        ]])</span>
 </pre></div>
 </div>
 <p>View the available algorithms for computing coevolution values:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">coevolve_pair_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">coevolve_pair_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 <span class="go">[&#39;mi&#39;, &#39;sca&#39;, &#39;an&#39;, &#39;gctmpca&#39;, &#39;rmi&#39;, &#39;nmi&#39;]</span>
 </pre></div>
 </div>
-<p>Perform an intermolecular coevolutionary analysis using mutual information (<tt class="docutils literal"><span class="pre">mi</span></tt>). Note that there are strict requirements on the sequence identifiers for intermolecular analyses, and some important considerations involved in preparing alignments for these analyses. See the coevolve_alignments docstring (i.e., <tt class="docutils literal"><span class="pre">help(coevolve_alignments)</span></tt> from the python interpreter) for information. Briefly, sequence identifiers are split on <tt class="docutils literal"><span class="pre">+</span></tt> symbols. The ids before the + must match perfectly between the two alignments as these are used to match the sequences between alignments. In the following example, these are common species names: human, chicken, echidna, and pig. The text after the <tt class="docutils literal"><span class="pre">+</span></tt> can be anything, and should probably be the original database identifiers of the sequences.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="kn">import</span> <span class="n">coevolve_alignment_functions</span><span class="p">,</span>\
+<p>Perform an intermolecular coevolutionary analysis using mutual information (<code class="docutils literal"><span class="pre">mi</span></code>). Note that there are strict requirements on the sequence identifiers for intermolecular analyses, and some important considerations involved in preparing alignments for these analyses. See the coevolve_alignments docstring (i.e., <code class="docutils literal"><span class="pre">help(coevolve_alignments)</span></code> from the python interpreter) for information. Briefly, sequence identifiers are split on <code class="docutils literal"><span class="pre">+</span></code> symbols. The ids before the + must match perfectly between the two alignments as these are used to match the sequences between alignments. In the following example, these are common species names: human, chicken, echidna, and pig. The text after the <code class="docutils literal"><span class="pre">+</span></code> can be anything, and should probably be the original database identifiers of the sequences.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.coevolution</span> <span class="k">import</span> <span class="n">coevolve_alignment_functions</span><span class="p">,</span>\
 <span class="gp">... </span>  <span class="n">coevolve_alignments</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aln1</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;human+protein1&#39;</span><span class="p">:</span><span class="s">&#39;AAA&#39;</span><span class="p">,</span><span class="s">&#39;pig+protein1&#39;</span><span class="p">:</span><span class="s">&#39;CTA&#39;</span><span class="p">,</span>
-<span class="gp">... </span> <span class="s">&#39;chicken+protein1&#39;</span><span class="p">:</span><span class="s">&#39;CTC&#39;</span><span class="p">,</span><span class="s">&#39;echidna+weird_db_identifier&#39;</span><span class="p">:</span><span class="s">&#39;-TC&#39;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln1</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;human+protein1&#39;</span><span class="p">:</span><span class="s1">&#39;AAA&#39;</span><span class="p">,</span><span class="s1">&#39;pig+protein1&#39;</span><span class="p">:</span><span class="s1">&#39;CTA&#39;</span><span class="p">,</span>
+<span class="gp">... </span> <span class="s1">&#39;chicken+protein1&#39;</span><span class="p">:</span><span class="s1">&#39;CTC&#39;</span><span class="p">,</span><span class="s1">&#39;echidna+weird_db_identifier&#39;</span><span class="p">:</span><span class="s1">&#39;-TC&#39;</span><span class="p">},</span>
 <span class="gp">... </span>  <span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="n">DenseAlignment</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aln2</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;pig+protein2&#39;</span><span class="p">:</span><span class="s">&#39;AAAY&#39;</span><span class="p">,</span><span class="s">&#39;chicken+protein2&#39;</span><span class="p">:</span><span class="s">&#39;CTAY&#39;</span><span class="p">,</span>
-<span class="gp">... </span> <span class="s">&#39;echidna+protein2&#39;</span><span class="p">:</span><span class="s">&#39;CTCF&#39;</span><span class="p">,</span><span class="s">&#39;human+protein2&#39;</span><span class="p">:</span><span class="s">&#39;-TCF&#39;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln2</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pig+protein2&#39;</span><span class="p">:</span><span class="s1">&#39;AAAY&#39;</span><span class="p">,</span><span class="s1">&#39;chicken+protein2&#39;</span><span class="p">:</span><span class="s1">&#39;CTAY&#39;</span><span class="p">,</span>
+<span class="gp">... </span> <span class="s1">&#39;echidna+protein2&#39;</span><span class="p">:</span><span class="s1">&#39;CTCF&#39;</span><span class="p">,</span><span class="s1">&#39;human+protein2&#39;</span><span class="p">:</span><span class="s1">&#39;-TCF&#39;</span><span class="p">},</span>
 <span class="gp">... </span>  <span class="n">moltype</span><span class="o">=</span><span class="n">PROTEIN</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="n">DenseAlignment</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_alignments</span><span class="p">(</span><span class="n">coevolve_alignment_functions</span><span class="p">[</span><span class="s">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln1</span><span class="p">,</span><span class="n">aln2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coevolve_alignments</span><span class="p">(</span><span class="n">coevolve_alignment_functions</span><span class="p">[</span><span class="s1">&#39;mi&#39;</span><span class="p">],</span><span class="n">aln1</span><span class="p">,</span><span class="n">aln2</span><span class="p">)</span>
 <span class="go">array([[        nan,         nan,         nan],</span>
 <span class="go">       [        nan,  0.12255625,  0.31127812],</span>
 <span class="go">       [        nan,  0.31127812,  0.        ],</span>
@@ -127,62 +126,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
+</ul>
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="estimate_startingpoint.html"
-                        title="previous chapter">Estimate parameter values using a sampling from a dataset</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="rate_heterogeneity.html"
-                        title="next chapter">Analysis of rate heterogeneity</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/coevolution.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="rate_heterogeneity.html" title="Analysis of rate heterogeneity"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
+              >previous</a> |
+            <a href="rate_heterogeneity.html" title="Analysis of rate heterogeneity"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/coevolution.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

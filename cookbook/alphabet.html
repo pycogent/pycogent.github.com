@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Alphabets &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Alphabets &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
     <link rel="next" title="DNA and RNA sequences" href="DNA_and_RNA_sequences.html" />
     <link rel="prev" title="Using the MolType and Sequence objects" href="moltypesequence.html" />     
@@ -33,44 +31,44 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="moltypesequence.html" title="Using the MolType and Sequence objects"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
-          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="alphabets">
 <h1>Alphabets<a class="headerlink" href="#alphabets" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="alphabet-and-moltype">
-<h2><tt class="docutils literal"><span class="pre">Alphabet</span></tt> and <tt class="docutils literal"><span class="pre">MolType</span></tt><a class="headerlink" href="#alphabet-and-moltype" title="Permalink to this headline">¶</a></h2>
-<p><tt class="docutils literal"><span class="pre">MolType</span></tt> instances have an <tt class="docutils literal"><span class="pre">Alphabet</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">PROTEIN</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span>
+<h2><code class="docutils literal"><span class="pre">Alphabet</span></code> and <code class="docutils literal"><span class="pre">MolType</span></code><a class="headerlink" href="#alphabet-and-moltype" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">MolType</span></code> instances have an <code class="docutils literal"><span class="pre">Alphabet</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">DNA</span><span class="p">,</span> <span class="n">PROTEIN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span>
 <span class="go">(&#39;T&#39;, &#39;C&#39;, &#39;A&#39;, &#39;G&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">Alphabet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">PROTEIN</span><span class="o">.</span><span class="n">Alphabet</span>
 <span class="go">(&#39;A&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, ...</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">Alphabet</span></tt> instances have a <tt class="docutils literal"><span class="pre">MolType</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">PROTEIN</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">MolType</span> <span class="o">==</span> <span class="n">PROTEIN</span>
+<p><code class="docutils literal"><span class="pre">Alphabet</span></code> instances have a <code class="docutils literal"><span class="pre">MolType</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PROTEIN</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">MolType</span> <span class="o">==</span> <span class="n">PROTEIN</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -78,18 +76,18 @@
 <div class="section" id="creating-tuple-alphabets">
 <h2>Creating tuple alphabets<a class="headerlink" href="#creating-tuple-alphabets" title="Permalink to this headline">¶</a></h2>
 <p>You can create a tuple alphabet of, for example, dinucleotides or trinucleotides.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dinuc_alphabet</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">getWordAlphabet</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">dinuc_alphabet</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dinuc_alphabet</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">getWordAlphabet</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">dinuc_alphabet</span>
 <span class="go">(&#39;TT&#39;, &#39;CT&#39;, &#39;AT&#39;, &#39;GT&#39;, ...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trinuc_alphabet</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">getWordAlphabet</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">trinuc_alphabet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">trinuc_alphabet</span>
 <span class="go">(&#39;TTT&#39;, &#39;CTT&#39;, &#39;ATT&#39;, ...</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="convert-a-sequence-into-integers">
 <h2>Convert a sequence into integers<a class="headerlink" href="#convert-a-sequence-into-integers" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="s">&#39;TAGT&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;TAGT&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">toIndices</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span>
 <span class="go">[0, 2, 3, 0]</span>
@@ -98,13 +96,13 @@
 </div>
 <div class="section" id="convert-integers-to-a-sequence">
 <h2>Convert integers to a sequence<a class="headerlink" href="#convert-integers-to-a-sequence" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">fromIndices</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">fromIndices</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span>
 <span class="go">[&#39;T&#39;, &#39;A&#39;, &#39;G&#39;, &#39;T&#39;]</span>
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">fromOrdinalsToSequence</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">DNA</span><span class="o">.</span><span class="n">Alphabet</span><span class="o">.</span><span class="n">fromOrdinalsToSequence</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span>
 <span class="go">DnaSequence(TAGT)</span>
 </pre></div>
@@ -116,74 +114,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Alphabets</a><ul>
-<li><a class="reference internal" href="#alphabet-and-moltype"><tt class="docutils literal"><span class="pre">Alphabet</span></tt> and <tt class="docutils literal"><span class="pre">MolType</span></tt></a></li>
-<li><a class="reference internal" href="#creating-tuple-alphabets">Creating tuple alphabets</a></li>
-<li><a class="reference internal" href="#convert-a-sequence-into-integers">Convert a sequence into integers</a></li>
-<li><a class="reference internal" href="#convert-integers-to-a-sequence">Convert integers to a sequence</a></li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
-</li>
-</ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="moltypesequence.html"
-                        title="previous chapter">Using the <tt class="docutils literal"><span class="pre">MolType</span></tt> and <tt class="docutils literal"><span class="pre">Sequence</span></tt> objects</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="DNA_and_RNA_sequences.html"
-                        title="next chapter">DNA and RNA sequences</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/alphabet.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="moltypesequence.html" title="Using the MolType and Sequence objects"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
-          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="moltypesequence.html" title="Using the MolType and Sequence objects"
+              >previous</a> |
+            <a href="DNA_and_RNA_sequences.html" title="DNA and RNA sequences"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/cookbook/alphabet.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

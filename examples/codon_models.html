@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using codon models &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Using codon models &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Use an empirical protein substitution model" href="empirical_protein_models.html" />
     <link rel="prev" title="Allowing substitution model parameters to differ between branches" href="scope_model_params_on_trees.html" />     
@@ -33,28 +31,29 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="empirical_protein_models.html" title="Use an empirical protein substitution model"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="scope_model_params_on_trees.html" title="Allowing substitution model parameters to differ between branches"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="empirical_protein_models.html" title="Use an empirical protein substitution model"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-codon-models">
 <h1>Using codon models<a class="headerlink" href="#using-codon-models" title="Permalink to this headline">¶</a></h1>
@@ -74,52 +73,52 @@
 </div>
 <div class="section" id="constructing-the-codon-substitution-model">
 <h2>Constructing the codon substitution model<a class="headerlink" href="#constructing-the-codon-substitution-model" title="Permalink to this headline">¶</a></h2>
-<p>PyCogent implements 4 basic rate matrices, described in a recently accepted manuscript: i) NF models, these are nucleotide frequency weighted rate matrices and were initially described by Muse and Gaut (1994); ii) a variant of (i) where position specific nucleotide frequencies are used; iii) TF models, these are tuple (codon in this case) frequency weighted rate matrices and were initially described by Goldman and Yang (1994); iv) CNF, these use the conditional nucleotide frequency and have developed by Yap, Lindsay, Easteal and Huttley. These different models can be created using provided convenience functions which will be the case here, or specified by directly calling the <tt class="docutils literal"><span class="pre">Codon</span></tt> substitution model class and setting the argument <tt class="docutils literal"><span class="pre">mprob_model</span></tt> equal to:</p>
+<p>PyCogent implements 4 basic rate matrices, described in a recently accepted manuscript: i) NF models, these are nucleotide frequency weighted rate matrices and were initially described by Muse and Gaut (1994); ii) a variant of (i) where position specific nucleotide frequencies are used; iii) TF models, these are tuple (codon in this case) frequency weighted rate matrices and were initially described by Goldman and Yang (1994); iv) CNF, these use the conditional nucleotide frequency and have developed by Yap, Lindsay, Easteal and Huttley. These different models can be created using provided convenience functions which will be the case here, or specified by directly calling the <code class="docutils literal"><span class="pre">Codon</span></code> substitution model class and setting the argument <code class="docutils literal"><span class="pre">mprob_model</span></code> equal to:</p>
 <ul class="simple">
-<li>NF, <tt class="docutils literal"><span class="pre">mprob_model='monomer'</span></tt></li>
-<li>NF with position specific nucleotide frequencies, <tt class="docutils literal"><span class="pre">mprob_model='monomers'</span></tt></li>
-<li>TF, <tt class="docutils literal"><span class="pre">mprob_model=None</span></tt></li>
-<li>CNF, <tt class="docutils literal"><span class="pre">mprob_model='conditional'</span></tt></li>
+<li>NF, <code class="docutils literal"><span class="pre">mprob_model='monomer'</span></code></li>
+<li>NF with position specific nucleotide frequencies, <code class="docutils literal"><span class="pre">mprob_model='monomers'</span></code></li>
+<li>TF, <code class="docutils literal"><span class="pre">mprob_model=None</span></code></li>
+<li>CNF, <code class="docutils literal"><span class="pre">mprob_model='conditional'</span></code></li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The TF form is the currently the default, but this will be changed in the near future.</p>
 </div>
 <p>In the following I will construct GTR variants of i and iv and a HKY variant of iii.</p>
-<p>We import these explicitly from the <tt class="docutils literal"><span class="pre">cogent.evolve.models</span></tt> module.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">CNFGTR</span><span class="p">,</span> <span class="n">MG94GTR</span><span class="p">,</span> <span class="n">GY94</span>
+<p>We import these explicitly from the <code class="docutils literal"><span class="pre">cogent.evolve.models</span></code> module.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="k">import</span> <span class="n">CNFGTR</span><span class="p">,</span> <span class="n">MG94GTR</span><span class="p">,</span> <span class="n">GY94</span>
 </pre></div>
 </div>
 <p>These are functions and calling them returns the indicated substitution model with default behaviour of recoding gap characters into N&#8217;s.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">GY94</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">GY94</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nf</span> <span class="o">=</span> <span class="n">MG94GTR</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cnf</span> <span class="o">=</span> <span class="n">CNFGTR</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>In the following demonstration I will use only the CNF form (<tt class="docutils literal"><span class="pre">cnf</span></tt>).</p>
+<p>In the following demonstration I will use only the CNF form (<code class="docutils literal"><span class="pre">cnf</span></code>).</p>
 <p>For our example we load a sample alignment and tree as per usual. To reduce the computational overhead for this example we will limit the number of sampled taxa.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">DNA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.fasta&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="s1">&#39;data/primate_brca1.fasta&#39;</span><span class="p">,</span> <span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s1">&#39;data/primate_brca1.tree&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="standard-test-of-neutrality">
 <h2>Standard test of neutrality<a class="headerlink" href="#standard-test-of-neutrality" title="Permalink to this headline">¶</a></h2>
 <p>We construct a likelihood function and constrain omega parameter (the ratio of nonsynonymous to synonymous substitutions) to equal 1. We also set some display formatting parameters.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We then provide an alignment and optimise the model. In the current case we just use the local optimiser (hiding progress to keep this document succinct). We then print the results.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">I&#8217;m going to specify a set of conditions that will be used for all optimiser steps. For those new to python, one can construct a dictionary with the following form <tt class="docutils literal"><span class="pre">{'argument_name':</span> <span class="pre">argument_value}</span></tt>, or alternatively <tt class="docutils literal"><span class="pre">dict(argument_name=argument_value)</span></tt>. I&#8217;m doing the latter. This dictionary is then passed to functions/methods by prefacing it with <tt class="docutils literal"><span class="pre">**</span></tt>.</p>
+<p class="last">I&#8217;m going to specify a set of conditions that will be used for all optimiser steps. For those new to python, one can construct a dictionary with the following form <code class="docutils literal"><span class="pre">{'argument_name':</span> <span class="pre">argument_value}</span></code>, or alternatively <code class="docutils literal"><span class="pre">dict(argument_name=argument_value)</span></code>. I&#8217;m doing the latter. This dictionary is then passed to functions/methods by prefacing it with <code class="docutils literal"><span class="pre">**</span></code>.</p>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">optimiser_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_restarts</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimiser_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_restarts</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">========================================</span>
 <span class="go"> A/C    A/G    A/T    C/G    C/T   omega</span>
@@ -148,17 +147,17 @@
 <span class="go">  ACC     0.00...</span>
 </pre></div>
 </div>
-<p>In the above output, the first table shows the maximum likelihood estimates (MLEs) for the substitution model parameters that are &#8216;global&#8217; in scope. For instance, the <tt class="docutils literal"><span class="pre">C/T=4.58</span></tt> MLE indicates that the relative rate of substitutions between C and T is nearly 5 times the background substitution rate.</p>
+<p>In the above output, the first table shows the maximum likelihood estimates (MLEs) for the substitution model parameters that are &#8216;global&#8217; in scope. For instance, the <code class="docutils literal"><span class="pre">C/T=4.58</span></code> MLE indicates that the relative rate of substitutions between C and T is nearly 5 times the background substitution rate.</p>
 <p>The above function has been fit using the default counting procedure for estimating the motif frequencies, i.e. codon frequencies are estimated as the average of the observed codon frequencies. If you wanted to numerically optimise the motif probabilities, then modify the likelihood function creation line to</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">optimise_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">optimise_motif_probs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can then free up the omega parameter, but before we do that we&#8217;ll store the log-likelihood and number of free parameters for the current model form for reuse later.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">neutral_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">neutral_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">neutral_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">========================================</span>
 <span class="go"> A/C    A/G    A/T    C/G    C/T   omega</span>
@@ -175,18 +174,18 @@
 </pre></div>
 </div>
 <p>We then conduct a likelihood ratio test whether the MLE of omega significantly improves the fit over the constraint it equals 1. We import the convenience function from the cogent stats module.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.stats</span> <span class="kn">import</span> <span class="n">chisqprob</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.stats</span> <span class="k">import</span> <span class="n">chisqprob</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">non_neutral_lnL</span><span class="o">-</span><span class="n">neutral_lnL</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">non_neutral_nfp</span> <span class="o">-</span> <span class="n">neutral_nfp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 <span class="go">0.0026...</span>
 </pre></div>
 </div>
 <p>Not surprisingly, this is significant. We then ask whether the Human and Chimpanzee edges have a value of omega that is significantly different from the rest of the tree.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Chimpanzee&#39;</span><span class="p">,</span> <span class="s">&#39;Human&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                         <span class="n">outgroup_name</span><span class="o">=</span><span class="s">&#39;Galago&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">tip_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Chimpanzee&#39;</span><span class="p">,</span> <span class="s1">&#39;Human&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                         <span class="n">outgroup_name</span><span class="o">=</span><span class="s1">&#39;Galago&#39;</span><span class="p">,</span> <span class="n">is_clade</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">================================</span>
 <span class="go"> A/C    A/G    A/T    C/G    C/T</span>
@@ -208,7 +207,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chimp_human_clade_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">chimp_human_clade_lnL</span><span class="o">-</span><span class="n">non_neutral_lnL</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">chimp_human_clade_nfp</span><span class="o">-</span><span class="n">non_neutral_nfp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 <span class="go">0.028...</span>
 </pre></div>
 </div>
@@ -217,46 +216,46 @@
 <div class="section" id="rate-heterogeneity-model-variants">
 <h2>Rate-heterogeneity model variants<a class="headerlink" href="#rate-heterogeneity-model-variants" title="Permalink to this headline">¶</a></h2>
 <p>It is also possible to specify rate-heterogeneity variants of these models. In the first instance we&#8217;ll create a likelihood function where these rate-classes are global across the entire tree. Because fitting these models can be time consuming I&#8217;m going to recreate the non-neutral likelihood function from above first, fit it, and then construct the rate-heterogeneity likelihood function. By doing this I can ensure that the richer model starts with parameter values that produce a log-likelihood the same as the null model, ensuring the subsequent optimisation step improves the likelihood over the null.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">non_neutral_lnL</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">non_neutral_nfp</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Now, we have a null model which we know (from having fit it above) has a MLE &lt; 1. We will construct a rate-heterogeneity model with just 2 rate-classes (neutral and adaptive) that are separated by the boundary of omega=1. These rate-classes are specified as discrete bins in PyCogent and the model configuration steps for a bin or bins are done using the <tt class="docutils literal"><span class="pre">setParamRule</span></tt> method. To ensure the alternate model starts with a likelihood at least as good as the previous we need to make the probability of the neutral site-class bin ~= 1 (these are referenced by the <tt class="docutils literal"><span class="pre">bprobs</span></tt> parameter type) and assign the null model omega MLE to this class.</p>
+<p>Now, we have a null model which we know (from having fit it above) has a MLE &lt; 1. We will construct a rate-heterogeneity model with just 2 rate-classes (neutral and adaptive) that are separated by the boundary of omega=1. These rate-classes are specified as discrete bins in PyCogent and the model configuration steps for a bin or bins are done using the <code class="docutils literal"><span class="pre">setParamRule</span></code> method. To ensure the alternate model starts with a likelihood at least as good as the previous we need to make the probability of the neutral site-class bin ~= 1 (these are referenced by the <code class="docutils literal"><span class="pre">bprobs</span></code> parameter type) and assign the null model omega MLE to this class.</p>
 <p>To get all the parameter MLEs (branch lengths, GTR terms, etc ..) into the alternate model we get an annotated tree from the null model which will have these values associated with it.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">annot_tree</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getAnnotatedTree</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">omega_mle</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getParamValue</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">annot_tree</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getAnnotatedTree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">omega_mle</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">getParamValue</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can then construct a new likelihood function, specifying the rate-class properties.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">annot_tree</span><span class="p">,</span>
-<span class="gp">... </span>                    <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;neutral&#39;</span><span class="p">,</span> <span class="s">&#39;adaptive&#39;</span><span class="p">],</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">annot_tree</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;neutral&#39;</span><span class="p">,</span> <span class="s1">&#39;adaptive&#39;</span><span class="p">],</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We define a very small value (<tt class="docutils literal"><span class="pre">epsilon</span></tt>) that is used to specify the starting values.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-6</span>
+<p>We define a very small value (<code class="docutils literal"><span class="pre">epsilon</span></code>) that is used to specify the starting values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
 </pre></div>
 </div>
-<p>We now provide starting parameter values for <tt class="docutils literal"><span class="pre">omega</span></tt> for the two bins, setting the boundary</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="s">&#39;neutral&#39;</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">omega_mle</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="s">&#39;adaptive&#39;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">+</span><span class="n">epsilon</span><span class="p">,</span>
+<p>We now provide starting parameter values for <code class="docutils literal"><span class="pre">omega</span></code> for the two bins, setting the boundary</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="s1">&#39;neutral&#39;</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">omega_mle</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="s1">&#39;adaptive&#39;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">+</span><span class="n">epsilon</span><span class="p">,</span>
 <span class="gp">... </span>        <span class="n">upper</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">epsilon</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>and provide the starting values for the bin probabilities (<tt class="docutils literal"><span class="pre">bprobs</span></tt>).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;bprobs&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">])</span>
+<p>and provide the starting values for the bin probabilities (<code class="docutils literal"><span class="pre">bprobs</span></code>).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;bprobs&#39;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The above statement essentially assigns a probability of nearly 1 to the &#8216;neutral&#8217; bin. We now set the alignment and fit the model.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lnL</span> <span class="o">=</span> <span class="n">rate_lf</span><span class="o">.</span><span class="n">getLogLikelihood</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rate_nfp</span> <span class="o">=</span> <span class="n">rate_lf</span><span class="o">.</span><span class="n">getNumFreeParams</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">rate_lnL</span><span class="o">-</span><span class="n">non_neutral_lnL</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">rate_nfp</span><span class="o">-</span><span class="n">non_neutral_nfp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">rate_lf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">rate_lf</span>
 <span class="go">Likelihood Function Table</span>
 <span class="go">============================</span>
 <span class="go">      edge   parent   length</span>
@@ -288,15 +287,15 @@
 <span class="go">motif   mprobs</span>
 <span class="go">--------------</span>
 <span class="go">  CTT     0.01...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">chisqprob</span><span class="p">(</span><span class="n">LR</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 <span class="go">0.000...</span>
 </pre></div>
 </div>
 <p>We can get the posterior probabilities of site-classifications out of this model as</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">rate_lf</span><span class="o">.</span><span class="n">getBinProbs</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">rate_lf</span><span class="o">.</span><span class="n">getBinProbs</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This is a <tt class="docutils literal"><span class="pre">DictArray</span></tt> class which stores the probabilities as a <tt class="docutils literal"><span class="pre">numpy.array</span></tt>.</p>
+<p>This is a <code class="docutils literal"><span class="pre">DictArray</span></code> class which stores the probabilities as a <code class="docutils literal"><span class="pre">numpy.array</span></code>.</p>
 </div>
 <div class="section" id="mixing-branch-and-site-heterogeneity">
 <h2>Mixing branch and site-heterogeneity<a class="headerlink" href="#mixing-branch-and-site-heterogeneity" title="Permalink to this headline">¶</a></h2>
@@ -342,18 +341,18 @@
 <p class="first admonition-title">Note</p>
 <p class="last">Our implementation is not as parametrically succinct as that of Zhang et al, we have 1 additional bin probability.</p>
 </div>
-<p>After Zhang et al, we first define a null model that has 2 rate classes &#8216;0&#8217; and &#8216;1&#8217;. We also get all the MLEs out using <tt class="docutils literal"><span class="pre">getStatistics</span></tt>, just printing out the bin parameters table in the current case.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">],</span>
+<p>After Zhang et al, we first define a null model that has 2 rate classes &#8216;0&#8217; and &#8216;1&#8217;. We also get all the MLEs out using <code class="docutils literal"><span class="pre">getStatistics</span></code>, just printing out the bin parameters table in the current case.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span>
 <span class="gp">... </span>                             <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span>
 <span class="gp">... </span>                     <span class="n">init</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rate_lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tables</span> <span class="o">=</span> <span class="n">rate_lf</span><span class="o">.</span><span class="n">getStatistics</span><span class="p">(</span><span class="n">with_titles</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tables</span> <span class="o">=</span> <span class="n">rate_lf</span><span class="o">.</span><span class="n">getStatistics</span><span class="p">(</span><span class="n">with_titles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="s">&#39;bin&#39;</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">Title</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">print</span> <span class="n">table</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s1">&#39;bin&#39;</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">Title</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span> <span class="n">table</span>
 <span class="go">bin params</span>
 <span class="go">====================</span>
 <span class="go">bin   bprobs   omega</span>
@@ -363,53 +362,53 @@
 <span class="go">--------------------</span>
 </pre></div>
 </div>
-<p>We&#8217;re also going to use the MLEs from the <tt class="docutils literal"><span class="pre">rate_lf</span></tt> model, since that nests within the more complex branch by rate-class model. This is unfortunately quite ugly compared with just using the annotated tree approach described above. It is currently necessary, however, due to a bug in constructing annotated trees for models with binned parameters.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">globals</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="s">&#39;global&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<p>We&#8217;re also going to use the MLEs from the <code class="docutils literal"><span class="pre">rate_lf</span></code> model, since that nests within the more complex branch by rate-class model. This is unfortunately quite ugly compared with just using the annotated tree approach described above. It is currently necessary, however, due to a bug in constructing annotated trees for models with binned parameters.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">globals</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="s1">&#39;global&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">globals</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">globals</span><span class="o">.</span><span class="n">Header</span><span class="p">,</span> <span class="nb">globals</span><span class="o">.</span><span class="n">getRawData</span><span class="p">()[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bin_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="s">&#39;bin&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_class_omegas</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bin_params</span><span class="o">.</span><span class="n">getRawData</span><span class="p">([</span><span class="s">&#39;bin&#39;</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_class_probs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bin_params</span><span class="o">.</span><span class="n">getRawData</span><span class="p">([</span><span class="s">&#39;bin&#39;</span><span class="p">,</span> <span class="s">&#39;bprobs&#39;</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="s">&#39;edge&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">lengths</span><span class="o">.</span><span class="n">getRawData</span><span class="p">([</span><span class="s">&#39;edge&#39;</span><span class="p">,</span> <span class="s">&#39;length&#39;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bin_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="s1">&#39;bin&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_class_omegas</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bin_params</span><span class="o">.</span><span class="n">getRawData</span><span class="p">([</span><span class="s1">&#39;bin&#39;</span><span class="p">,</span> <span class="s1">&#39;omega&#39;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_class_probs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bin_params</span><span class="o">.</span><span class="n">getRawData</span><span class="p">([</span><span class="s1">&#39;bin&#39;</span><span class="p">,</span> <span class="s1">&#39;bprobs&#39;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="s1">&#39;edge&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">lengths</span><span class="o">.</span><span class="n">getRawData</span><span class="p">([</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>We now create the more complex model,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span>
-<span class="gp">... </span>            <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;2a&#39;</span><span class="p">,</span> <span class="s">&#39;2b&#39;</span><span class="p">],</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2a&#39;</span><span class="p">,</span> <span class="s1">&#39;2b&#39;</span><span class="p">],</span> <span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and set from the nested null model the branch lengths,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">branch</span><span class="p">,</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">lengths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="n">branch</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">length</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">branch</span><span class="p">,</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">lengths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="n">branch</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">length</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>GTR term MLES,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">mle</span> <span class="ow">in</span> <span class="nb">globals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">mle</span> <span class="ow">in</span> <span class="nb">globals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">mle</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>binned parameter values,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;2a&#39;</span><span class="p">],</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-<span class="gp">... </span>                <span class="n">init</span><span class="o">=</span><span class="n">rate_class_omegas</span><span class="p">[</span><span class="s">&#39;0&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;2b&#39;</span><span class="p">],</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;2a&#39;</span><span class="p">],</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">init</span><span class="o">=</span><span class="n">rate_class_omegas</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2b&#39;</span><span class="p">],</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">... </span>                <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;2a&#39;</span><span class="p">,</span> <span class="s">&#39;2b&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                   <span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Chimpanzee&#39;</span><span class="p">,</span> <span class="s">&#39;Human&#39;</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-<span class="gp">... </span>                   <span class="n">lower</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;2a&#39;</span><span class="p">,</span> <span class="s1">&#39;2b&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                   <span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Chimpanzee&#39;</span><span class="p">,</span> <span class="s1">&#39;Human&#39;</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">lower</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">is_constant</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and the bin probabilities.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s">&#39;bprobs&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="n">init</span><span class="o">=</span><span class="p">[</span><span class="n">rate_class_probs</span><span class="p">[</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span>
-<span class="gp">... </span>              <span class="n">rate_class_probs</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setParamRule</span><span class="p">(</span><span class="s1">&#39;bprobs&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">init</span><span class="o">=</span><span class="p">[</span><span class="n">rate_class_probs</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="n">rate_class_probs</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The result of these steps is to create a rate/branch model with initial parameter values that result in likelihood the same as the null.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function can then be optimised as before. The results of one such optimisation are shown below. As you can see, the <tt class="docutils literal"><span class="pre">omega</span></tt> value for the &#8216;2a&#8217; and &#8216;2b&#8217; bins is at the upper bounds, indicating the model is not maximised in this case.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
+<p>This function can then be optimised as before. The results of one such optimisation are shown below. As you can see, the <code class="docutils literal"><span class="pre">omega</span></code> value for the &#8216;2a&#8217; and &#8216;2b&#8217; bins is at the upper bounds, indicating the model is not maximised in this case.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rate_branch_lf</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="o">**</span><span class="n">optimiser_args</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">rate_branch_lf</span>
 <span class="n">Likelihood</span> <span class="n">Function</span> <span class="n">Table</span>
 <span class="o">=========================</span>
@@ -452,73 +451,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Using codon models</a><ul>
-<li><a class="reference internal" href="#constructing-the-codon-substitution-model">Constructing the codon substitution model</a></li>
-<li><a class="reference internal" href="#standard-test-of-neutrality">Standard test of neutrality</a></li>
-<li><a class="reference internal" href="#rate-heterogeneity-model-variants">Rate-heterogeneity model variants</a></li>
-<li><a class="reference internal" href="#mixing-branch-and-site-heterogeneity">Mixing branch and site-heterogeneity</a></li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
-</li>
-</ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="scope_model_params_on_trees.html"
-                        title="previous chapter">Allowing substitution model parameters to differ between branches</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="empirical_protein_models.html"
-                        title="next chapter">Use an empirical protein substitution model</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/codon_models.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="empirical_protein_models.html" title="Use an empirical protein substitution model"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="scope_model_params_on_trees.html" title="Allowing substitution model parameters to differ between branches"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="scope_model_params_on_trees.html" title="Allowing substitution model parameters to differ between branches"
+              >previous</a> |
+            <a href="empirical_protein_models.html" title="Use an empirical protein substitution model"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/codon_models.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

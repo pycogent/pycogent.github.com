@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Performing a parametric bootstrap &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Performing a parametric bootstrap &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Cogent Usage Examples" href="index.html" />
     <link rel="next" title="Estimate parameter values using a sampling from a dataset" href="estimate_startingpoint.html" />
     <link rel="prev" title="Simulate an alignment" href="simulate_alignment.html" />     
@@ -33,80 +31,81 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="simulate_alignment.html" title="Simulate an alignment"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="performing-a-parametric-bootstrap">
 <span id="parametric-bootstrap"></span><h1>Performing a parametric bootstrap<a class="headerlink" href="#performing-a-parametric-bootstrap" title="Permalink to this headline">¶</a></h1>
 <p><em>Section author: Gavin Huttley</em></p>
 <p>This file contains an example for estimating the probability of a Likelihood ratio statistic obtained from a relative rate test. The bootstrap classes can take advantage of parallel architectures.</p>
 <p>From cogent import all the components we need.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve</span> <span class="kn">import</span> <span class="n">bootstrap</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="kn">import</span> <span class="n">HKY85</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths</span> <span class="kn">import</span> <span class="n">stats</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">LoadTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve</span> <span class="k">import</span> <span class="n">bootstrap</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.evolve.models</span> <span class="k">import</span> <span class="n">HKY85</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths</span> <span class="k">import</span> <span class="n">stats</span>
 </pre></div>
 </div>
 <p>Define the null model that takes an alignment object and returns a likelihood function properly assembled for optimising the likelihood under the null hypothesis. The sample distribution is generated using this model.</p>
 <p>We will use a HKY model.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">create_alt_function</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="n">t</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s">&quot;data/test.tree&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">create_alt_function</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">t</span> <span class="o">=</span> <span class="n">LoadTree</span><span class="p">(</span><span class="s2">&quot;data/test.tree&quot;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">sm</span> <span class="o">=</span> <span class="n">HKY85</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">sm</span><span class="o">.</span><span class="n">makeLikelihoodFunction</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Define a function that takes an alignment object and returns an appropriately assembled function for the alternative model. Since the two models are identical bar the constraint on the branch lengths, we&#8217;ll use the same code to generate the basic likelihood function as for the alt model, and then apply the constraint here</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">create_null_function</span><span class="p">():</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">create_null_function</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="n">lf</span> <span class="o">=</span> <span class="n">create_alt_function</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="c"># set the local clock for humans &amp; howler monkey</span>
-<span class="gp">... </span>    <span class="n">lf</span><span class="o">.</span><span class="n">setLocalClock</span><span class="p">(</span><span class="s">&quot;Human&quot;</span><span class="p">,</span> <span class="s">&quot;HowlerMon&quot;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="c1"># set the local clock for humans &amp; howler monkey</span>
+<span class="gp">... </span>    <span class="n">lf</span><span class="o">.</span><span class="n">setLocalClock</span><span class="p">(</span><span class="s2">&quot;Human&quot;</span><span class="p">,</span> <span class="s2">&quot;HowlerMon&quot;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">lf</span>
 </pre></div>
 </div>
 <p>Get our observed data alignment</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">aln</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;data/long_testseqs.fasta&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Create a <tt class="docutils literal"><span class="pre">EstimateProbability</span></tt> bootstrap instance</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">estimateP</span> <span class="o">=</span> <span class="n">bootstrap</span><span class="o">.</span><span class="n">EstimateProbability</span><span class="p">(</span><span class="n">create_null_function</span><span class="p">(),</span>
+<p>Create a <code class="docutils literal"><span class="pre">EstimateProbability</span></code> bootstrap instance</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">estimateP</span> <span class="o">=</span> <span class="n">bootstrap</span><span class="o">.</span><span class="n">EstimateProbability</span><span class="p">(</span><span class="n">create_null_function</span><span class="p">(),</span>
 <span class="gp">... </span>                                      <span class="n">create_alt_function</span><span class="p">(),</span>
 <span class="gp">... </span>                                      <span class="n">aln</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Specify how many random samples we want it to generate. Here we use a very small number of replicates only for the purpose of testing.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">estimateP</span><span class="o">.</span><span class="n">setNumReplicates</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">estimateP</span><span class="o">.</span><span class="n">setNumReplicates</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Run it.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">estimateP</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">estimateP</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Get the estimated probability.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">estimateP</span><span class="o">.</span><span class="n">getEstimatedProb</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">estimateP</span><span class="o">.</span><span class="n">getEstimatedProb</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">p</span></tt> is a floating point value, as you&#8217;d expect. Grab the estimated likelihoods (null and alternate) for the observed data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;</span><span class="si">%.2f</span><span class="s">, </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">estimateP</span><span class="o">.</span><span class="n">getObservedlnL</span><span class="p">()</span>
+<p><code class="docutils literal"><span class="pre">p</span></code> is a floating point value, as you&#8217;d expect. Grab the estimated likelihoods (null and alternate) for the observed data.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1">, </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">estimateP</span><span class="o">.</span><span class="n">getObservedlnL</span><span class="p">()</span>
 <span class="go">-8751.94, -8750.59</span>
 </pre></div>
 </div>
@@ -116,62 +115,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
+</ul>
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="simulate_alignment.html"
-                        title="previous chapter">Simulate an alignment</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="estimate_startingpoint.html"
-                        title="next chapter">Estimate parameter values using a sampling from a dataset</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/examples/parametric_bootstrap.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="simulate_alignment.html" title="Simulate an alignment"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Cogent Usage Examples</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="simulate_alignment.html" title="Simulate an alignment"
+              >previous</a> |
+            <a href="estimate_startingpoint.html" title="Estimate parameter values using a sampling from a dataset"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/examples/parametric_bootstrap.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

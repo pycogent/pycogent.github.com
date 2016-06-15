@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Structural data &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Structural data &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="Manipulating biological data" href="manipulating_biological_data.html" />
     <link rel="next" title="Structural Data Advanced" href="structural_data_2.html" />
     <link rel="prev" title="Tabular data" href="tables.html" />     
@@ -33,29 +31,29 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="structural_data_2.html" title="Structural Data Advanced"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="tables.html" title="Tabular data"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
-          <li><a href="manipulating_biological_data.html" accesskey="U">Manipulating biological data</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="structural_data_2.html" title="Structural Data Advanced"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="structural-data">
 <h1>Structural data<a class="headerlink" href="#structural-data" title="Permalink to this headline">¶</a></h1>
@@ -66,20 +64,20 @@
 <h3>Reading Protein structures<a class="headerlink" href="#reading-protein-structures" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="retrieve-a-structure-from-pdb">
 <h4>Retrieve a structure from PDB<a class="headerlink" href="#retrieve-a-structure-from-pdb" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.pdb</span> <span class="kn">import</span> <span class="n">Pdb</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.db.pdb</span> <span class="k">import</span> <span class="n">Pdb</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Pdb</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_file</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;4tsv&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb_file</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;4tsv&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pdb</span> <span class="o">=</span> <span class="n">pdb_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pdb</span><span class="p">)</span>
-<span class="go">135027</span>
+<span class="go">134136</span>
 </pre></div>
 </div>
 <p>This example will retrieve the structure as a PDB file string.</p>
 </div>
 <div class="section" id="parse-a-pdb-file">
 <h4>Parse a PDB file<a class="headerlink" href="#parse-a-pdb-file" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="kn">import</span> <span class="n">PDBParser</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;data/4TSV.pdb&#39;</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="k">import</span> <span class="n">PDBParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/4TSV.pdb&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span>
 <span class="go">&lt;Structure id=4TSV&gt;</span>
 </pre></div>
@@ -87,20 +85,20 @@
 </div>
 <div class="section" id="parse-a-pdb-entry-directly-from-the-web">
 <h4>Parse a PDB entry directly from the web<a class="headerlink" href="#parse-a-pdb-entry-directly-from-the-web" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="kn">import</span> <span class="n">PDBParser</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">&#39;4tsv&#39;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.parse.pdb</span> <span class="k">import</span> <span class="n">PDBParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;4tsv&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="accessing-pdb-header-information">
 <h4>Accessing PDB header information<a class="headerlink" href="#accessing-pdb-header-information" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 <span class="go">&#39;4TSV&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;resolution&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">]</span>
 <span class="go">&#39;1.80&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;r_free&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;r_free&#39;</span><span class="p">]</span>
 <span class="go">&#39;0.262&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;space_group&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;space_group&#39;</span><span class="p">]</span>
 <span class="go">&#39;H 3&#39;</span>
 </pre></div>
 </div>
@@ -110,12 +108,12 @@
 <h3>Navigating structure objects<a class="headerlink" href="#navigating-structure-objects" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="what-does-a-structure-object-contain">
 <h4>What does a structure object contain?<a class="headerlink" href="#what-does-a-structure-object-contain" title="Permalink to this headline">¶</a></h4>
-<p>A <tt class="docutils literal"><span class="pre">cogent.parse.pdb.Structure</span></tt> object as returned by <tt class="docutils literal"><span class="pre">PDBParser</span></tt> contains a tree-like hierarchy of <tt class="docutils literal"><span class="pre">Entity</span></tt> objects. They are organized such that <tt class="docutils literal"><span class="pre">Structures</span></tt> that contain <tt class="docutils literal"><span class="pre">Models</span></tt> that contain <tt class="docutils literal"><span class="pre">Chains</span></tt> that contain <tt class="docutils literal"><span class="pre">Residues</span></tt> that in turn contain <tt class="docutils literal"><span class="pre">Atoms</span></tt>. You can read more about the entity model on [URL of Marcins example page].</p>
+<p>A <code class="docutils literal"><span class="pre">cogent.parse.pdb.Structure</span></code> object as returned by <code class="docutils literal"><span class="pre">PDBParser</span></code> contains a tree-like hierarchy of <code class="docutils literal"><span class="pre">Entity</span></code> objects. They are organized such that <code class="docutils literal"><span class="pre">Structures</span></code> that contain <code class="docutils literal"><span class="pre">Models</span></code> that contain <code class="docutils literal"><span class="pre">Chains</span></code> that contain <code class="docutils literal"><span class="pre">Residues</span></code> that in turn contain <code class="docutils literal"><span class="pre">Atoms</span></code>. You can read more about the entity model on [URL of Marcins example page].</p>
 </div>
 <div class="section" id="how-to-access-a-model-from-a-structure">
 <h4>How to access a model from a structure<a class="headerlink" href="#how-to-access-a-model-from-a-structure" title="Permalink to this headline">¶</a></h4>
 <p>To get the first model out of a structure:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">struc</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">struc</span><span class="p">[(</span><span class="mi">0</span><span class="p">,)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span>
 <span class="go">&lt;Model id=0&gt;</span>
 </pre></div>
@@ -125,7 +123,7 @@
 <div class="section" id="how-to-access-a-chain-from-a-model">
 <h4>How to access a chain from a model?<a class="headerlink" href="#how-to-access-a-chain-from-a-model" title="Permalink to this headline">¶</a></h4>
 <p>To get a particular chain:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span> <span class="o">=</span> <span class="n">model</span><span class="p">[(</span><span class="s">&#39;A&#39;</span><span class="p">,)]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span> <span class="o">=</span> <span class="n">model</span><span class="p">[(</span><span class="s1">&#39;A&#39;</span><span class="p">,)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span>
 <span class="go">&lt;Chain id=A&gt;</span>
 </pre></div>
@@ -134,7 +132,7 @@
 <div class="section" id="how-to-access-a-residue-from-a-chain">
 <h4>How to access a residue from a chain?<a class="headerlink" href="#how-to-access-a-residue-from-a-chain" title="Permalink to this headline">¶</a></h4>
 <p>To get a particular residue:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span> <span class="o">=</span> <span class="n">chain</span><span class="p">[(</span><span class="s">&#39;ILE&#39;</span><span class="p">,</span> <span class="mi">154</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span> <span class="o">=</span> <span class="n">chain</span><span class="p">[(</span><span class="s1">&#39;ILE&#39;</span><span class="p">,</span> <span class="mi">154</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span>
 <span class="go">&lt;Residue ILE resseq=154 icode= &gt;</span>
 </pre></div>
@@ -142,7 +140,7 @@
 </div>
 <div class="section" id="what-properties-does-a-residue-have">
 <h4>What properties does a residue have?<a class="headerlink" href="#what-properties-does-a-residue-have" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span><span class="o">.</span><span class="n">res_id</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span><span class="o">.</span><span class="n">res_id</span>
 <span class="go">154</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span><span class="o">.</span><span class="n">name</span>
 <span class="go">&#39;ILE&#39;</span>
@@ -156,7 +154,7 @@
 <div class="section" id="access-an-atom-from-a-residue">
 <h4>Access an atom from a residue<a class="headerlink" href="#access-an-atom-from-a-residue" title="Permalink to this headline">¶</a></h4>
 <p>To get a particular atom:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">atom</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s">&quot;N&quot;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">atom</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">atom</span>
 <span class="go">&lt;Atom (&#39;N&#39;, &#39; &#39;)&gt;</span>
 </pre></div>
@@ -164,7 +162,7 @@
 </div>
 <div class="section" id="properties-of-an-atom">
 <h4>Properties of an atom<a class="headerlink" href="#properties-of-an-atom" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">atom</span><span class="o">.</span><span class="n">name</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">atom</span><span class="o">.</span><span class="n">name</span>
 <span class="go">&#39; N  &#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">atom</span><span class="o">.</span><span class="n">element</span>
 <span class="go">&#39; N&#39;</span>
@@ -179,11 +177,11 @@
 </div>
 <div class="section" id="if-a-model-chain-residue-atom-does-not-exist">
 <h4>If a model/chain/residue/atom does not exist<a class="headerlink" href="#if-a-model-chain-residue-atom-does-not-exist" title="Permalink to this headline">¶</a></h4>
-<p>You will get a <tt class="docutils literal"><span class="pre">KeyError</span></tt>.</p>
+<p>You will get a <code class="docutils literal"><span class="pre">KeyError</span></code>.</p>
 </div>
 <div class="section" id="is-there-something-special-about-heteroatoms-to-consider">
 <h4>Is there something special about heteroatoms to consider?<a class="headerlink" href="#is-there-something-special-about-heteroatoms-to-consider" title="Permalink to this headline">¶</a></h4>
-<p>Yes, they have the <tt class="docutils literal"><span class="pre">h_flag</span></tt> attribute set in residues.</p>
+<p>Yes, they have the <code class="docutils literal"><span class="pre">h_flag</span></code> attribute set in residues.</p>
 </div>
 <div class="section" id="how-are-altlocs-insertion-codes-represented">
 <h4>How are Altlocs/insertion codes represented?<a class="headerlink" href="#how-are-altlocs-insertion-codes-represented" title="Permalink to this headline">¶</a></h4>
@@ -194,15 +192,15 @@
 <h3>Useful methods to access Structure objects<a class="headerlink" href="#useful-methods-to-access-structure-objects" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="how-to-access-all-atoms-residues-etc-via-a-dictionary">
 <h4>How to access all atoms, residues etc via a dictionary<a class="headerlink" href="#how-to-access-all-atoms-residues-etc-via-a-dictionary" title="Permalink to this headline">¶</a></h4>
-<p>The <tt class="docutils literal"><span class="pre">table</span></tt> property of a structure returns a two-dimensional dictionary containing all atoms. The keys are 1) the entity level (any of &#8216;A&#8217;,&#8217;R&#8217;,&#8217;C&#8217;,&#8217;M&#8217;) and 2) the combined IDs of <tt class="docutils literal"><span class="pre">Structure</span></tt>, <tt class="docutils literal"><span class="pre">Model</span></tt>, <tt class="docutils literal"><span class="pre">Chain</span></tt>, <tt class="docutils literal"><span class="pre">Residue</span></tt>, <tt class="docutils literal"><span class="pre">Atom</span></tt> as a tuple.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">][(</span><span class="s">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;HIS&#39;</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;O&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">))]</span>
+<p>The <code class="docutils literal"><span class="pre">table</span></code> property of a structure returns a two-dimensional dictionary containing all atoms. The keys are 1) the entity level (any of &#8216;A&#8217;,&#8217;R&#8217;,&#8217;C&#8217;,&#8217;M&#8217;) and 2) the combined IDs of <code class="docutils literal"><span class="pre">Structure</span></code>, <code class="docutils literal"><span class="pre">Model</span></code>, <code class="docutils literal"><span class="pre">Chain</span></code>, <code class="docutils literal"><span class="pre">Residue</span></code>, <code class="docutils literal"><span class="pre">Atom</span></code> as a tuple.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">][(</span><span class="s1">&#39;4TSV&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;HIS&#39;</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))]</span>
 <span class="go">&lt;Atom (&#39;O&#39;, &#39; &#39;)&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="calculate-the-center-of-mass-of-a-model-or-chain">
 <h4>Calculate the center of mass of a model or chain<a class="headerlink" href="#calculate-the-center-of-mass-of-a-model-or-chain" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">coords</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">coords</span>
 <span class="go">array([ 146.66615752,   35.08673503,   -3.60735847])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="o">.</span><span class="n">coords</span>
 <span class="go">array([ 146.66615752,   35.08673503,   -3.60735847])</span>
@@ -211,14 +209,14 @@
 </div>
 <div class="section" id="how-to-get-a-list-of-all-residues-in-a-chain">
 <h4>How to get a list of all residues in a chain?<a class="headerlink" href="#how-to-get-a-list-of-all-residues-in-a-chain" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&lt;Residue ILE resseq=154 icode= &gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="how-to-get-a-list-of-all-atoms-in-a-chain">
 <h4>How to get a list of all atoms in a chain?<a class="headerlink" href="#how-to-get-a-list-of-all-atoms-in-a-chain" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">resi</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&lt;Atom (&#39;N&#39;, &#39; &#39;)&gt;</span>
 </pre></div>
 </div>
@@ -228,24 +226,24 @@
 <h3>Constructing structures<a class="headerlink" href="#constructing-structures" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="how-to-create-a-new-entity">
 <h4>How to create a new entity?<a class="headerlink" href="#how-to-create-a-new-entity" title="Permalink to this headline">¶</a></h4>
-<p><tt class="docutils literal"><span class="pre">Structure</span></tt>/<tt class="docutils literal"><span class="pre">Model</span></tt>/<tt class="docutils literal"><span class="pre">Chain</span></tt>/<tt class="docutils literal"><span class="pre">Residue</span></tt>/<tt class="docutils literal"><span class="pre">Atom</span></tt> objects can be created as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.entity</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span><span class="n">Model</span><span class="p">,</span><span class="n">Chain</span><span class="p">,</span><span class="n">Residue</span><span class="p">,</span><span class="n">Atom</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Structure</span><span class="p">(</span><span class="s">&#39;my_struc&#39;</span><span class="p">)</span>
+<p><code class="docutils literal"><span class="pre">Structure</span></code>/<code class="docutils literal"><span class="pre">Model</span></code>/<code class="docutils literal"><span class="pre">Chain</span></code>/<code class="docutils literal"><span class="pre">Residue</span></code>/<code class="docutils literal"><span class="pre">Atom</span></code> objects can be created as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.core.entity</span> <span class="k">import</span> <span class="n">Structure</span><span class="p">,</span><span class="n">Model</span><span class="p">,</span><span class="n">Chain</span><span class="p">,</span><span class="n">Residue</span><span class="p">,</span><span class="n">Atom</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Structure</span><span class="p">(</span><span class="s1">&#39;my_struc&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Model</span><span class="p">((</span><span class="mi">0</span><span class="p">),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">((</span><span class="s">&#39;A&#39;</span><span class="p">),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Residue</span><span class="p">((</span><span class="s">&#39;ALA&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,),</span><span class="bp">False</span><span class="p">,</span><span class="s">&#39; &#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">((</span><span class="s">&#39;C  &#39;</span><span class="p">,</span><span class="s">&#39; &#39;</span><span class="p">,),</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">((</span><span class="s1">&#39;A&#39;</span><span class="p">),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Residue</span><span class="p">((</span><span class="s1">&#39;ALA&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,),</span><span class="kc">False</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">((</span><span class="s1">&#39;C  &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,),</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="how-to-add-entities-to-each-other">
 <h4>How to add entities to each other?<a class="headerlink" href="#how-to-add-entities-to-each-other" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">setTable</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">setTable</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">table</span>
 <span class="go">{&#39;A&#39;: {(&#39;my_struc&#39;, 0, &#39;A&#39;, (&#39;ALA&#39;, 1, &#39; &#39;), (&#39;C  &#39;, &#39; &#39;)): &lt;Atom (&#39;C  &#39;, &#39; &#39;)&gt;}, &#39;C&#39;: {(&#39;my_struc&#39;, 0, &#39;A&#39;): &lt;Chain id=A&gt;}, &#39;R&#39;: {(&#39;my_struc&#39;, 0, &#39;A&#39;, (&#39;ALA&#39;, 1, &#39; &#39;)): &lt;Residue ALA resseq=1 icode= &gt;}, &#39;M&#39;: {(&#39;my_struc&#39;, 0): &lt;Model id=0&gt;}}</span>
 </pre></div>
@@ -253,7 +251,7 @@
 </div>
 <div class="section" id="how-to-remove-a-residue-from-a-chain">
 <h4>How to remove a residue from a chain?<a class="headerlink" href="#how-to-remove-a-residue-from-a-chain" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">delChild</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">delChild</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">table</span>
 <span class="go">{&#39;A&#39;: {(&#39;my_struc&#39;, 0, &#39;A&#39;, (&#39;ALA&#39;, 1, &#39; &#39;), ...</span>
 </pre></div>
@@ -264,9 +262,9 @@
 <h3>Geometrical analyses<a class="headerlink" href="#geometrical-analyses" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="calculating-euclidean-distances-between-atoms">
 <h4>Calculating euclidean distances between atoms<a class="headerlink" href="#calculating-euclidean-distances-between-atoms" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.geometry</span> <span class="kn">import</span> <span class="n">distance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atom1</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s">&#39;N&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atom2</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s">&#39;CA&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.geometry</span> <span class="k">import</span> <span class="n">distance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atom1</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atom2</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s1">&#39;CA&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">distance</span><span class="p">(</span><span class="n">atom1</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">atom2</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 <span class="go">1.4691967192993618</span>
 </pre></div>
@@ -274,8 +272,8 @@
 </div>
 <div class="section" id="calculating-euclidean-distances-between-coordinates">
 <h4>Calculating euclidean distances between coordinates<a class="headerlink" href="#calculating-euclidean-distances-between-coordinates" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.geometry</span> <span class="kn">import</span> <span class="n">distance</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.maths.geometry</span> <span class="k">import</span> <span class="n">distance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">distance</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
@@ -285,8 +283,8 @@
 </div>
 <div class="section" id="calculating-flat-angles-from-atoms">
 <h4>Calculating flat angles from atoms<a class="headerlink" href="#calculating-flat-angles-from-atoms" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="kn">import</span> <span class="n">angle</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atom3</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="k">import</span> <span class="n">angle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atom3</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a12</span> <span class="o">=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">coords</span><span class="o">-</span><span class="n">atom1</span><span class="o">.</span><span class="n">coords</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a23</span> <span class="o">=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">coords</span><span class="o">-</span><span class="n">atom3</span><span class="o">.</span><span class="n">coords</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">angle</span><span class="p">(</span><span class="n">a12</span><span class="p">,</span><span class="n">a23</span><span class="p">)</span>
@@ -297,7 +295,7 @@
 </div>
 <div class="section" id="calculating-flat-angles-from-coordinates">
 <h4>Calculating flat angles from coordinates<a class="headerlink" href="#calculating-flat-angles-from-coordinates" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="kn">import</span> <span class="n">angle</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="k">import</span> <span class="n">angle</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
@@ -311,8 +309,8 @@
 </div>
 <div class="section" id="calculating-dihedral-angles-from-atoms">
 <h4>Calculating dihedral angles from atoms<a class="headerlink" href="#calculating-dihedral-angles-from-atoms" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="kn">import</span> <span class="n">dihedral</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atom4</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s">&#39;CG1&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">),]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="k">import</span> <span class="n">dihedral</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atom4</span> <span class="o">=</span> <span class="n">resi</span><span class="p">[(</span><span class="s1">&#39;CG1&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">),]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dihedral</span><span class="p">(</span><span class="n">atom1</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span><span class="n">atom2</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span><span class="n">atom3</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">atom4</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 <span class="go">259.49277688244217</span>
 </pre></div>
@@ -321,7 +319,7 @@
 </div>
 <div class="section" id="calculating-dihedral-angles-from-coordinates">
 <h4>Calculating dihedral angles from coordinates<a class="headerlink" href="#calculating-dihedral-angles-from-coordinates" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="kn">import</span> <span class="n">dihedral</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cogent.struct.dihedral</span> <span class="k">import</span> <span class="n">dihedral</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
@@ -337,7 +335,7 @@
 <h3>Other stuff<a class="headerlink" href="#other-stuff" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="how-to-count-the-atoms-in-a-structure">
 <h4>How to count the atoms in a structure?<a class="headerlink" href="#how-to-count-the-atoms-in-a-structure" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 <span class="go">1187</span>
 </pre></div>
 </div>
@@ -346,8 +344,8 @@
 <h4>How to iterate over chains in canonical PDB order?<a class="headerlink" href="#how-to-iterate-over-chains-in-canonical-pdb-order" title="Permalink to this headline">¶</a></h4>
 <p>In PDB, the chain with space as ID comes last, the
 others in alphabetical order.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">sortedvalues</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">chain</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">sortedvalues</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">chain</span>
 <span class="go">&lt;Chain id=A&gt;</span>
 </pre></div>
 </div>
@@ -355,17 +353,17 @@ others in alphabetical order.</p>
 <div class="section" id="how-to-iterate-over-chains-in-alphabetical-order">
 <h4>How to iterate over chains in alphabetical order?<a class="headerlink" href="#how-to-iterate-over-chains-in-alphabetical-order" title="Permalink to this headline">¶</a></h4>
 <p>If you want the chains in purely alphabetical order:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">chain</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">chain</span>
 <span class="go">&lt;Chain id=A&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="how-to-iterate-over-all-residues-in-a-chain">
 <h4>How to iterate over all residues in a chain?<a class="headerlink" href="#how-to-iterate-over-all-residues-in-a-chain" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">residues</span> <span class="o">=</span> <span class="p">[</span><span class="n">resi</span> <span class="k">for</span> <span class="n">resi</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">residues</span> <span class="o">=</span> <span class="p">[</span><span class="n">resi</span> <span class="k">for</span> <span class="n">resi</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">residues</span><span class="p">)</span>
 <span class="go">218</span>
 </pre></div>
@@ -373,11 +371,11 @@ others in alphabetical order.</p>
 </div>
 <div class="section" id="how-to-remove-all-water-molecules-from-a-structure">
 <h4>How to remove all water molecules from a structure<a class="headerlink" href="#how-to-remove-all-water-molecules-from-a-structure" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">water</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;R&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;H_HOH&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">water</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;H_HOH&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">resi</span> <span class="ow">in</span> <span class="n">water</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">resi</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">delChild</span><span class="p">(</span><span class="n">resi</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">setTable</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">struc</span><span class="o">.</span><span class="n">setTable</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">struc</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 <span class="go">1117</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">residues</span> <span class="o">=</span> <span class="p">[</span><span class="n">resi</span> <span class="k">for</span> <span class="n">resi</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">residues</span><span class="p">)</span>
@@ -393,123 +391,71 @@ others in alphabetical order.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Structural data</a><ul>
-<li><a class="reference internal" href="#protein-structures">Protein structures</a><ul>
-<li><a class="reference internal" href="#reading-protein-structures">Reading Protein structures</a><ul>
-<li><a class="reference internal" href="#retrieve-a-structure-from-pdb">Retrieve a structure from PDB</a></li>
-<li><a class="reference internal" href="#parse-a-pdb-file">Parse a PDB file</a></li>
-<li><a class="reference internal" href="#parse-a-pdb-entry-directly-from-the-web">Parse a PDB entry directly from the web</a></li>
-<li><a class="reference internal" href="#accessing-pdb-header-information">Accessing PDB header information</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#navigating-structure-objects">Navigating structure objects</a><ul>
-<li><a class="reference internal" href="#what-does-a-structure-object-contain">What does a structure object contain?</a></li>
-<li><a class="reference internal" href="#how-to-access-a-model-from-a-structure">How to access a model from a structure</a></li>
-<li><a class="reference internal" href="#how-to-access-a-chain-from-a-model">How to access a chain from a model?</a></li>
-<li><a class="reference internal" href="#how-to-access-a-residue-from-a-chain">How to access a residue from a chain?</a></li>
-<li><a class="reference internal" href="#what-properties-does-a-residue-have">What properties does a residue have?</a></li>
-<li><a class="reference internal" href="#access-an-atom-from-a-residue">Access an atom from a residue</a></li>
-<li><a class="reference internal" href="#properties-of-an-atom">Properties of an atom</a></li>
-<li><a class="reference internal" href="#if-a-model-chain-residue-atom-does-not-exist">If a model/chain/residue/atom does not exist</a></li>
-<li><a class="reference internal" href="#is-there-something-special-about-heteroatoms-to-consider">Is there something special about heteroatoms to consider?</a></li>
-<li><a class="reference internal" href="#how-are-altlocs-insertion-codes-represented">How are Altlocs/insertion codes represented?</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#useful-methods-to-access-structure-objects">Useful methods to access Structure objects</a><ul>
-<li><a class="reference internal" href="#how-to-access-all-atoms-residues-etc-via-a-dictionary">How to access all atoms, residues etc via a dictionary</a></li>
-<li><a class="reference internal" href="#calculate-the-center-of-mass-of-a-model-or-chain">Calculate the center of mass of a model or chain</a></li>
-<li><a class="reference internal" href="#how-to-get-a-list-of-all-residues-in-a-chain">How to get a list of all residues in a chain?</a></li>
-<li><a class="reference internal" href="#how-to-get-a-list-of-all-atoms-in-a-chain">How to get a list of all atoms in a chain?</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#constructing-structures">Constructing structures</a><ul>
-<li><a class="reference internal" href="#how-to-create-a-new-entity">How to create a new entity?</a></li>
-<li><a class="reference internal" href="#how-to-add-entities-to-each-other">How to add entities to each other?</a></li>
-<li><a class="reference internal" href="#how-to-remove-a-residue-from-a-chain">How to remove a residue from a chain?</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#geometrical-analyses">Geometrical analyses</a><ul>
-<li><a class="reference internal" href="#calculating-euclidean-distances-between-atoms">Calculating euclidean distances between atoms</a></li>
-<li><a class="reference internal" href="#calculating-euclidean-distances-between-coordinates">Calculating euclidean distances between coordinates</a></li>
-<li><a class="reference internal" href="#calculating-flat-angles-from-atoms">Calculating flat angles from atoms</a></li>
-<li><a class="reference internal" href="#calculating-flat-angles-from-coordinates">Calculating flat angles from coordinates</a></li>
-<li><a class="reference internal" href="#calculating-dihedral-angles-from-atoms">Calculating dihedral angles from atoms</a></li>
-<li><a class="reference internal" href="#calculating-dihedral-angles-from-coordinates">Calculating dihedral angles from coordinates</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#other-stuff">Other stuff</a><ul>
-<li><a class="reference internal" href="#how-to-count-the-atoms-in-a-structure">How to count the atoms in a structure?</a></li>
-<li><a class="reference internal" href="#how-to-iterate-over-chains-in-canonical-pdb-order">How to iterate over chains in canonical PDB order?</a></li>
-<li><a class="reference internal" href="#how-to-iterate-over-chains-in-alphabetical-order">How to iterate over chains in alphabetical order?</a></li>
-<li><a class="reference internal" href="#how-to-iterate-over-all-residues-in-a-chain">How to iterate over all residues in a chain?</a></li>
-<li><a class="reference internal" href="#how-to-remove-all-water-molecules-from-a-structure">How to remove all water molecules from a structure</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="tables.html"
-                        title="previous chapter">Tabular data</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="structural_data_2.html"
-                        title="next chapter">Structural Data Advanced</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/structural_data.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="structural_data_2.html" title="Structural Data Advanced"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="tables.html" title="Tabular data"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li>
-          <li><a href="manipulating_biological_data.html" >Manipulating biological data</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="tables.html" title="Tabular data"
+              >previous</a> |
+            <a href="structural_data_2.html" title="Structural Data Advanced"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/cookbook/structural_data.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>

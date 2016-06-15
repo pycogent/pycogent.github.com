@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Building a tree of life &mdash; PyCogent 1.5.3 documentation</title>
+    <title>Building a tree of life &mdash; PyCogent 1.9 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.3',
+        VERSION:     '1.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyCogent 1.5.3 documentation" href="../index.html" />
+    <link rel="top" title="PyCogent 1.9 documentation" href="../index.html" />
     <link rel="up" title="PyCogent Cookbook" href="index.html" />
     <link rel="next" title="Building phylogenies" href="building_phylogenies.html" />
     <link rel="prev" title="Building alignments" href="building_alignments.html" />     
@@ -33,28 +31,29 @@
 <script type="text/javascript" src="../_static/google_feed.js"></script>
 
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="building_phylogenies.html" title="Building phylogenies"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+  <body role="document">
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">PyCogent 1.9 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
           <a href="building_alignments.html" title="Building alignments"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">PyCogent Cookbook</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="building_phylogenies.html" title="Building phylogenies"
+             accesskey="N">next</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="building-a-tree-of-life">
 <h1>Building a tree of life<a class="headerlink" href="#building-a-tree-of-life" title="Permalink to this headline">¶</a></h1>
@@ -65,54 +64,54 @@
 <h3>Step 0. Set up your python environment<a class="headerlink" href="#step-0-set-up-your-python-environment" title="Permalink to this headline">¶</a></h3>
 <p>For this tutorial you&#8217;ll need cogent, muscle, and FastTree installed on your system.</p>
 <p>Start an interactive python session by entering the following into a command terminal:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">python</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span>
 </pre></div>
 </div>
 <p>You should now see the python command prompt:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="step-1-download-sequences-from-ncbi">
 <h3>Step 1: Download sequences from NCBI<a class="headerlink" href="#step-1-download-sequences-from-ncbi" title="Permalink to this headline">¶</a></h3>
 <p>Here we&#8217;ll work with archaeal, bacteria, and eukaryotic sequences obtained from NCBI using the PyCogent EUtils wrappers. Run the following commands to obtain these sequences:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="kn">import</span> <span class="n">EUtils</span>
-<span class="kn">from</span> <span class="nn">cogent.parse.fasta</span> <span class="kn">import</span> <span class="n">MinimalFastaParser</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cogent.db.ncbi</span> <span class="k">import</span> <span class="n">EUtils</span>
+<span class="kn">from</span> <span class="nn">cogent.parse.fasta</span> <span class="k">import</span> <span class="n">MinimalFastaParser</span>
 <span class="n">e</span> <span class="o">=</span> <span class="n">EUtils</span><span class="p">()</span>
-<span class="n">arc16s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s">&#39;&quot;small subunit rRNA&quot;[ti] AND archaea[orgn]&#39;</span><span class="p">]))</span>
-<span class="n">bac16s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s">&#39;&quot;small subunit rRNA&quot;[ti] AND bacteria[orgn]&#39;</span><span class="p">]))</span>
-<span class="n">euk16s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s">&#39;&quot;small subunit rRNA&quot;[ti] AND eukarya[orgn]&#39;</span><span class="p">]))</span>
+<span class="n">arc16s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;&quot;small subunit rRNA&quot;[ti] AND archaea[orgn]&#39;</span><span class="p">]))</span>
+<span class="n">bac16s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;&quot;small subunit rRNA&quot;[ti] AND bacteria[orgn]&#39;</span><span class="p">]))</span>
+<span class="n">euk16s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MinimalFastaParser</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;&quot;small subunit rRNA&quot;[ti] AND eukarya[orgn]&#39;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>You can check how many sequences you obtained for each query by running:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">arc16s</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">arc16s</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">bac16s</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">euk16s</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In this example you&#8217;ll notice that you have relatively few sequences for each query. You&#8217;d obtain many more if you replaced the <tt class="docutils literal"><span class="pre">rRNA</span></tt> in the query with <tt class="docutils literal"><span class="pre">ribosomal</span> <span class="pre">RNA</span></tt>, but the runtime would also be significantly longer. For the purpose of these tutorial we&#8217;ll therefore stick with this command that returns fewer sequences.</p>
+<p class="last">In this example you&#8217;ll notice that you have relatively few sequences for each query. You&#8217;d obtain many more if you replaced the <code class="docutils literal"><span class="pre">rRNA</span></code> in the query with <code class="docutils literal"><span class="pre">ribosomal</span> <span class="pre">RNA</span></code>, but the runtime would also be significantly longer. For the purpose of these tutorial we&#8217;ll therefore stick with this command that returns fewer sequences.</p>
 </div>
 </div>
 <div class="section" id="step-2-load-the-sequences">
 <h3>Step 2: Load the sequences<a class="headerlink" href="#step-2-load-the-sequences" title="Permalink to this headline">¶</a></h3>
-<p>We&#8217;ll begin by loading the sequences that have been downloaded, applying a filter to retain only those that we consider to be of good quality. Sequences fewer than 750 bases or sequences containing one or more <tt class="docutils literal"><span class="pre">N</span></tt>  characters will be ignored (<tt class="docutils literal"><span class="pre">N</span></tt> characters typically represent ambiguous base calls during sequencing).</p>
+<p>We&#8217;ll begin by loading the sequences that have been downloaded, applying a filter to retain only those that we consider to be of good quality. Sequences fewer than 750 bases or sequences containing one or more <code class="docutils literal"><span class="pre">N</span></code>  characters will be ignored (<code class="docutils literal"><span class="pre">N</span></code> characters typically represent ambiguous base calls during sequencing).</p>
 <p>First, define a function to load and filter the sequences:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent.parse.fasta</span> <span class="kn">import</span> <span class="n">MinimalFastaParser</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cogent.parse.fasta</span> <span class="k">import</span> <span class="n">MinimalFastaParser</span>
 
 <span class="k">def</span> <span class="nf">load_and_filter_seqs</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span> <span class="n">domain_label</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">seq_id</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">750</span> <span class="ow">and</span> <span class="n">seq</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;N&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">750</span> <span class="ow">and</span> <span class="n">seq</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">domain_label</span> <span class="o">+</span> <span class="n">seq_id</span><span class="p">,</span><span class="n">seq</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 </div>
 <p>Next, load and filter the three sequence sets:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">arc16s_filtered</span> <span class="o">=</span> <span class="n">load_and_filter_seqs</span><span class="p">(</span><span class="n">arc16s</span><span class="p">,</span><span class="s">&#39;A: &#39;</span><span class="p">)</span>
-<span class="n">bac16s_filtered</span> <span class="o">=</span> <span class="n">load_and_filter_seqs</span><span class="p">(</span><span class="n">bac16s</span><span class="p">,</span><span class="s">&#39;B: &#39;</span><span class="p">)</span>
-<span class="n">euk16s_filtered</span> <span class="o">=</span> <span class="n">load_and_filter_seqs</span><span class="p">(</span><span class="n">euk16s</span><span class="p">,</span><span class="s">&#39;E: &#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">arc16s_filtered</span> <span class="o">=</span> <span class="n">load_and_filter_seqs</span><span class="p">(</span><span class="n">arc16s</span><span class="p">,</span><span class="s1">&#39;A: &#39;</span><span class="p">)</span>
+<span class="n">bac16s_filtered</span> <span class="o">=</span> <span class="n">load_and_filter_seqs</span><span class="p">(</span><span class="n">bac16s</span><span class="p">,</span><span class="s1">&#39;B: &#39;</span><span class="p">)</span>
+<span class="n">euk16s_filtered</span> <span class="o">=</span> <span class="n">load_and_filter_seqs</span><span class="p">(</span><span class="n">euk16s</span><span class="p">,</span><span class="s1">&#39;E: &#39;</span><span class="p">)</span>
 
 <span class="nb">len</span><span class="p">(</span><span class="n">arc16s_filtered</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">bac16s_filtered</span><span class="p">)</span>
@@ -123,42 +122,42 @@
 <div class="section" id="step-3-select-a-random-subset-of-the-sequences">
 <h3>Step 3: Select a random subset of the sequences<a class="headerlink" href="#step-3-select-a-random-subset-of-the-sequences" title="Permalink to this headline">¶</a></h3>
 <p>Import shuffle from the random module to extract a random collection of sequences:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">shuffle</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">shuffle</span>
 <span class="n">shuffle</span><span class="p">(</span><span class="n">arc16s_filtered</span><span class="p">)</span>
 <span class="n">shuffle</span><span class="p">(</span><span class="n">bac16s_filtered</span><span class="p">)</span>
 <span class="n">shuffle</span><span class="p">(</span><span class="n">euk16s_filtered</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Select some random sequences from each domain. Note that only a few sequences are chosen to facilitate a quick analysis:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">combined16s</span> <span class="o">=</span> <span class="n">arc16s_filtered</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">bac16s_filtered</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="n">euk16s_filtered</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">combined16s</span> <span class="o">=</span> <span class="n">arc16s_filtered</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">bac16s_filtered</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="n">euk16s_filtered</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">combined16s</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="step-4-load-the-sequences-into-a-sequencecollection-object">
 <h3>Step 4: Load the sequences into a SequenceCollection object<a class="headerlink" href="#step-4-load-the-sequences-into-a-sequencecollection-object" title="Permalink to this headline">¶</a></h3>
-<p>Use <tt class="docutils literal"><span class="pre">LoadSeqs</span></tt> to load the unaligned sequences into a <tt class="docutils literal"><span class="pre">SequenceCollection</span></tt> object. In this step we&#8217;ll rename the sequences (by passing a <tt class="docutils literal"><span class="pre">label_to_name</span></tt> function) to only the accession number for the sequence. This facilitates visualization in downstream steps.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent</span> <span class="kn">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">DNA</span>
-<span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">combined16s</span><span class="p">,</span><span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">label_to_name</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]))</span>
+<p>Use <code class="docutils literal"><span class="pre">LoadSeqs</span></code> to load the unaligned sequences into a <code class="docutils literal"><span class="pre">SequenceCollection</span></code> object. In this step we&#8217;ll rename the sequences (by passing a <code class="docutils literal"><span class="pre">label_to_name</span></code> function) to only the accession number for the sequence. This facilitates visualization in downstream steps.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cogent</span> <span class="k">import</span> <span class="n">LoadSeqs</span><span class="p">,</span> <span class="n">DNA</span>
+<span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">combined16s</span><span class="p">,</span><span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">label_to_name</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>You can explore some properties of this sequence collection. For example, you can count how many sequences are in the sequence collection object:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">seqs</span><span class="o">.</span><span class="n">getNumSeqs</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">seqs</span><span class="o">.</span><span class="n">getNumSeqs</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="step-5-align-the-sequences-using-muscle">
 <span id="step5"></span><h3>Step 5: Align the sequences using muscle<a class="headerlink" href="#step-5-align-the-sequences-using-muscle" title="Permalink to this headline">¶</a></h3>
-<p>Load an aligner function, and align the sequences. Here we&#8217;ll align with muscle via the muscle application controller. The sequences will be loaded into an <tt class="docutils literal"><span class="pre">Alignment</span></tt> object called <tt class="docutils literal"><span class="pre">aln</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent.app.muscle</span> <span class="kn">import</span> <span class="n">align_unaligned_seqs</span>
+<p>Load an aligner function, and align the sequences. Here we&#8217;ll align with muscle via the muscle application controller. The sequences will be loaded into an <code class="docutils literal"><span class="pre">Alignment</span></code> object called <code class="docutils literal"><span class="pre">aln</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cogent.app.muscle</span> <span class="k">import</span> <span class="n">align_unaligned_seqs</span>
 <span class="n">aln</span> <span class="o">=</span> <span class="n">align_unaligned_seqs</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span><span class="n">DNA</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="step-6-build-a-tree-from-the-alignment-using-fasttree">
 <h3>Step 6: Build a tree from the alignment using FastTree<a class="headerlink" href="#step-6-build-a-tree-from-the-alignment-using-fasttree" title="Permalink to this headline">¶</a></h3>
-<p>Load a tree-building function, and build a tree from the alignment. Here we&#8217;ll use FastTree. The tree will be stored in a <tt class="docutils literal"><span class="pre">PhyloNode</span></tt> object called <tt class="docutils literal"><span class="pre">tree</span></tt>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent.app.fasttree</span> <span class="kn">import</span> <span class="n">build_tree_from_alignment</span>
+<p>Load a tree-building function, and build a tree from the alignment. Here we&#8217;ll use FastTree. The tree will be stored in a <code class="docutils literal"><span class="pre">PhyloNode</span></code> object called <code class="docutils literal"><span class="pre">tree</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cogent.app.fasttree</span> <span class="k">import</span> <span class="n">build_tree_from_alignment</span>
 <span class="n">tree</span> <span class="o">=</span> <span class="n">build_tree_from_alignment</span><span class="p">(</span><span class="n">aln</span><span class="p">,</span><span class="n">DNA</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -166,12 +165,12 @@
 <div class="section" id="step-7-visualize-the-tree">
 <h3>Step 7: Visualize the tree<a class="headerlink" href="#step-7-visualize-the-tree" title="Permalink to this headline">¶</a></h3>
 <p>Load a drawing function to generate a prettier picture of the tree:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cogent.draw.dendrogram</span> <span class="kn">import</span> <span class="n">UnrootedDendrogram</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cogent.draw.dendrogram</span> <span class="k">import</span> <span class="n">UnrootedDendrogram</span>
 <span class="n">dendrogram</span> <span class="o">=</span> <span class="n">UnrootedDendrogram</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Have a quick look at the unrooted dendrogram:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">dendrogram</span><span class="o">.</span><span class="n">showFigure</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dendrogram</span><span class="o">.</span><span class="n">showFigure</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>You should see something like this:</p>
@@ -183,12 +182,12 @@
 <div class="section" id="step-8-save-the-tree-as-a-pdf">
 <h3>Step 8: Save the tree as a PDF<a class="headerlink" href="#step-8-save-the-tree-as-a-pdf" title="Permalink to this headline">¶</a></h3>
 <p>Finally, you can save this tree as a PDF for sharing or later viewing:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">dendrogram</span><span class="o">.</span><span class="n">drawToPDF</span><span class="p">(</span><span class="s">&#39;./tol.pdf&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dendrogram</span><span class="o">.</span><span class="n">drawToPDF</span><span class="p">(</span><span class="s1">&#39;./tol.pdf&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You can also write the alignment and tree to fasta and newick files, respectively. You can then load these in tools such as <a class="reference external" href="http://www.microbio.me/boulderale/">BoulderALE</a> (for alignment editing) or <a class="reference external" href="http://topiaryexplorer.sourceforge.net/">TopiaryExplorer</a> or <a class="reference external" href="http://tree.bio.ed.ac.uk/software/figtree/">FigTree</a> (for tree viewing, coloring, and layout manipulation).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">open</span><span class="p">(</span><span class="s">&#39;./tol.fasta&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">toFasta</span><span class="p">())</span>
-<span class="nb">open</span><span class="p">(</span><span class="s">&#39;./tol.tre&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">getNewick</span><span class="p">(</span><span class="n">with_distances</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./tol.fasta&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">aln</span><span class="o">.</span><span class="n">toFasta</span><span class="p">())</span>
+<span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./tol.tre&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">getNewick</span><span class="p">(</span><span class="n">with_distances</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -198,16 +197,16 @@
 <h4>Filter highly gapped positions from the alignment<a class="headerlink" href="#filter-highly-gapped-positions-from-the-alignment" title="Permalink to this headline">¶</a></h4>
 <p>To try to improve the quality of the alignment and therefore the tree, it&#8217;s often a good idea to removed positions that contain a high proportion of gap characters from the alignment. These generally represent non-homologous regions of the sequence of interest, and therefore contribute little to our understanding of the evolutionary history of the sequence. These steps may result in a clearer delineation of the three domains on your tree, but the results will in part be dependent on the randomly chosen sequences in your alignment.</p>
 <p>To remove positions that are greater than 10% gap characters from the alignment, run the following command:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">gap_filtered_aln</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">omitGapPositions</span><span class="p">(</span><span class="n">allowed_gap_frac</span><span class="o">=</span><span class="mf">0.10</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gap_filtered_aln</span> <span class="o">=</span> <span class="n">aln</span><span class="o">.</span><span class="n">omitGapPositions</span><span class="p">(</span><span class="n">allowed_gap_frac</span><span class="o">=</span><span class="mf">0.10</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you count the positions in both the full and reduced alignments you&#8217;ll see that your alignment is now a lot shorter:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Rebuild the tree and visualize the result as before:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">gap_filtered_tree</span> <span class="o">=</span> <span class="n">build_tree_from_alignment</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="p">,</span><span class="n">DNA</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gap_filtered_tree</span> <span class="o">=</span> <span class="n">build_tree_from_alignment</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="p">,</span><span class="n">DNA</span><span class="p">)</span>
 <span class="n">gap_filtered_dendrogram</span> <span class="o">=</span> <span class="n">UnrootedDendrogram</span><span class="p">(</span><span class="n">gap_filtered_tree</span><span class="p">)</span>
 <span class="n">gap_filtered_dendrogram</span><span class="o">.</span><span class="n">showFigure</span><span class="p">()</span>
 </pre></div>
@@ -222,26 +221,26 @@
 <h4>Filtering highly variable positions<a class="headerlink" href="#filtering-highly-variable-positions" title="Permalink to this headline">¶</a></h4>
 <p>Another issue that adds noise to alignments of distantly related sequences is highly entropic (or highly variable) positions. To filter these, we can compute the Shannon Entropy or uncertainty of each position, and then remove the most 10% entropic positions.</p>
 <p>First we&#8217;ll compile the Shannon Entropy value for each position in the alignment:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">sorted_uncertainties</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="o">.</span><span class="n">uncertainties</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sorted_uncertainties</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="o">.</span><span class="n">uncertainties</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>Next we&#8217;ll find the 90th percentile by sorting the uncertainties and finding that value that is 90% of the way through that list:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">uncertain_90p</span> <span class="o">=</span> <span class="n">sorted_uncertainties</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sorted_uncertainties</span><span class="p">)</span><span class="o">*</span><span class="mf">0.9</span><span class="p">)]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">uncertain_90p</span> <span class="o">=</span> <span class="n">sorted_uncertainties</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sorted_uncertainties</span><span class="p">)</span><span class="o">*</span><span class="mf">0.9</span><span class="p">)]</span>
 </pre></div>
 </div>
-<p>Next we&#8217;ll identify and store the positions that have lower entropy than <tt class="docutils literal"><span class="pre">uncertain_90p</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">positions_to_keep</span> <span class="o">=</span> <span class="p">[]</span>
+<p>Next we&#8217;ll identify and store the positions that have lower entropy than <code class="docutils literal"><span class="pre">uncertain_90p</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">positions_to_keep</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">u</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="o">.</span><span class="n">uncertainties</span><span class="p">()):</span>
      <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">uncertain_90p</span><span class="p">:</span>
          <span class="n">positions_to_keep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then we&#8217;ll filter the alignment to contain only those positions:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">entropy_gap_filtered_aln</span> <span class="o">=</span> <span class="n">gap_filtered_aln</span><span class="o">.</span><span class="n">takePositions</span><span class="p">(</span><span class="n">positions_to_keep</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">entropy_gap_filtered_aln</span> <span class="o">=</span> <span class="n">gap_filtered_aln</span><span class="o">.</span><span class="n">takePositions</span><span class="p">(</span><span class="n">positions_to_keep</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can then rebuild and visualize the tree:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">entropy_gap_filtered_tree</span> <span class="o">=</span> <span class="n">build_tree_from_alignment</span><span class="p">(</span><span class="n">entropy_gap_filtered_aln</span><span class="p">,</span><span class="n">DNA</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">entropy_gap_filtered_tree</span> <span class="o">=</span> <span class="n">build_tree_from_alignment</span><span class="p">(</span><span class="n">entropy_gap_filtered_aln</span><span class="p">,</span><span class="n">DNA</span><span class="p">)</span>
 <span class="n">entropy_gap_filtered_dendrogram</span> <span class="o">=</span> <span class="n">UnrootedDendrogram</span><span class="p">(</span><span class="n">entropy_gap_filtered_tree</span><span class="p">)</span>
 <span class="n">entropy_gap_filtered_dendrogram</span><span class="o">.</span><span class="n">showFigure</span><span class="p">()</span>
 </pre></div>
@@ -252,56 +251,56 @@
 </div></blockquote>
 <p>Figure 3: A tree of life build from 16S rRNA sequences. A: archaeal sequence; B: bacterial sequences; E: eukaryotic sequences.</p>
 <p>While the trees in Figures 1, 2, and 3 don&#8217;t look very different, an interesting point to note is the amount of information in each:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">aln</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">gap_filtered_aln</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">entropy_gap_filtered_aln</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The entropy and gap filtered alignment (<tt class="docutils literal"><span class="pre">entropy_gap_filtered_aln</span></tt>) contains approximately 1/4 of the positions as the full alignment (<tt class="docutils literal"><span class="pre">aln</span></tt>), yet results in a nearly identical phylogenetic tree. This suggests that the filtered positions add very little phylogenetic information. In small alignments such as the example here this may not have a large affect on run time, but when building a tree from thousands or tens of thousands of sequences removing gap and high entropy positions can save significant compute time as well as frequently improving results.</p>
+<p>The entropy and gap filtered alignment (<code class="docutils literal"><span class="pre">entropy_gap_filtered_aln</span></code>) contains approximately 1/4 of the positions as the full alignment (<code class="docutils literal"><span class="pre">aln</span></code>), yet results in a nearly identical phylogenetic tree. This suggests that the filtered positions add very little phylogenetic information. In small alignments such as the example here this may not have a large affect on run time, but when building a tree from thousands or tens of thousands of sequences removing gap and high entropy positions can save significant compute time as well as frequently improving results.</p>
 </div>
 </div>
 <div class="section" id="starting-with-silva-sequences-to-skip-steps-of-obtaining-sequences-from-ncbi">
 <h3>Starting with Silva sequences (to skip steps of obtaining sequences from NCBI)<a class="headerlink" href="#starting-with-silva-sequences-to-skip-steps-of-obtaining-sequences-from-ncbi" title="Permalink to this headline">¶</a></h3>
 <p>The following sequences are randomly chosen from the Silva database. You can use these instead of pulling random sequences from NCBI.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">fasta_str</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;&gt;AF424517 1 994 Archaea/Crenarchaeota/uncultured/uncultured</span>
-<span class="s">CAGCAGCCGCGGTAATACCAGCCCCCCGAGTGGTGGGGATGTTTATTTGGCCTAAAACGTCCGTAGCCAGCTCGGTAAATCTCTCGTTAAATCCAGCGTCCTAAGCGTTGGGCTGCGAGGGAGACTGCCAAGCTAGAGGGTGGGAGAGGTCAGCGGTATTTCTGGGGTAGGGGCGAAATCCATTGATCCCAGGAGGACCACCAGTGGCGAAGGCTGCTGACTAGAACACGCCTGACGGTGAGGGACGAAAGCTGGGGGAGCAAACCGGATTAGATACCCGGGTAGTCCCAGCTGTAAACGATGCAAACTCGGTGATGCCCTGGCTTGTGGCCAGTGCAGTGCCGCAGGGAAGCCGTTAAGTTTGCCGCCTGGGAAGTACGTACGCAAGTATGAAACTTAAAGGAATTGGCGGGGGAGCACCACAAGGGGTGAAGCCTGCGGTTCAATTGGAGTCAACGCCAGAAATCTTACCCGAAGAGACAGCAGAATGAAGGTCAAGCTGGAGACTTTACCAGACAAGCTGAGAAGTGGTGCATGGCCGTCGCCAGCTCGTGCCGTGAGATGTCCTGTTAAGTCAGGTAACCAGCGAGATCCCTGCCTCTAGTTGCCACCATTACTCTCCGGAGTAGTGGGGCGAATTAGCGGGACCGCCGTAGTTAATACGGAGGAAGGAAGGGGCCACGGCAGGTCAGTATGCCCTGAAACTTTGGGGCCACACGCGGGCTGCAATGGTAACGACAATGGGTTCCGAAACCGAAAGGTGGAGGTAATCCTCAAACGTTACCACAGTTATGATTGAGGGCTGCAACTCGCCCTCATGAATATGGAATCCCTAGTAACTGCGTGTCATTATCGCGCGGTGAATACGTCCCTGCTCCTTGCACACACTGCCCGTCGAACCACCCGAATGAGGTTTGGGTGAGGAATGGTCGAATGTTGGCCGTTTCGAACCTGGGCTTCGTAAGGAGGGTTAAGTCGTAACAAGGTAACCGTA</span>
-<span class="s">&gt;AF448158 1 1828 Eukarya/Metazoa/Magelona et rel.</span>
-<span class="s">TTGATCCTGCCAGTAGTCATATGCTTGACTCAAAGATTAAGCCATGCATGTGCAAGTACATGACTTTTTTACACACGGTGAGACCGCGAATGGCTCATTAGATCAGTCTTAGTTCCTTAGACGGAAAGTGCTACTTGGATAACTGTGGCAATTCTAGAGCTAATACGTGCACGCAAGCTCCGACCTACTGGGGAAGAGCGCAATTATTAGATCAAGACCAAACGAGTCGAAAGGCTCGAACGTCTGGTGACTCTGGATAACCTCGGGCTGACCGCACGGCCAAGAGCCGGCGGCGCATCTTTCAAGTGTCTGCCCTATCAACTTTCGATGGTATGCGATCTGCGTACCATGGTGCTTACGGGTAACGGGGAATCAGGGTTCGATTCCGGAGAGGGAGCATGAGAAACGGCTACCACCTCCAAGGAAGGCAGCAGGCGCGCAAATTACCCACTCCTGGCACAGGGAGGTAGTGACGAGCAATAGCGACTCGGGACTCTTTCGAGGCCTCGGGATCGGAATGAGTACAACGTAAACACTTTTGCAAGGAACAATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCCAATAGCGTATATTAAAGCTGTTGCAGTTAAAAAGCTCGTAGCTGAATCTCGGGTGCGGGCGGGCGGTCCGCCTTACAGCGTGCACTGCCCCGATCCTGATCCAACTGCCGGTATTATCTCGGGGTGCTCTTAGCTGAGTGTCTTGGGCTGGCCGGTGCTTTTACTTTGAAAAAATTAGAGTGCTCAAAGCAGGCTTCCACGCCTGAATACTATAGCATGGAATAATGGAATAAGACCTCGGTTCTATTCTGTTGGTCTCTGGAAACCAGAGGTAATGATTAAGAGGGACAGACGGGGGCATTCGTATTGCGGGGCGAGAGGTGAAATTCTTAGACCCTCGCAAGACGAACTACAGCGAAAGCATTTGCCAAGCATGTTTTCTTTAGTCAAGAACGAAAGTCAGAGGTTCGAAGACGATCAGATACCGTCCTAGTTCTGACCATAAACGATGCCGACTAGCGATGCGCGAGCGTTGGTATCTGACCTCGCGCGCAGCTCCCGGGAAACCAAAGTCTTTGGGTTCCGGGGGAAGTATGGTTGCAAAGCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAAACTCACCCGGCCCGGACACTGCGAGGATTGACAGATTGAGAGCTCTTTCTTGATTCGGTGGGTGGTGGTGCATGGCCGTTCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGATAACGAACGAGACTCTAGCCTGCTAAATAGTTCGTCGACACGCGGTTGTGTCTGGCGAGGAAACTTCTTAGAGGGACAAATGGCATTTAGTCATACGAGATTGAGCAATAACAGGTCTGTGATGCCCTTAGATGTTCGGGGCCGCACGCGCGCTACACTGAAGGAGACAGCGAGTGTCCTGACCTAGCCCGAAAGGGCCGGGCAATCTGCTGAACCTCTTTCGTGGTAGGGATTGGGGCTTGCAATTGTTCCCCATGAACCAGGAATTCCGAGTAAGCGCAGGTCACAAGCCTGCGTTGATTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTACTACCGATTGAGCGGTTCAGTGAGACCCTCGGACTTGCCCAGCAGGAGCCGGCGACGGCTCCGCGTGTGTGCGAGAAAGAATGTCGAACTGTATTGCTTAGAGGAAGTAAAAGTCGTAACAAGGTTTCCGTAGGTGAACCTGCAGAAGGATCAAGCTT</span>
-<span class="s">&gt;AJ428075 1 1749 Eukarya/Viridiplantae/Streptophyta/Klebsormidiophyceae</span>
-<span class="s">TAGTCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGTATAAATTACTCTAAATGGTAAAACTGCGAATGGCTCATTAAATCAGTTATAGTTTATTTGATGATTCCTGCTACTCGGATAACCGTAGTAATTATAGAGCTAATACGTGCGCAAACGCCCGACTTCGGAAGGGCCGTATTTATTAGATAAAAGACCAACTCGGGGTTCGCCCCGAAACTTTGGTGATTCATAATGTAATCTCGGACCGCACGGCCTCGCGCCGGCGGCAAATCAATCAAATATCTGCCCTATCAACTTTCGATGGCAGGATAGTCGCCTGCCATGGTTGTAACGGGTGACGGAGAATTAGGGTTCGATTCCGGAGAGGGAGCATGAGAAACGGCTACCACATCCAAGGAAGGCAGCAGGCGCGCAAATTACCCAATCCTGATTCAGGGAGGTAGTGACAATAAATAACAATACCGGTCTCTTATGTGACTGGTAATTGGAATGAGCGGAACATAAATACCTTAACGAGGATCCATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCCAATAGCGTATATTTAAGTTGTTGCAGTTAAAAAGCTCGTAGTTGGATTTCGGGACGGAGACGTCGGTCCTCCCTCGTGGTCGATACTGACTCTCTTCCTTAATTGCCTCGAGCGCCGCCTAGTCTTCATTGCCTGGGCGCGCTACGCGGCGCCGTTACCTTGAATAAATTATGGTGTTCAAAGCAGGCTTATGCTCTGAGTACATTAGCATGGAATAACGCTATAGGACTCCGGTCCTATTACGTTGGTCTTCTGACCGGAGTAATGATTAATAGGGACAGTCGGGGGCATTCGTACTTCATCGTTAGAGGTGAAATTCTTGGATCGATGAAAGACGAACTTCTGCGAAAGCATTTGCCAAGGATGTTTTCATTAATCAAGAACGAAAGTTGGGGGCGCGAAGACGATTAGATACCGTCCTAGTCCCAACCGTAAACGATGCCGACCCCGAATTGGCGCACGTATGACTTGACGTCGCCAGCGCCCGAGGAGAAATCAGAGTCTTTGGGTTCCGGGGGGAGTATGGTCGCAAGTCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGTGTGGAGCGTGCGGCTTAATTTGACTCAACGCGGGGAATCTTACCAGGTCCAGACATAGCGACGATTGACAGACTGATAGCTCTTTCTTGATCATATGGGTAGTGGTGCATGGCCGTTCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGTTAACGAACGAGACCTCAGCTTGCTAACTAGTTGCGCGAAGATTTTCTTCGCGCACACTTCTTAGAAGGACTTTGAGCGTTTAGCTCATGGAGGTTTGAGGCAATAACAGGTCTGTGATGCCCTTAGATGTTCTGGGCCGCACGCGCGCTACAATGATGCATTCAGCGAGCGGAATCCCTGATCGGAAACGGTCGGGCAATCTTTGAATCTTTATCGTGATGGGGATAGACCCTTGCAATTATTGGTCTCGAACGAGGAATACCTAGTAAGCGCTCGTCATCAGCGTGCGCTGACTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTCCTACCGATAGAATGCTTCGGTGAAGCACTCGGATCGCGCCGCCGSCGGCGAAACCTCCGGGGACGGCATGAGAAGTTTGTTAAACCATATCGTTTAGAGGAAGGAGAAGTCGTAACAAGG</span>
-<span class="s">&gt;AJ850036 1 1961 Eukarya/Metazoa/Arthropoda/Polyphaga/Bagous et rel.</span>
-<span class="s">TTGTCTCAAAGATTAAGCCATGCATGTCTCAGTACAAGCCATATTAAGGTGAAACCGCGAAAGGCTCATTAAATCAGTTATGGTTCCTTAGATCGTACCCAGGTTACTTGGATAACTGTGGTAATTCTAGAGCTAATACATGCAAACAGAGCTCCGACTGGAAACGGAAGGAGTGCTTTTATTAGATCAAAGCCAAACGGTAACTTAATGTTGTCGTACAATAATATTGTTGACTCTGAATAACTTTATGCTGATCGCATGGTCTTGCACCGGCGACGCATCTTTCAAATGTCTGCCTTATCAACTGTCGATGGTAGGTTCTGCGCCTACCATGGTTGTAACGGGTAACGGGGAATCAGGGTTCGATTCCGGAGAGGGAGCCTGAGAAACGGCTACCACATCCAAGGAAGGCAGCAGGCGCGCAAATTACCCACTCCCGGCACGGGGAGGTAGTGACGAAAAATAACGATACGGGACTCATCCGAGGCCCCGTAATCGGAATGAGTACACTTTAAATCCTTTAACGAGGATCAATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCCAATAGCGTATATTAAAGTTGTTGCGGTTAAAAAGCTCGTAGTCAAATTTGTGTCTCGTGCCGCTGGTTCATCGTTCGCGGTGTTAATTGGCGTGATACGAGACGTCCTGCCGGTGGGCTTTCAGATTTTTCCGTATTTCAGGACCATAACAATTGGTTTGTATCTGTGGCGTAATACTGCAGTGCAGGGCAATTGGTTAATGAACGGTTGGTTTTTGTGCTACCCAAACTTACAATCCTGTCGCGTTGCTCTTGATTGAGTGACGAGGTGGGCCGGCACGTTTACTTTGAACAAATTAGAGTGCTTAAAGCAGGCAAAATTTCGCCTGAATATTCTGTGCATGGAATAATGGAATAGGACCTCGGTTCTATTTCGTTGGTTTTCGGAACTCCGAGGTAATGATTAATAGGAACGGATGGGGGCATTCGTATTGCGACGTTAGAGGTGAAATTCTTGGATCGTCGCAAGACGAACAGAAGCGAAAGCATTTGCCAAAAACGCTTTCATTGATCAAGAACGAAAGTTAGAGGTTCGAAGGCGATCAGATACCGCCCTAGTTCTAACCGTAAACTATGTCATCTGACGATCCGTCGACGTTCCTTTATTGACTCGACGGGCAGTTTCCGGGAAACCAAAGATTTTGGGTTCCGGGGGAAGTATGGTTGCAAAGCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAACCTCACCAGGCCCGGACACCGGAAGGATTGACAGATTGAGAGCTCTTTCTTGATTCGGTGGGTGGTGGTGCATGGCCGTTCTTAGTTGGTGGAGCGATTTGTCTGGTTAATTCCGATAACGAACGAGACTCTAGCCTGCTAAATAGGCGACATATGACATCGCAAAGGCCAGCCGGTTTGATTTAAAGGGTGGCGAGGTGGCGTCAAGGCGTTTATCTCGTGCTCTTGTCAGATTGTGCGCGGTTTTTACTGTCGGCGTATAAATAATTCTTCTTAGAGGGACAGGCGGCTTTTAGCCGCACGAGATTGAGCAATAACAGGTCTGTGATGCCCTTAGATGTTCTGGGCCGCACGCGCGCTACACTGAAGGAATCAGCGTGTCCTCCCTGGCCGAGTGGCCCGGGTAACCCGCTGAACCTCCTTCGTGCTAGGGATTGGGGCTTGCAATTGTTCCCCATGAACGAGGAATTCCCAGTAAGCGCGAGTCATAAGCTCGCGTTGATTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTACTACCGATTGAATGATTTACTGAGGTCTTCGGATCGATGCGCGATGACGTCTGACGTTGATCGATGTATCCGAGAAGATGACCAAACTTGATCATTT</span>
-<span class="s">&gt;AM745254 1 1365 Archaea/Euryarchaeota/Halobacteriales/uncultured</span>
-<span class="s">TTCCGGTTGATCCTGCCGGACCTGACTGCTATTGGAGTAGGACTAAGTCACGCTAGTCAAAGGTGTGGAATGGAACACCTGGCGCACGGCTCAGTAACACGTAGTGAACCTACCCTAAGGACGAGGACAACCACGGGAAACTGTGGCTAATCCTCGATAGGAAATTTGGCCTGGAACGGTATCTTTCCTAAAACCGGCTCGCCGTGAGACACGGGCCTTAGGATGGCGCTGCGGCCGATTATGCTAGACGGCGGTGTAAAGGACCACCGTGGCGACGATCGGTATGGGCGATGGAAGTCGGAGCCCAGAGTCGGCTACTGAGACAAGGAGCCGAGCCTTACGAGGCTTAGCGGTCGCGAAAACTCGCCAATGCACGAAAGTGTGAGTGGGCTACTCCAAGTGTCATTCTTACGGATGACTGTCGCCCAGTTTTACAAGCTGGGAAAGGAAGGAGAGGGCAAGGCTGGTGCCAGCCGCCGCGGTAAAACCAGCTCTTCGAGTGGTCAGGACGAATATTGGGTCTAAAGCGTTCGTAGCGGGACAAGTAGGTTCCTGGTTAAATCCGATGTCACAAGCATCGGGCTGCTGGGAATACCGCTAGTCTTGAGAGCGGGATAGGACAGGGGTAGTCTATGGGCAGGGGTGAAATCCAGTGATCCATAGGCGACCACCGATGGCGAAGGCACCTGTCTGGAACGTATCTAACCGTGATGGACGAAAGCCAGGGGAGCGACCCGGATTAGATACCCGGTTAGTCCTGGCCGTAAACGATGCCGACTAGGTGTTGCAGCGGCCAAGAGCCACTGCAGTGCCACAGTGAAGACGTTAAGTCGGCCACCTGGGGAGTACGGTCGCAAGACTGAAACTTAAAGGAATTGACGGGGGCGCACCACCAGGAGTGAAGCCTGCGGTTTAATTGGATTCAACGCCGAAAAACTCACCTAAACAGACGGCAGAATGAAGCTCAAGTTAATGACTTTAGCTAACTCGCCGAGAGGAAGTGCATGGCCGTCGACAGTTCGTGCTGTGAAGTGTCTTGTTAAGTCAAGCAACGAACGAGATCCACGTCCGCAATTGCCAGCGGGTCCCTTTGGGATGCCGGGAACCTTGCGGAGACTGCTTGGTGCTAAACCAGAGGAAGGAGTGGGCAACGGCAGGTCAGTATGCTCCGATAGTTTAGGGCTACACGCGGGCTGCAATGGTCGGTACAATGGGCCGCGACCCCGAAAGGGGAAGCCAATCCCGAAAGCCGGTCTCAGTCAGGATTGGGGTTTGCAACTCAGCCCCATGAATATGGAATTCCTAGTAAACGTGTTTCATTAAGACACGTTGAATACGTCCCCGCGCCTTGTACACACCGCCCGT</span>
-<span class="s">&gt;AY175392 1 1057 Archaea/Euryarchaeota/Methanomicrobiales</span>
-<span class="s">CCCTTTCTGGTTGATCCTGCCAGAGGCCACTGCTATCGGGGTTCGACTAAGCCATGCGAGTCGAGAGGGGTAATGCCCTCGGCGAACGGCTCAGTAACACGTGGACAACCTACCCTCAGATCTGGGATAACTCCGGGAAACTGGAGATAATACCGGATAATCCGTGAACGCTGGAATGCCTTACGGTTCAAAGCTTTAGCGTCTGAGGATGGGTCTGCGGCCGATTAGGTAGTTGCTGGGGTAACGTCCCAACAAGCCGATAATCGGTACGGGTTGTGAGAGCAAGAGCCCGGAGATGGATTCTGAGACACGAATCCAGGTCCTACGGGGCGCAGCAGGCGCGAAAACTTTACACTGCGCGAAAGCGCGATAAGGGAACCTCGAGTGCGTGCGCAATGCGTACGCTTTTCACATGCCTAAAAAGCATGTGGAATAAGAGCCGGGCAAGACCGGTGCCAGCCGCCGCGGTAACACCGGCGGCTCAAGTGGTGGCCGCTATTATTGGGCTTAAAGGGTCCGTAGCCGGACCAGTTAGTCCCTTGGGAAATCTTACGGCTTAACCGTAAGGCTGCCAATGGATACTGCTGGCCTTGGGACCGGGAGAGGCAAGAGGTACCTCAGGGGTAGGAGTGAAATCCTGTAATCCTTGAGGGACCGCCAGTGGCGAAGGCGTCTTGCTAGAACGGGTCCGACGGTGAGGGACGAAAGCTAGGGGCACGAACCGGATTAGATACCCGGGTAGTCCTAGCCGTAAACGATGCGAGCTAGGTGTCACGTGGATTGCGAATCCATGTGGTGCCGTAGGGAAACCGTGAAGCTCGCCGCCTGGGAAGTACGGCCGCAAGGCTGAAACTTAAAGGAATTGGCGGGGGAGCACCACAACGGGTGGAGCCTGCGGTTTAATTGGACTCAACGCCGGAAAGCTCACCGGAGACGACAGCGGGATGAGGGCCAGGCTGATGACCTTGCTAGACTAGCTGAGAGGAGGTGCATGGCCGCCGTCAGTTCGTACCGTGAGGCGTCCTGTTAAGTCAGGCAACGAGCGAGACCCAAAGGG</span>
-<span class="s">&gt;AY284588 1 1736 Eukarya/Metazoa/Nematoda/Aphelenchus et rel.</span>
-<span class="s">CTCAAAGATTAAGCCATGCATGTGTAAGTATAAACGATTCAATCGTGAAACCGCGAACGGCTCATTATAACAGCTATGATCTACTTGATCTTGAGAATCCTAATTGGATAACTGTAGTAATTCTAGAGCTAATACATGCATAAGAGCTCGAACCTTGCGCAAGCGGGGGAAGAGTGCATTTATTGGAAGAAGACCAGTTGTGGCTGTAAAAAGCTGCATGTCGTTGACTCGCAATAACTAAGCTGATCGCATGGCCTTGTGCCGGCGACGAGTCTTTCGAGTATCTGCCTTATCAACTTTCGACGGTAGTGTATTTGACTACCATGGTGGTGACGGGTAACGGAGGATAAGGGTTCGACTCCGGAGAAGGGGCCTGAGAAATGGCCACTACGTCTAAGGATGGCAGCAGGCGCGCAAATTACCCACTCTCGGTACGAGGAGGTAGTGACGAAAAATAACGAAGAGGTCCCCTATGGGTCTTCTATTGGAATGGGTACAATTTAAACCCTTTAACGATTAACCAAGAGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCTCTAAATGCATAGATACATTGCTGCGGTTAAAAAGCTCGTAGTTGGATCTGTGTTGGGGACTTGGTCCACTCTAACGGGTGGTACTTTGCTCCTTGACAATCAATGTTGGCTCACTTGGCGTAGTCTTCAGTGATTGCGTCATAGTTGGCTGACGAGTTTACTTTGAGCAAATCAGAGTGCTCCAAACAGGCGTTTACGCTTGAATGTTCGTGCATGGAATAATAGAAGAGGATTTCGGTTCTATTTTGTTGGTTTTGAGACCGAGATAATGGTTAACAGAGACAGACGGGGGCATTCGTACTTCTGCGTGAGAGGTGAAATTCTTGGACCGCAGAAAGACGCACCACAGCGAAAGCATTTGCCAAGAATGTCTTCATTAATCAAGAACGAAAGTCAGAGGATCGAAGGCGATCAGATACCGCCCTAGTTCTGACCGTAAACGATGCCAACTAGCGATCTGTCGGTGGTGTGTTTTCGCCCTGATAGGGAGCTTCCCGGAAACGAAAGTCTTCGGGTTCCGGGGGAAGTATGGTTGCAAAGCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAACCTCACCCGGGCCGGACACCGTAAGGATTGACAAATTGATAGCTTTTTCATGATTCGGTGGTTGGTGGTGCATGGCCGTTCTTAGTTCGTGGAGCGATTTGTCTGGTTTATTCCGATAACGAGCGAGACTCTAGCCTACTAAATAGTTGGCACATTACATTGTGCGTCCTAACTTCTTAGAGGGATTTACGGCGTATAGCCGCAAGAGAATGAGCAATAACAGGTCTGTGATGCCCTTAGATGTCCGGGGCTGCACGCGCGCTACACTGGTGAAATCAACGTGTTCTCCTATGCCGAGAGGCACTTGGGTAAACCATTGAAAATTCGCCGTGATTGGGATCGGAGATTGAAATTATTTTCCGTGAACGAGGAATTCCAAGTAAGTGCGAGTCATCAACTCGCGTTGATTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTACCCGGGACTGGGTTATTTCGAGAAATTTGAGGATTGGCTAGGTGCTTGATGCCTCCGGGTGTCATCGCCTGTCGAGAATCAACTTAATCGAGATGGCCTGAACCGGGT</span>
-<span class="s">&gt;AY454558 1 1110 Archaea/Crenarchaeota/uncultured/uncultured</span>
-<span class="s">ACTCACTAAGAGCGAATTGGGCCTTTCGTCGCATGCTAAAAGGCCGCCATGGCCGCGGGATTGGGCACGGGGGGACGGGTTGCCGCAGGCGCGAAACCTCTGCAATAGGCGAAAGCTTGACAGGGTTACTCTGAGTGATTTCCGTTAAGGAGATCTTTTGGCACCTCTAAAAATGGTGCAGAATAAGGGGTGGGCAAGTCTGGTGTCAGCCGCCGCGGTAATACCAGCACCCCGAGTGGTCGGGACGTTTATTGGGCCTAAAGCATCCGTAGCCGGTTCTACAAGTCTTCCGTTAAATCCACCTGCTTAACAGATGGGCTGCGGAAGATACTATAGAGCTAGGAGGCGGGAGAGGCAAGCGGTACTCGATGGGTAGGGGTAAAATCCGTTGATCCATTGAAGACCACCAGTGGCGAAGGCGGCTTGCCAGAACGCGCTCGACGGTGAGGGATGAAAGCTGGGGGAGCAAACCGGATTAGATACCCGGGTAGTCCCAGCTGTAAACGATGCAGACTCGGTGATGAGTTGGCTTCTTGCTAACTCAGTGCCGCAGGGAAGCCGTTAAGTTTGCCGCCTGGGGAGTACGGTCGCAAGACTGAAACTTAAAGGAATTGGCGGGGGAGCACCACAAGGGGTGAAGCCTGCGGTTCAATTGGAGTCAACGCCGGAAATCTTACCGGGGGCGACAGCAGAGTGAAGGTCAAGCTGAAGACTTTACCAGACAAGCTGAGAGGAGGTGCATGGCCGTCGCCAGCTCGTGCCGTGAGGTGTCCTGTTAAGTCAGGTAACGAGCGAGATCCCTGCCTCTAGTTGCTACCATTATTCTCAGGAGTAGTGGAGCTAATTAGAGGGACCGCCGTCGCTGAGACGGAGGAAGGTGGGGGCTACGGCAGGTCAGTATGCCCCGAAACCCTCGGGCCACACGCGGGCTGCAATGGTAAGGACAATGAGTTTCAATTCCGAAAGGAGGAGGCAATCTCTAAACCTTACCACAGTTATGATTGAGGGCTGAAACTCGCCCTCATGAATATGGAATCCCTAGTAACCGCGTGTCACTATCGCGCGGTGAATACGTCCCTGCTCCTTGCACGAGTTAACCGAATCACTAGT</span>
-<span class="s">&gt;DQ421767 1 1422 Bacteria/Beta Gammaproteobacteria/Gammaproteobacteria_1/Oceanospirillales_2/Marinomonas</span>
-<span class="s">AGCGGTAACAGGAATTAGCTTGCTAATTTGCTGACGAGCGGCGGACGGGTGAGTAACGCGTAGGAATCTGCCTGGTAGTGGGGGACAACATGTGGAAACGCATGCTAATACCGCATACGCCCTACGGGGGAAAGGAGGGGATCTTCGGACCTTTCGCTATCAGATGAGCCTGCGTGAGATTAGCTAGTTGGTGGGGTAAAGGCTCACCAAGGCGACGATCTCTAGCTGGTCTGAGAGGATGATCAGCCACACTGGGACTGAGACACGGCCCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGGACAATGGGCGCAAGCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGCCTTCGGGTTGTAAAGCACTTTCAGTTGGGAAGATGATGACGTTACCAACAGAAGAAGCACCGGCTAAATCCGTGCCAGCAGCCGCGGTAATACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGACCAGAAAGTTGGGGGTGAAATCCCGGGGCTCAACCCCGGAACGGCCTCCAAAACTCCTGGTCTTGAGTACGGCAGAGGGGGATGGAATTCCGCGTGTAGCAGTGAAATGCGTAGATATAGGAAGGAACATCAGTGGCGAAGGCGACACCCTGGACCGATACTGACACTGAGGTGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGTCTACTAGCCGTTGGGGATTTTATTCTTAGTGGCGCAGCTAACGCGATAAGTAGACCGCCTGGGGAGTACGGCCGCAAGGTTAAAACTCAAATGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAAGCAACGCGAAGAACCTTACCTACTCTTGACATCCAGAGAATTTAGCAGAGATGCTTTAGTGCCTTCGGGAACTCTGAGACAGGTGCTGCATGGCTGTCGTCAGCTCGTGTTGTGAGATGTTGGGTTAAGTCCCGTAACGAGCGCAACCCTTATCCTTATTTGCCAGCACTTCGGGTGGGAACTCTAAGGAGACTGCCGGTGACAAACCGGAGGAAGGTGGGGACGACGTCAAGTCATCATGGCCCTTACGAGTAGGGCTACACACGTGCTACAATGGCGTATACAGAGGGCCGCAAGACCGCGAGGTGGAGCAAATCCCAAAAAGTACGTCGTAGTCCGGATTGGAGTCTGCAACTCGACTCCATGAAGTCGGAATCGCTAGTAATCGTGAATCAGAATGTCACGGTGAATACGTTCCCGGGCCTTGTACACACCGCCCGTCACACCATGGGAGTTGATTGCTCCAGAAGTAGCTAGCTTAACCTTCGGGATGGCGGTTACCACGGAGTGGTCATGACTGGGGTGAAGTCGTAACAAGGTAGCCTAGG</span>
-<span class="s">&gt;DQ628981 1 1786 Eukarya/Rhodophyta et al./Rhodophyta/Florideophyceae/Corallinales</span>
-<span class="s">CACCTGGTTGATCCTGCCAGTGGTATATGCTTGTCTCAAAGACTAAGCCATGCAAGTCTAAGTATAAGTTATTCTTACGACAAAACTGCGAATGGCTCGGTAAAACAGCAATAATTTCTTCAGTGATGATTTTACTCACGGATAACCGTAGTAATTCTAGAGCTAATACGTGCAAATTAAAGCAATGACCGCAAGGCCAGCGCTGTGCCGTTTAGATAACAACACCATCATTTGGTGATTCATAATCGTCTTTCTGATCGCTTCGTGCGACACACTGTTCAAATTTCTGACCTATCAACTTTCGATGGTAAGGTAGTGTCTTACCATGGTTATGACGGGTAACGGACCGTGGGTGCGGGATTCCGGAGAGGGAGCCTGAGAAACGGCTACCACATCCAAGGAAGGCAGCAGGCGCGTAAATTACCCAATCCAGACACTGGGAGGTAGTGACAAGAAATATCAATGGGGGAACTGTAAAGTTCTTCCAATTGGAATGAGATCGAGCTAAATAGCCAAATCGAGAATCCAGCAGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCTGTAAGCGTATACCAAAGTTGTTGCACTTAAAACGCTCGTAGTCGGACATTGGTAGTTCCGGGAGTGTGCGCGTCGTGTGCATGCTCTGCGGGACTGCCTTTCGTGGAGTTGTCGGAGGGATGAAGCATTTTAATTAATGAACGTCCACCGCGCCCACTTTTTACTGTGAGAAAATCAGAGTGCTCAAAGCAGGCAATTGCCGTGAATGTATTAGCATGGAATAATAGAATAGGACTCGTTTCTATTTTGTTGGTTTGTTGGGAATGAGTAATGATTAAGAGGGACAGTTGGGGGCATTTGTATTACGAGGCTAGAGGTGAAATTCTTAGATTCTCGTAAGACAAACTGCTGCGAAAGCGTCTGCCAAGGATGTTTTCATTGATCAAGAACGAAAGTAAGGGGATCGAAGACGATCAGATACCGTCGTAGTCTTTACTATAAACGATGAGAACTAGGGATCGGGCGAGGCATTACGATGACCCGCCCGGCACCTTCCGCGAAAGCAAAGTGTTTGCTTTCTGGGGGGAGTATGGTCGCAAGGCTGAAACTTAAAGGAATTGACGGAAGGGCATCACCGGGTGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAAACTTACCAGGTCAGGACATAGTGAGGATGAACAGATTGAGAGCTCTTTTTTGATTCTATGGTTGGTGGTGCATGGCCGTTCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGTTAACGAGCGAGACCTGGGCGTGCTAACTAGGAGAGGCTACACTCGTGGTAGTTTTCGACTTCTTAGACGGACTGGTGGCGTCTAGCCACCGGAAGCTCCAGGCAATAACAGGTCTGAGATGCCCTTAGATGTTCTGGGCCGCACGCGTGCTACACTGAGTAATTCAATGGGTAAGGGAACACGAAAGTGCGACCTAATCTTGAAATTTGCTCGTGATGGGGATCGACGGTTGCAATTTTCCGTCGTGAACGAGGAATACCTTGTAGGCGCGTGTCATCATCACGCGCCGAATACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTCCTACCGATTGAGTGATCCGGTGAGGCTCTGGGACCTGAGCGGAAAGAGCGTTTCGCTTGTTCTGCTTGGGAAACTTGGTCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGGTTTCCGTAGGTGAACCTGCAGAAGGATCAAGCTA</span>
-<span class="s">&gt;EF406474 1 1502 Bacteria/Firmicutes/Clostridiales/Ruminococcus et rel./Papillibacter et rel./Oscillospira</span>
-<span class="s">TAGAGTTTGATCCTGGCTCAGGACGAACGCTGGCGGCGTGCTTAACACATGCAAGTCGAACGGAGCACCCTTGAAGGAGTTTTCGGACAACGGATAGGAATGCTTAGTGGCGGACTGGTGAGTAACGCGTGAGGAACCTGCCTTCCAGAGGGGGACAACAGTTGGAAACGACTGCTAATACCGCATGACGCATTGGTGTCGCATGGCACTGATGTCAAAGATTTATCGCTGGAAGATGGCCTCGCGTCTGATTAGCTAGTTGGTGAGGTAACGGCCCACCAAGGCGACGATCAGTAGCCGGACTGAGAGGTTGGCCGGCCACATTGGGACTGAGATACGGCCCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGGGCAATGGACGCAAGTCTGACCCAGCAACGCCGCGTGAAGGAAGAAGGCTTTCGGGTTGTAAACTTCTTTTAAGGGGGAAGAGCAGAAGACGGTACCCCTTGAATAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGATTTACTGGGTGTAAAGGGCGTGCAGCCGGAGAGACAAGTCAGATGTGAAATCCACGGGCTCAACCCGTGAACTGCATTTGAAACTGTTTCCCTTGAGTGTCGGAGAGGTAATCGGAATTCCTTGTGTAGCGGTGAAATGCGTAGATATTAGGAAGAACACCAGTGGCGAAGGCGGATTACTGGACGATAACTGACGGTGAGGCGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCTGTAAACGATCGATACTAGGTGTGCGGGGACTGACCCCCTGCGTGCCGGAGTTAACACAATAAGTATCGCACCTGGGGAGTACGATCGCAAGGTTGAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGTGGATTATGTGGTTTAATTCGAAGCAACGCGAAGAACCTTACCAGGGCTTGACATCCTACTAACGAAGTAGAGATACATTAGGTGCCCTTCGGGACAAGAGAGACAGGTGGTGCATGGTTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTATCTTCAGTAGCCAGCAGGTAAAGCCGGGCACTCTGGAGAGACTGCCGGGGATAACCCGGAGGAAGGTGGGGATGACGTCAAATCATCATGCCCCTTATGATTTGGGCTACACACGTGCTACAATGGCGTAAACAGAGGGAAGCGAGCCCGCGAGGGGGAGCAAATCCCAAAAATAACGTCCCAGTTCGGATTGTAGTCTGCAACCCGACTACATGAAGCTGGAATCGCTAGTAATCGCGGATCAGAATGCCGCGGTGAATACGTTCCCGGGTCTTGTACACACCGCCCGTCACACCATGGGAGTCGGAAATGCCCGAAGTCTGTGACCCAACCGCAAGGAGGGAGCAGCCGAAGGCAGGTCGGATGACTGGGGTGAAGTCGTAACAAGGTAACCGTAA</span>
-<span class="s">&gt;EF516988 1 1782 Bacteria/Firmicutes/Bacillales Mollicutes/Staphylococcaceae/Staphylococcus/Staphylococcus aureus et rel./Staphylococcus aureus et rel./Staphylococcus warneri</span>
-<span class="s">GTACCGCTTTGGAGCCTCTCGAGTTTGATCCTGGCTCAGGAGGTCCTAACAAGGTAACCAGTATTGGATCCCCTAGAGTTTGATCCCGGCCCCTAAAGTTTGAACAAAGTCCAGGAAATTGGGGCCCCTACAGTTTAATCTCTTTTGCTTCATGGTAAAAAACTGAAAGACGGTTTCGGCTGTCGCTATTTGATGGGCCCGCGGCGCATTAGCTAGTTGGTGAGGTAACGGCTCACCAAGGCGACGATGCGTAGCCCACCTGAGAGGGTGATCGGCCACACTGGGACTGAGACACGGCCCAGACTCCTACGGGAGGCAGCAGTAGGGAATCTTCCACAATGGGCGAAAGCCTGATGGAGCAACGCCGCGTGAGTGAAGAAGGTTTTCGGATCGTAAAACTCTGTTGTAAGGGAAGAACAAGTACAGTAGTAACTGGCTGTACCTTGACGGTACCTTATTAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGAATTATTGGGCGTAAAGCGCGCGCAGGCGGTCCTTTAAGTCTGATGTGAAAGCCCACGGCTCAACCGTGGAGGGTCATTGGAAACTGGGGGACTTGAGTGCAGAAGAGGAAAGTGGAATTCCAAGTGTAGCGGTGAAATGCGTAGAGATTTGGAGGAACACCAGTGGCGAAGGCGACTTTCTGGTCTGTAACTGACGCTGAGGCGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGAGTGCTAAGTGTTAGGGGGGTTTCCGCCCCTTAGTGCTGCAGCTAACGCATTAAGCACTCCGCCTGGAGAGTACGGTCGCAGGACTGAAACTCAAAAGAATTTGACGGGGGGCTCCTTTAAGTCTGATGTGAAAGCCCACGGCTCAACCGTGGAGGGTCATTGGAAACTGGGGGACTTGAGTGCAGAAGAGGAAAGTGGAATTCCAAGTGTAGCGGTGAAATGCGTAGAGATTTGGAGGAACACCAGTGGCGAAGGCGACTTTCTGGTCTGTAACTGACGCTGAGGCGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGAGTGCTAAGTGTTAGGGGGTTTCCGCCCCTTAGTGCTGCAGCTAACGCATTAAGCACTCCGCCTGGGGAGTACGGTCGCAAGACTGAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAAGCAACGCGAAGAACCTTACCAGGTCTTGACATCCCGTTGACCACTGTAGAGATATAGTTTCCCCTTCGGGGGCAACGGTGACAGGTGGTGCATGGTTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTAGTTGCCATCATTTAGTTGGGCACTCTAAGGTGACTGCCGGTGACAAACCGGAGGAAGGTGGGGATGACGTCAAATCATCATGCCCCTTATGACCTGGGCTACACACGTGCTACAATGGACGATACAAACGGTTGCCAACTCGCGAGAGGGAGGTATCCGATAAAGTCGTTCTCAGTTCGGATTGTTGGCCCCAACTCGCGTACGTGAAACCAGAATAACCAGTAATGGCTCCTCAGCATTTTGATCCGGGCTCGTTAAGTGGTAACAAGGTAACCGCTATTGGATCCTTAGAGTTTGATCCGGCTCAGGAAGTCGTAACAAGGTAACCAGTATGGTCCTCTAGAG</span>
-<span class="s">&gt;EF551905 1 1203 Bacteria/Beta Gammaproteobacteria/Xanthomonadales</span>
-<span class="s">GATAGCGGCGCGATTCGCCCTTCCTACGGGGGGCAGCAGTGGGGAATATTGGACAATGGGCGAAAGCCAGATCCAGCCATGCCGCGTGGGTGAAGAAGGCCTTCGGGTTGTAAAGCCCTTTTGTTGGGAAAGAAAGACGTCCGGCTAATACCCGGATGGAATGACGGTACCCAAAGAATAAGCACCGGCTAACTTCGTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTACTCGGAATTACTGGGCGTAAAGGGTGCGTAGGTGGTTCGTTAAGTCTGATGTGAAAGCCCTGGGCTCAACCTGGGAATTGCATTGGATACTGGCGAGCTGGAGTGCGGTAGAGGGTAGTGGAATTCCCGGTGTAGCAGTGAAATGCGTAGATATCGGGAGGAACATCCGTGGCGAAGGCGACTACCTGGACCAGCACTGACACTGAGGCACGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCCTAAACGATGCGAACTGGATGTTGGGTTCAATCAGGAACTCAGTATCGAAGCTAACGCGTTAAGTTCGCCGCCTGGGGAGTACGGTCGCAAGACTGAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGTGGAGTATGTGGTTTAATTCGATGCAACGCGAAGAACCTTACCTGGCCTTGACATGTCGAGAACTTTCCAGAGATGGATTGGTGCCTTCGGGAACTCGAACACAGGTGCTGCATGGCTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGTCCTTAGTTGCCAGCACGTAATGGTGGGAACTCTAAGGAGACCGCCGGTGACAAACCGGAGGAAGGTGGGGATGACGTCAAGTCATCATGGCCCTTACGGCCAGGGCTACACACGTACTACAATGGGAAAGGACAGAGGGCTGCGAACCCGCGAGGGCAAGCCAATCCCAGAAACCTTTCTCCCAGTCCGGATTGGAGTCTGCAACTCGACTCCATGAAGTCGGAATCGCTAGTAATCGCAGATCAGCATTGCTGCGGTGAATACGTTTCCGGTCTTGTACAACACCGCCCGTCACACCATGGGAGTGGGTGCCACCAGAAGTAGCTAGACTACGTTCGGGAGACCGTTACCCACGGTTGAATTCATGGACTTGGGGTGAGTCCGTAAACAGGGTTACCCCCG</span>
-<span class="s">&gt;EU132755 1 1345 Bacteria/Actinobacteria/CMN et rel./CMN/Pseudonocardiaceae_3/Pseudonocardia aurantiaca et rel./Pseudonocardia aurantiaca et rel.</span>
-<span class="s">GAACGCTTGACGGCGTGCTTACACATGCAAGTCGAACGGGCCATTGCTCTTCGGGGTGGTGGTTAGTGGCGAACGGGTGAGTAACACGTGAGTAACCTGCCCTCGGCTTCGGGATAAGCCTGGGAAACTGGGTCTAATACCGGATATTCACATCTTGTTGCATGGTGGGGTGTGGAAAGGGTTTCTGGCTGGGGATGGGCTCGCGGCCTATCAGCTTGTTGGTGGGGTGATGGCCTACCAAGGCGGTGACGGGTAGCCGGCCTGAGAGGGCGACCGGCCACACTGGGACTGAGACACGGCCCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGCGCAATGGGCGGAAGCCTGACGCAGCGACGCCGCGTGGGGGATGACGGCCTTCGGGTTGTAAACCTCTTTCAGCCCCGACGAAGCGAAAGTGACGGTAGGGGTAGAAGAAGCGCCGGCCAACTACGTGCCAGCAGCCGCGGTAATACGTAGGGCGCAAGCGTTGTCCGGATTTATTGGGCGTAAAGAGCTCGTAGGCGGTTTGTCGCGTCTTCCGTGAAAACTGGGGGCTTAACTTCCAGCTTGCGGTGGATACGGGCTGACTGGAGTGCGGCAGGGGAGACTGGAATTCCTGGTGTAGCGGTGAAATGCGCAGATATCAGGAGGAACACCGGTGGCGAAGGCGGGTCTCTGGGCCGTTACTGACGCTGAGGAGCGAAAGCGTGGGGAGCGAACAGGATTAGATACCCTGGTAGTCCACGCTGTAAACGTTGGGCGCTAGGTGTGGGGGACTTTCCACGTTCTCCGTGCCGTAGCTAACGCATTAAGCGCCCCGCCTGGGGAGTACGGCCGCAAGGCTAAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGCGGAGCATGTGGCTTAATTCGATGCAACGCGAAGAACCTTACCTGGGTTTGACATGCGCGGTAATCCTGTAGAGATACAGGGTCCTTCGGGGCCGTGTACAGGTGGTGCATGGCTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGTTCCATGTTGCCAGCACGTGATGGTGGGGACTCATGGGAGACTGCCGGGGTCAACTCGGAGGAAGGTAGGGATGACGTCAAGTCATCATGCCCCTTATGTCCAGGGCTGCACACATGCTACAATGGCTCATACAGAGGGCTGCGATGCTGTGAGGCTGAGCGAATCCCTTAAAGTGAGTCTCAGTTCGGATCGGGGTCTGCAACTCGACCCCGTGAAGTCGGAGTCGCTAGTAATCGCAGATCAGCAACGCTGCGGTGATACGTTCCCGGGCATTGCACTCA</span>
-<span class="s">&gt;EU570118 1 1433 Archaea/Euryarchaeota/Thermoplasmatales/uncultured</span>
-<span class="s">CGGTTGATCCTGCCGGCGCTCACCGCTCTTGGAATCCGATTAAGCCATGTGAGTCGAGAGGGTTCGGCCCTCGGCAAACTGCTCAGTAACACGTGGATAACCTAACCTAAGGTGGGAGATAATCTCGGAAAACTGAGGCTAATATCCCATAGACCTTGATGACTGGAATGTTTTGAGGTTTAAAGTTACGACGCCTTAGGATGGGTCTGCGGCCTATCAGGTTGTAGTTAGTGTAAAGGACTAACTAGCCGACGACGGGTACGGGCCATGGGAGTGGTTGCCCGGAGATGGACTCTGAGACACGAGTCCAGGCCCTACGGGGCGCAGCAGGCGCGAAAACTTTGCAATGCGCGAAAGCGCGACAAGGGGATTCCAAGTGCATGCACTAAGTGTATGCTTTTCGTGAGTGTAAAAAGCTCACGGAATAAGGGCTGGGTAAGACTGGTGCCAGCCGCCGCGGTAATACCAGCGGCCCTAGTGGTGATCGTTTTTATTGGGCCTAAAGCGTCCGTAGCCGGTTCGGTAAATCTCTGGGTAAATCGTTGGGCTTAACCCAACGAATTCTGGGGAGACTGCCGAACTTGGGACCGGGAGAGGTCGGAGGTACTCCAGGGGTAGGGGTGAAATCCTGTAATCCTTGGGGGACCACCGGTGGCGAAAGCGTCCGACCAGAACGGGTCCGACGGTAAGGGACGAAGCCCTGGGTCGCGAACCGGATTAGATACCCGGGTAGTCCAGGGTGTAAACGCTGTGCGCTTGGTGTAGGGGGTCCTACGAGGGCATCCTGTGCCGGAGAGAAGTTGTTAAGCGCACCGCCTGGGGAGTACGGTCGCAAGACTGAAACTTAAAGGAATTGGCGGGGGAGCACAGCAACGGGAGGAGCGTGCGGTTTAATTGGATTCAACGCCGGAAAACTCACCAGGGGCGACTGCCACATGAAGATCAAGCTGATGACTTTATCTGATTGGTAGAGAGGTGGTGCATGGCCGTCGTCAGTTCGTACCGTAGGGCGTTCTGTTAAGTCAGATAACGAACGAGACCCTTGCCCTTAATTGCCATGTTTCCCTCCGGGGGAACGGTACTTTAAGGGGACCGCTGGTGCAAAATCAGAGGAAGGGAAGGGCAACGGTAGGTCAGTATGCCCCGAATCCCCTGGGCAACACGCGCGCTACAAAGGCCGGGACAAAGGGTTCCGACACCGAGAGGTGAAGGTAATCCCGAAACCTGTCCGTAGTTCGGATCGAGGGCTGCAACCCGCCCTCGTGAAGCTGGATTCCGTAGTAATCGCAGATCAACATCCTGCGGTGAATATGCCCCTGCTCCTTGCACACACCGCCCGTCAAACCATCCGAGTGGAGTTTCGATGAGGGTGGGATTCTTGTCCTTCTCAAATCGCGATTTCGCAAGGAGGGTTAAGTCGTAACAAGGTAACC&quot;&quot;&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fasta_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;&gt;AF424517 1 994 Archaea/Crenarchaeota/uncultured/uncultured</span>
+<span class="s2">CAGCAGCCGCGGTAATACCAGCCCCCCGAGTGGTGGGGATGTTTATTTGGCCTAAAACGTCCGTAGCCAGCTCGGTAAATCTCTCGTTAAATCCAGCGTCCTAAGCGTTGGGCTGCGAGGGAGACTGCCAAGCTAGAGGGTGGGAGAGGTCAGCGGTATTTCTGGGGTAGGGGCGAAATCCATTGATCCCAGGAGGACCACCAGTGGCGAAGGCTGCTGACTAGAACACGCCTGACGGTGAGGGACGAAAGCTGGGGGAGCAAACCGGATTAGATACCCGGGTAGTCCCAGCTGTAAACGATGCAAACTCGGTGATGCCCTGGCTTGTGGCCAGTGCAGTGCCGCAGGGAAGCCGTTAAGTTTGCCGCCTGGGAAGTACGTACGCAAGTATGAAACTTAAAGGAATTGGCGGGGGAGCACCACAAGGGGTGAAGCCTGCGGTTCAATTGGAGTCAACGCCAGAAATCTTACCCGAAGAGACAGCAGAATGAAGGTCAAGCTGGAGACTTTACCAGACAAGCTGAGAAGTGGTGCATGGCCGTCGCCAGCTCGTGCCGTGAGATGTCCTGTTAAGTCAGGTAACCAGCGAGATCCCTGCCTCTAGTTGCCACCATTACTCTCCGGAGTAGTGGGGCGAATTAGCGGGACCGCCGTAGTTAATACGGAGGAAGGAAGGGGCCACGGCAGGTCAGTATGCCCTGAAACTTTGGGGCCACACGCGGGCTGCAATGGTAACGACAATGGGTTCCGAAACCGAAAGGTGGAGGTAATCCTCAAACGTTACCACAGTTATGATTGAGGGCTGCAACTCGCCCTCATGAATATGGAATCCCTAGTAACTGCGTGTCATTATCGCGCGGTGAATACGTCCCTGCTCCTTGCACACACTGCCCGTCGAACCACCCGAATGAGGTTTGGGTGAGGAATGGTCGAATGTTGGCCGTTTCGAACCTGGGCTTCGTAAGGAGGGTTAAGTCGTAACAAGGTAACCGTA</span>
+<span class="s2">&gt;AF448158 1 1828 Eukarya/Metazoa/Magelona et rel.</span>
+<span class="s2">TTGATCCTGCCAGTAGTCATATGCTTGACTCAAAGATTAAGCCATGCATGTGCAAGTACATGACTTTTTTACACACGGTGAGACCGCGAATGGCTCATTAGATCAGTCTTAGTTCCTTAGACGGAAAGTGCTACTTGGATAACTGTGGCAATTCTAGAGCTAATACGTGCACGCAAGCTCCGACCTACTGGGGAAGAGCGCAATTATTAGATCAAGACCAAACGAGTCGAAAGGCTCGAACGTCTGGTGACTCTGGATAACCTCGGGCTGACCGCACGGCCAAGAGCCGGCGGCGCATCTTTCAAGTGTCTGCCCTATCAACTTTCGATGGTATGCGATCTGCGTACCATGGTGCTTACGGGTAACGGGGAATCAGGGTTCGATTCCGGAGAGGGAGCATGAGAAACGGCTACCACCTCCAAGGAAGGCAGCAGGCGCGCAAATTACCCACTCCTGGCACAGGGAGGTAGTGACGAGCAATAGCGACTCGGGACTCTTTCGAGGCCTCGGGATCGGAATGAGTACAACGTAAACACTTTTGCAAGGAACAATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCCAATAGCGTATATTAAAGCTGTTGCAGTTAAAAAGCTCGTAGCTGAATCTCGGGTGCGGGCGGGCGGTCCGCCTTACAGCGTGCACTGCCCCGATCCTGATCCAACTGCCGGTATTATCTCGGGGTGCTCTTAGCTGAGTGTCTTGGGCTGGCCGGTGCTTTTACTTTGAAAAAATTAGAGTGCTCAAAGCAGGCTTCCACGCCTGAATACTATAGCATGGAATAATGGAATAAGACCTCGGTTCTATTCTGTTGGTCTCTGGAAACCAGAGGTAATGATTAAGAGGGACAGACGGGGGCATTCGTATTGCGGGGCGAGAGGTGAAATTCTTAGACCCTCGCAAGACGAACTACAGCGAAAGCATTTGCCAAGCATGTTTTCTTTAGTCAAGAACGAAAGTCAGAGGTTCGAAGACGATCAGATACCGTCCTAGTTCTGACCATAAACGATGCCGACTAGCGATGCGCGAGCGTTGGTATCTGACCTCGCGCGCAGCTCCCGGGAAACCAAAGTCTTTGGGTTCCGGGGGAAGTATGGTTGCAAAGCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAAACTCACCCGGCCCGGACACTGCGAGGATTGACAGATTGAGAGCTCTTTCTTGATTCGGTGGGTGGTGGTGCATGGCCGTTCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGATAACGAACGAGACTCTAGCCTGCTAAATAGTTCGTCGACACGCGGTTGTGTCTGGCGAGGAAACTTCTTAGAGGGACAAATGGCATTTAGTCATACGAGATTGAGCAATAACAGGTCTGTGATGCCCTTAGATGTTCGGGGCCGCACGCGCGCTACACTGAAGGAGACAGCGAGTGTCCTGACCTAGCCCGAAAGGGCCGGGCAATCTGCTGAACCTCTTTCGTGGTAGGGATTGGGGCTTGCAATTGTTCCCCATGAACCAGGAATTCCGAGTAAGCGCAGGTCACAAGCCTGCGTTGATTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTACTACCGATTGAGCGGTTCAGTGAGACCCTCGGACTTGCCCAGCAGGAGCCGGCGACGGCTCCGCGTGTGTGCGAGAAAGAATGTCGAACTGTATTGCTTAGAGGAAGTAAAAGTCGTAACAAGGTTTCCGTAGGTGAACCTGCAGAAGGATCAAGCTT</span>
+<span class="s2">&gt;AJ428075 1 1749 Eukarya/Viridiplantae/Streptophyta/Klebsormidiophyceae</span>
+<span class="s2">TAGTCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGTATAAATTACTCTAAATGGTAAAACTGCGAATGGCTCATTAAATCAGTTATAGTTTATTTGATGATTCCTGCTACTCGGATAACCGTAGTAATTATAGAGCTAATACGTGCGCAAACGCCCGACTTCGGAAGGGCCGTATTTATTAGATAAAAGACCAACTCGGGGTTCGCCCCGAAACTTTGGTGATTCATAATGTAATCTCGGACCGCACGGCCTCGCGCCGGCGGCAAATCAATCAAATATCTGCCCTATCAACTTTCGATGGCAGGATAGTCGCCTGCCATGGTTGTAACGGGTGACGGAGAATTAGGGTTCGATTCCGGAGAGGGAGCATGAGAAACGGCTACCACATCCAAGGAAGGCAGCAGGCGCGCAAATTACCCAATCCTGATTCAGGGAGGTAGTGACAATAAATAACAATACCGGTCTCTTATGTGACTGGTAATTGGAATGAGCGGAACATAAATACCTTAACGAGGATCCATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCCAATAGCGTATATTTAAGTTGTTGCAGTTAAAAAGCTCGTAGTTGGATTTCGGGACGGAGACGTCGGTCCTCCCTCGTGGTCGATACTGACTCTCTTCCTTAATTGCCTCGAGCGCCGCCTAGTCTTCATTGCCTGGGCGCGCTACGCGGCGCCGTTACCTTGAATAAATTATGGTGTTCAAAGCAGGCTTATGCTCTGAGTACATTAGCATGGAATAACGCTATAGGACTCCGGTCCTATTACGTTGGTCTTCTGACCGGAGTAATGATTAATAGGGACAGTCGGGGGCATTCGTACTTCATCGTTAGAGGTGAAATTCTTGGATCGATGAAAGACGAACTTCTGCGAAAGCATTTGCCAAGGATGTTTTCATTAATCAAGAACGAAAGTTGGGGGCGCGAAGACGATTAGATACCGTCCTAGTCCCAACCGTAAACGATGCCGACCCCGAATTGGCGCACGTATGACTTGACGTCGCCAGCGCCCGAGGAGAAATCAGAGTCTTTGGGTTCCGGGGGGAGTATGGTCGCAAGTCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGTGTGGAGCGTGCGGCTTAATTTGACTCAACGCGGGGAATCTTACCAGGTCCAGACATAGCGACGATTGACAGACTGATAGCTCTTTCTTGATCATATGGGTAGTGGTGCATGGCCGTTCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGTTAACGAACGAGACCTCAGCTTGCTAACTAGTTGCGCGAAGATTTTCTTCGCGCACACTTCTTAGAAGGACTTTGAGCGTTTAGCTCATGGAGGTTTGAGGCAATAACAGGTCTGTGATGCCCTTAGATGTTCTGGGCCGCACGCGCGCTACAATGATGCATTCAGCGAGCGGAATCCCTGATCGGAAACGGTCGGGCAATCTTTGAATCTTTATCGTGATGGGGATAGACCCTTGCAATTATTGGTCTCGAACGAGGAATACCTAGTAAGCGCTCGTCATCAGCGTGCGCTGACTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTCCTACCGATAGAATGCTTCGGTGAAGCACTCGGATCGCGCCGCCGSCGGCGAAACCTCCGGGGACGGCATGAGAAGTTTGTTAAACCATATCGTTTAGAGGAAGGAGAAGTCGTAACAAGG</span>
+<span class="s2">&gt;AJ850036 1 1961 Eukarya/Metazoa/Arthropoda/Polyphaga/Bagous et rel.</span>
+<span class="s2">TTGTCTCAAAGATTAAGCCATGCATGTCTCAGTACAAGCCATATTAAGGTGAAACCGCGAAAGGCTCATTAAATCAGTTATGGTTCCTTAGATCGTACCCAGGTTACTTGGATAACTGTGGTAATTCTAGAGCTAATACATGCAAACAGAGCTCCGACTGGAAACGGAAGGAGTGCTTTTATTAGATCAAAGCCAAACGGTAACTTAATGTTGTCGTACAATAATATTGTTGACTCTGAATAACTTTATGCTGATCGCATGGTCTTGCACCGGCGACGCATCTTTCAAATGTCTGCCTTATCAACTGTCGATGGTAGGTTCTGCGCCTACCATGGTTGTAACGGGTAACGGGGAATCAGGGTTCGATTCCGGAGAGGGAGCCTGAGAAACGGCTACCACATCCAAGGAAGGCAGCAGGCGCGCAAATTACCCACTCCCGGCACGGGGAGGTAGTGACGAAAAATAACGATACGGGACTCATCCGAGGCCCCGTAATCGGAATGAGTACACTTTAAATCCTTTAACGAGGATCAATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCCAATAGCGTATATTAAAGTTGTTGCGGTTAAAAAGCTCGTAGTCAAATTTGTGTCTCGTGCCGCTGGTTCATCGTTCGCGGTGTTAATTGGCGTGATACGAGACGTCCTGCCGGTGGGCTTTCAGATTTTTCCGTATTTCAGGACCATAACAATTGGTTTGTATCTGTGGCGTAATACTGCAGTGCAGGGCAATTGGTTAATGAACGGTTGGTTTTTGTGCTACCCAAACTTACAATCCTGTCGCGTTGCTCTTGATTGAGTGACGAGGTGGGCCGGCACGTTTACTTTGAACAAATTAGAGTGCTTAAAGCAGGCAAAATTTCGCCTGAATATTCTGTGCATGGAATAATGGAATAGGACCTCGGTTCTATTTCGTTGGTTTTCGGAACTCCGAGGTAATGATTAATAGGAACGGATGGGGGCATTCGTATTGCGACGTTAGAGGTGAAATTCTTGGATCGTCGCAAGACGAACAGAAGCGAAAGCATTTGCCAAAAACGCTTTCATTGATCAAGAACGAAAGTTAGAGGTTCGAAGGCGATCAGATACCGCCCTAGTTCTAACCGTAAACTATGTCATCTGACGATCCGTCGACGTTCCTTTATTGACTCGACGGGCAGTTTCCGGGAAACCAAAGATTTTGGGTTCCGGGGGAAGTATGGTTGCAAAGCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAACCTCACCAGGCCCGGACACCGGAAGGATTGACAGATTGAGAGCTCTTTCTTGATTCGGTGGGTGGTGGTGCATGGCCGTTCTTAGTTGGTGGAGCGATTTGTCTGGTTAATTCCGATAACGAACGAGACTCTAGCCTGCTAAATAGGCGACATATGACATCGCAAAGGCCAGCCGGTTTGATTTAAAGGGTGGCGAGGTGGCGTCAAGGCGTTTATCTCGTGCTCTTGTCAGATTGTGCGCGGTTTTTACTGTCGGCGTATAAATAATTCTTCTTAGAGGGACAGGCGGCTTTTAGCCGCACGAGATTGAGCAATAACAGGTCTGTGATGCCCTTAGATGTTCTGGGCCGCACGCGCGCTACACTGAAGGAATCAGCGTGTCCTCCCTGGCCGAGTGGCCCGGGTAACCCGCTGAACCTCCTTCGTGCTAGGGATTGGGGCTTGCAATTGTTCCCCATGAACGAGGAATTCCCAGTAAGCGCGAGTCATAAGCTCGCGTTGATTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTACTACCGATTGAATGATTTACTGAGGTCTTCGGATCGATGCGCGATGACGTCTGACGTTGATCGATGTATCCGAGAAGATGACCAAACTTGATCATTT</span>
+<span class="s2">&gt;AM745254 1 1365 Archaea/Euryarchaeota/Halobacteriales/uncultured</span>
+<span class="s2">TTCCGGTTGATCCTGCCGGACCTGACTGCTATTGGAGTAGGACTAAGTCACGCTAGTCAAAGGTGTGGAATGGAACACCTGGCGCACGGCTCAGTAACACGTAGTGAACCTACCCTAAGGACGAGGACAACCACGGGAAACTGTGGCTAATCCTCGATAGGAAATTTGGCCTGGAACGGTATCTTTCCTAAAACCGGCTCGCCGTGAGACACGGGCCTTAGGATGGCGCTGCGGCCGATTATGCTAGACGGCGGTGTAAAGGACCACCGTGGCGACGATCGGTATGGGCGATGGAAGTCGGAGCCCAGAGTCGGCTACTGAGACAAGGAGCCGAGCCTTACGAGGCTTAGCGGTCGCGAAAACTCGCCAATGCACGAAAGTGTGAGTGGGCTACTCCAAGTGTCATTCTTACGGATGACTGTCGCCCAGTTTTACAAGCTGGGAAAGGAAGGAGAGGGCAAGGCTGGTGCCAGCCGCCGCGGTAAAACCAGCTCTTCGAGTGGTCAGGACGAATATTGGGTCTAAAGCGTTCGTAGCGGGACAAGTAGGTTCCTGGTTAAATCCGATGTCACAAGCATCGGGCTGCTGGGAATACCGCTAGTCTTGAGAGCGGGATAGGACAGGGGTAGTCTATGGGCAGGGGTGAAATCCAGTGATCCATAGGCGACCACCGATGGCGAAGGCACCTGTCTGGAACGTATCTAACCGTGATGGACGAAAGCCAGGGGAGCGACCCGGATTAGATACCCGGTTAGTCCTGGCCGTAAACGATGCCGACTAGGTGTTGCAGCGGCCAAGAGCCACTGCAGTGCCACAGTGAAGACGTTAAGTCGGCCACCTGGGGAGTACGGTCGCAAGACTGAAACTTAAAGGAATTGACGGGGGCGCACCACCAGGAGTGAAGCCTGCGGTTTAATTGGATTCAACGCCGAAAAACTCACCTAAACAGACGGCAGAATGAAGCTCAAGTTAATGACTTTAGCTAACTCGCCGAGAGGAAGTGCATGGCCGTCGACAGTTCGTGCTGTGAAGTGTCTTGTTAAGTCAAGCAACGAACGAGATCCACGTCCGCAATTGCCAGCGGGTCCCTTTGGGATGCCGGGAACCTTGCGGAGACTGCTTGGTGCTAAACCAGAGGAAGGAGTGGGCAACGGCAGGTCAGTATGCTCCGATAGTTTAGGGCTACACGCGGGCTGCAATGGTCGGTACAATGGGCCGCGACCCCGAAAGGGGAAGCCAATCCCGAAAGCCGGTCTCAGTCAGGATTGGGGTTTGCAACTCAGCCCCATGAATATGGAATTCCTAGTAAACGTGTTTCATTAAGACACGTTGAATACGTCCCCGCGCCTTGTACACACCGCCCGT</span>
+<span class="s2">&gt;AY175392 1 1057 Archaea/Euryarchaeota/Methanomicrobiales</span>
+<span class="s2">CCCTTTCTGGTTGATCCTGCCAGAGGCCACTGCTATCGGGGTTCGACTAAGCCATGCGAGTCGAGAGGGGTAATGCCCTCGGCGAACGGCTCAGTAACACGTGGACAACCTACCCTCAGATCTGGGATAACTCCGGGAAACTGGAGATAATACCGGATAATCCGTGAACGCTGGAATGCCTTACGGTTCAAAGCTTTAGCGTCTGAGGATGGGTCTGCGGCCGATTAGGTAGTTGCTGGGGTAACGTCCCAACAAGCCGATAATCGGTACGGGTTGTGAGAGCAAGAGCCCGGAGATGGATTCTGAGACACGAATCCAGGTCCTACGGGGCGCAGCAGGCGCGAAAACTTTACACTGCGCGAAAGCGCGATAAGGGAACCTCGAGTGCGTGCGCAATGCGTACGCTTTTCACATGCCTAAAAAGCATGTGGAATAAGAGCCGGGCAAGACCGGTGCCAGCCGCCGCGGTAACACCGGCGGCTCAAGTGGTGGCCGCTATTATTGGGCTTAAAGGGTCCGTAGCCGGACCAGTTAGTCCCTTGGGAAATCTTACGGCTTAACCGTAAGGCTGCCAATGGATACTGCTGGCCTTGGGACCGGGAGAGGCAAGAGGTACCTCAGGGGTAGGAGTGAAATCCTGTAATCCTTGAGGGACCGCCAGTGGCGAAGGCGTCTTGCTAGAACGGGTCCGACGGTGAGGGACGAAAGCTAGGGGCACGAACCGGATTAGATACCCGGGTAGTCCTAGCCGTAAACGATGCGAGCTAGGTGTCACGTGGATTGCGAATCCATGTGGTGCCGTAGGGAAACCGTGAAGCTCGCCGCCTGGGAAGTACGGCCGCAAGGCTGAAACTTAAAGGAATTGGCGGGGGAGCACCACAACGGGTGGAGCCTGCGGTTTAATTGGACTCAACGCCGGAAAGCTCACCGGAGACGACAGCGGGATGAGGGCCAGGCTGATGACCTTGCTAGACTAGCTGAGAGGAGGTGCATGGCCGCCGTCAGTTCGTACCGTGAGGCGTCCTGTTAAGTCAGGCAACGAGCGAGACCCAAAGGG</span>
+<span class="s2">&gt;AY284588 1 1736 Eukarya/Metazoa/Nematoda/Aphelenchus et rel.</span>
+<span class="s2">CTCAAAGATTAAGCCATGCATGTGTAAGTATAAACGATTCAATCGTGAAACCGCGAACGGCTCATTATAACAGCTATGATCTACTTGATCTTGAGAATCCTAATTGGATAACTGTAGTAATTCTAGAGCTAATACATGCATAAGAGCTCGAACCTTGCGCAAGCGGGGGAAGAGTGCATTTATTGGAAGAAGACCAGTTGTGGCTGTAAAAAGCTGCATGTCGTTGACTCGCAATAACTAAGCTGATCGCATGGCCTTGTGCCGGCGACGAGTCTTTCGAGTATCTGCCTTATCAACTTTCGACGGTAGTGTATTTGACTACCATGGTGGTGACGGGTAACGGAGGATAAGGGTTCGACTCCGGAGAAGGGGCCTGAGAAATGGCCACTACGTCTAAGGATGGCAGCAGGCGCGCAAATTACCCACTCTCGGTACGAGGAGGTAGTGACGAAAAATAACGAAGAGGTCCCCTATGGGTCTTCTATTGGAATGGGTACAATTTAAACCCTTTAACGATTAACCAAGAGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCTCTAAATGCATAGATACATTGCTGCGGTTAAAAAGCTCGTAGTTGGATCTGTGTTGGGGACTTGGTCCACTCTAACGGGTGGTACTTTGCTCCTTGACAATCAATGTTGGCTCACTTGGCGTAGTCTTCAGTGATTGCGTCATAGTTGGCTGACGAGTTTACTTTGAGCAAATCAGAGTGCTCCAAACAGGCGTTTACGCTTGAATGTTCGTGCATGGAATAATAGAAGAGGATTTCGGTTCTATTTTGTTGGTTTTGAGACCGAGATAATGGTTAACAGAGACAGACGGGGGCATTCGTACTTCTGCGTGAGAGGTGAAATTCTTGGACCGCAGAAAGACGCACCACAGCGAAAGCATTTGCCAAGAATGTCTTCATTAATCAAGAACGAAAGTCAGAGGATCGAAGGCGATCAGATACCGCCCTAGTTCTGACCGTAAACGATGCCAACTAGCGATCTGTCGGTGGTGTGTTTTCGCCCTGATAGGGAGCTTCCCGGAAACGAAAGTCTTCGGGTTCCGGGGGAAGTATGGTTGCAAAGCTGAAACTTAAAGGAATTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAACCTCACCCGGGCCGGACACCGTAAGGATTGACAAATTGATAGCTTTTTCATGATTCGGTGGTTGGTGGTGCATGGCCGTTCTTAGTTCGTGGAGCGATTTGTCTGGTTTATTCCGATAACGAGCGAGACTCTAGCCTACTAAATAGTTGGCACATTACATTGTGCGTCCTAACTTCTTAGAGGGATTTACGGCGTATAGCCGCAAGAGAATGAGCAATAACAGGTCTGTGATGCCCTTAGATGTCCGGGGCTGCACGCGCGCTACACTGGTGAAATCAACGTGTTCTCCTATGCCGAGAGGCACTTGGGTAAACCATTGAAAATTCGCCGTGATTGGGATCGGAGATTGAAATTATTTTCCGTGAACGAGGAATTCCAAGTAAGTGCGAGTCATCAACTCGCGTTGATTACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTACCCGGGACTGGGTTATTTCGAGAAATTTGAGGATTGGCTAGGTGCTTGATGCCTCCGGGTGTCATCGCCTGTCGAGAATCAACTTAATCGAGATGGCCTGAACCGGGT</span>
+<span class="s2">&gt;AY454558 1 1110 Archaea/Crenarchaeota/uncultured/uncultured</span>
+<span class="s2">ACTCACTAAGAGCGAATTGGGCCTTTCGTCGCATGCTAAAAGGCCGCCATGGCCGCGGGATTGGGCACGGGGGGACGGGTTGCCGCAGGCGCGAAACCTCTGCAATAGGCGAAAGCTTGACAGGGTTACTCTGAGTGATTTCCGTTAAGGAGATCTTTTGGCACCTCTAAAAATGGTGCAGAATAAGGGGTGGGCAAGTCTGGTGTCAGCCGCCGCGGTAATACCAGCACCCCGAGTGGTCGGGACGTTTATTGGGCCTAAAGCATCCGTAGCCGGTTCTACAAGTCTTCCGTTAAATCCACCTGCTTAACAGATGGGCTGCGGAAGATACTATAGAGCTAGGAGGCGGGAGAGGCAAGCGGTACTCGATGGGTAGGGGTAAAATCCGTTGATCCATTGAAGACCACCAGTGGCGAAGGCGGCTTGCCAGAACGCGCTCGACGGTGAGGGATGAAAGCTGGGGGAGCAAACCGGATTAGATACCCGGGTAGTCCCAGCTGTAAACGATGCAGACTCGGTGATGAGTTGGCTTCTTGCTAACTCAGTGCCGCAGGGAAGCCGTTAAGTTTGCCGCCTGGGGAGTACGGTCGCAAGACTGAAACTTAAAGGAATTGGCGGGGGAGCACCACAAGGGGTGAAGCCTGCGGTTCAATTGGAGTCAACGCCGGAAATCTTACCGGGGGCGACAGCAGAGTGAAGGTCAAGCTGAAGACTTTACCAGACAAGCTGAGAGGAGGTGCATGGCCGTCGCCAGCTCGTGCCGTGAGGTGTCCTGTTAAGTCAGGTAACGAGCGAGATCCCTGCCTCTAGTTGCTACCATTATTCTCAGGAGTAGTGGAGCTAATTAGAGGGACCGCCGTCGCTGAGACGGAGGAAGGTGGGGGCTACGGCAGGTCAGTATGCCCCGAAACCCTCGGGCCACACGCGGGCTGCAATGGTAAGGACAATGAGTTTCAATTCCGAAAGGAGGAGGCAATCTCTAAACCTTACCACAGTTATGATTGAGGGCTGAAACTCGCCCTCATGAATATGGAATCCCTAGTAACCGCGTGTCACTATCGCGCGGTGAATACGTCCCTGCTCCTTGCACGAGTTAACCGAATCACTAGT</span>
+<span class="s2">&gt;DQ421767 1 1422 Bacteria/Beta Gammaproteobacteria/Gammaproteobacteria_1/Oceanospirillales_2/Marinomonas</span>
+<span class="s2">AGCGGTAACAGGAATTAGCTTGCTAATTTGCTGACGAGCGGCGGACGGGTGAGTAACGCGTAGGAATCTGCCTGGTAGTGGGGGACAACATGTGGAAACGCATGCTAATACCGCATACGCCCTACGGGGGAAAGGAGGGGATCTTCGGACCTTTCGCTATCAGATGAGCCTGCGTGAGATTAGCTAGTTGGTGGGGTAAAGGCTCACCAAGGCGACGATCTCTAGCTGGTCTGAGAGGATGATCAGCCACACTGGGACTGAGACACGGCCCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGGACAATGGGCGCAAGCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGCCTTCGGGTTGTAAAGCACTTTCAGTTGGGAAGATGATGACGTTACCAACAGAAGAAGCACCGGCTAAATCCGTGCCAGCAGCCGCGGTAATACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGACCAGAAAGTTGGGGGTGAAATCCCGGGGCTCAACCCCGGAACGGCCTCCAAAACTCCTGGTCTTGAGTACGGCAGAGGGGGATGGAATTCCGCGTGTAGCAGTGAAATGCGTAGATATAGGAAGGAACATCAGTGGCGAAGGCGACACCCTGGACCGATACTGACACTGAGGTGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGTCTACTAGCCGTTGGGGATTTTATTCTTAGTGGCGCAGCTAACGCGATAAGTAGACCGCCTGGGGAGTACGGCCGCAAGGTTAAAACTCAAATGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAAGCAACGCGAAGAACCTTACCTACTCTTGACATCCAGAGAATTTAGCAGAGATGCTTTAGTGCCTTCGGGAACTCTGAGACAGGTGCTGCATGGCTGTCGTCAGCTCGTGTTGTGAGATGTTGGGTTAAGTCCCGTAACGAGCGCAACCCTTATCCTTATTTGCCAGCACTTCGGGTGGGAACTCTAAGGAGACTGCCGGTGACAAACCGGAGGAAGGTGGGGACGACGTCAAGTCATCATGGCCCTTACGAGTAGGGCTACACACGTGCTACAATGGCGTATACAGAGGGCCGCAAGACCGCGAGGTGGAGCAAATCCCAAAAAGTACGTCGTAGTCCGGATTGGAGTCTGCAACTCGACTCCATGAAGTCGGAATCGCTAGTAATCGTGAATCAGAATGTCACGGTGAATACGTTCCCGGGCCTTGTACACACCGCCCGTCACACCATGGGAGTTGATTGCTCCAGAAGTAGCTAGCTTAACCTTCGGGATGGCGGTTACCACGGAGTGGTCATGACTGGGGTGAAGTCGTAACAAGGTAGCCTAGG</span>
+<span class="s2">&gt;DQ628981 1 1786 Eukarya/Rhodophyta et al./Rhodophyta/Florideophyceae/Corallinales</span>
+<span class="s2">CACCTGGTTGATCCTGCCAGTGGTATATGCTTGTCTCAAAGACTAAGCCATGCAAGTCTAAGTATAAGTTATTCTTACGACAAAACTGCGAATGGCTCGGTAAAACAGCAATAATTTCTTCAGTGATGATTTTACTCACGGATAACCGTAGTAATTCTAGAGCTAATACGTGCAAATTAAAGCAATGACCGCAAGGCCAGCGCTGTGCCGTTTAGATAACAACACCATCATTTGGTGATTCATAATCGTCTTTCTGATCGCTTCGTGCGACACACTGTTCAAATTTCTGACCTATCAACTTTCGATGGTAAGGTAGTGTCTTACCATGGTTATGACGGGTAACGGACCGTGGGTGCGGGATTCCGGAGAGGGAGCCTGAGAAACGGCTACCACATCCAAGGAAGGCAGCAGGCGCGTAAATTACCCAATCCAGACACTGGGAGGTAGTGACAAGAAATATCAATGGGGGAACTGTAAAGTTCTTCCAATTGGAATGAGATCGAGCTAAATAGCCAAATCGAGAATCCAGCAGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCCAGCTCTGTAAGCGTATACCAAAGTTGTTGCACTTAAAACGCTCGTAGTCGGACATTGGTAGTTCCGGGAGTGTGCGCGTCGTGTGCATGCTCTGCGGGACTGCCTTTCGTGGAGTTGTCGGAGGGATGAAGCATTTTAATTAATGAACGTCCACCGCGCCCACTTTTTACTGTGAGAAAATCAGAGTGCTCAAAGCAGGCAATTGCCGTGAATGTATTAGCATGGAATAATAGAATAGGACTCGTTTCTATTTTGTTGGTTTGTTGGGAATGAGTAATGATTAAGAGGGACAGTTGGGGGCATTTGTATTACGAGGCTAGAGGTGAAATTCTTAGATTCTCGTAAGACAAACTGCTGCGAAAGCGTCTGCCAAGGATGTTTTCATTGATCAAGAACGAAAGTAAGGGGATCGAAGACGATCAGATACCGTCGTAGTCTTTACTATAAACGATGAGAACTAGGGATCGGGCGAGGCATTACGATGACCCGCCCGGCACCTTCCGCGAAAGCAAAGTGTTTGCTTTCTGGGGGGAGTATGGTCGCAAGGCTGAAACTTAAAGGAATTGACGGAAGGGCATCACCGGGTGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGAAAACTTACCAGGTCAGGACATAGTGAGGATGAACAGATTGAGAGCTCTTTTTTGATTCTATGGTTGGTGGTGCATGGCCGTTCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGTTAACGAGCGAGACCTGGGCGTGCTAACTAGGAGAGGCTACACTCGTGGTAGTTTTCGACTTCTTAGACGGACTGGTGGCGTCTAGCCACCGGAAGCTCCAGGCAATAACAGGTCTGAGATGCCCTTAGATGTTCTGGGCCGCACGCGTGCTACACTGAGTAATTCAATGGGTAAGGGAACACGAAAGTGCGACCTAATCTTGAAATTTGCTCGTGATGGGGATCGACGGTTGCAATTTTCCGTCGTGAACGAGGAATACCTTGTAGGCGCGTGTCATCATCACGCGCCGAATACGTCCCTGCCCTTTGTACACACCGCCCGTCGCTCCTACCGATTGAGTGATCCGGTGAGGCTCTGGGACCTGAGCGGAAAGAGCGTTTCGCTTGTTCTGCTTGGGAAACTTGGTCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGGTTTCCGTAGGTGAACCTGCAGAAGGATCAAGCTA</span>
+<span class="s2">&gt;EF406474 1 1502 Bacteria/Firmicutes/Clostridiales/Ruminococcus et rel./Papillibacter et rel./Oscillospira</span>
+<span class="s2">TAGAGTTTGATCCTGGCTCAGGACGAACGCTGGCGGCGTGCTTAACACATGCAAGTCGAACGGAGCACCCTTGAAGGAGTTTTCGGACAACGGATAGGAATGCTTAGTGGCGGACTGGTGAGTAACGCGTGAGGAACCTGCCTTCCAGAGGGGGACAACAGTTGGAAACGACTGCTAATACCGCATGACGCATTGGTGTCGCATGGCACTGATGTCAAAGATTTATCGCTGGAAGATGGCCTCGCGTCTGATTAGCTAGTTGGTGAGGTAACGGCCCACCAAGGCGACGATCAGTAGCCGGACTGAGAGGTTGGCCGGCCACATTGGGACTGAGATACGGCCCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGGGCAATGGACGCAAGTCTGACCCAGCAACGCCGCGTGAAGGAAGAAGGCTTTCGGGTTGTAAACTTCTTTTAAGGGGGAAGAGCAGAAGACGGTACCCCTTGAATAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGATTTACTGGGTGTAAAGGGCGTGCAGCCGGAGAGACAAGTCAGATGTGAAATCCACGGGCTCAACCCGTGAACTGCATTTGAAACTGTTTCCCTTGAGTGTCGGAGAGGTAATCGGAATTCCTTGTGTAGCGGTGAAATGCGTAGATATTAGGAAGAACACCAGTGGCGAAGGCGGATTACTGGACGATAACTGACGGTGAGGCGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCTGTAAACGATCGATACTAGGTGTGCGGGGACTGACCCCCTGCGTGCCGGAGTTAACACAATAAGTATCGCACCTGGGGAGTACGATCGCAAGGTTGAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGTGGATTATGTGGTTTAATTCGAAGCAACGCGAAGAACCTTACCAGGGCTTGACATCCTACTAACGAAGTAGAGATACATTAGGTGCCCTTCGGGACAAGAGAGACAGGTGGTGCATGGTTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTATCTTCAGTAGCCAGCAGGTAAAGCCGGGCACTCTGGAGAGACTGCCGGGGATAACCCGGAGGAAGGTGGGGATGACGTCAAATCATCATGCCCCTTATGATTTGGGCTACACACGTGCTACAATGGCGTAAACAGAGGGAAGCGAGCCCGCGAGGGGGAGCAAATCCCAAAAATAACGTCCCAGTTCGGATTGTAGTCTGCAACCCGACTACATGAAGCTGGAATCGCTAGTAATCGCGGATCAGAATGCCGCGGTGAATACGTTCCCGGGTCTTGTACACACCGCCCGTCACACCATGGGAGTCGGAAATGCCCGAAGTCTGTGACCCAACCGCAAGGAGGGAGCAGCCGAAGGCAGGTCGGATGACTGGGGTGAAGTCGTAACAAGGTAACCGTAA</span>
+<span class="s2">&gt;EF516988 1 1782 Bacteria/Firmicutes/Bacillales Mollicutes/Staphylococcaceae/Staphylococcus/Staphylococcus aureus et rel./Staphylococcus aureus et rel./Staphylococcus warneri</span>
+<span class="s2">GTACCGCTTTGGAGCCTCTCGAGTTTGATCCTGGCTCAGGAGGTCCTAACAAGGTAACCAGTATTGGATCCCCTAGAGTTTGATCCCGGCCCCTAAAGTTTGAACAAAGTCCAGGAAATTGGGGCCCCTACAGTTTAATCTCTTTTGCTTCATGGTAAAAAACTGAAAGACGGTTTCGGCTGTCGCTATTTGATGGGCCCGCGGCGCATTAGCTAGTTGGTGAGGTAACGGCTCACCAAGGCGACGATGCGTAGCCCACCTGAGAGGGTGATCGGCCACACTGGGACTGAGACACGGCCCAGACTCCTACGGGAGGCAGCAGTAGGGAATCTTCCACAATGGGCGAAAGCCTGATGGAGCAACGCCGCGTGAGTGAAGAAGGTTTTCGGATCGTAAAACTCTGTTGTAAGGGAAGAACAAGTACAGTAGTAACTGGCTGTACCTTGACGGTACCTTATTAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGAATTATTGGGCGTAAAGCGCGCGCAGGCGGTCCTTTAAGTCTGATGTGAAAGCCCACGGCTCAACCGTGGAGGGTCATTGGAAACTGGGGGACTTGAGTGCAGAAGAGGAAAGTGGAATTCCAAGTGTAGCGGTGAAATGCGTAGAGATTTGGAGGAACACCAGTGGCGAAGGCGACTTTCTGGTCTGTAACTGACGCTGAGGCGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGAGTGCTAAGTGTTAGGGGGGTTTCCGCCCCTTAGTGCTGCAGCTAACGCATTAAGCACTCCGCCTGGAGAGTACGGTCGCAGGACTGAAACTCAAAAGAATTTGACGGGGGGCTCCTTTAAGTCTGATGTGAAAGCCCACGGCTCAACCGTGGAGGGTCATTGGAAACTGGGGGACTTGAGTGCAGAAGAGGAAAGTGGAATTCCAAGTGTAGCGGTGAAATGCGTAGAGATTTGGAGGAACACCAGTGGCGAAGGCGACTTTCTGGTCTGTAACTGACGCTGAGGCGCGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGAGTGCTAAGTGTTAGGGGGTTTCCGCCCCTTAGTGCTGCAGCTAACGCATTAAGCACTCCGCCTGGGGAGTACGGTCGCAAGACTGAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAAGCAACGCGAAGAACCTTACCAGGTCTTGACATCCCGTTGACCACTGTAGAGATATAGTTTCCCCTTCGGGGGCAACGGTGACAGGTGGTGCATGGTTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTAGTTGCCATCATTTAGTTGGGCACTCTAAGGTGACTGCCGGTGACAAACCGGAGGAAGGTGGGGATGACGTCAAATCATCATGCCCCTTATGACCTGGGCTACACACGTGCTACAATGGACGATACAAACGGTTGCCAACTCGCGAGAGGGAGGTATCCGATAAAGTCGTTCTCAGTTCGGATTGTTGGCCCCAACTCGCGTACGTGAAACCAGAATAACCAGTAATGGCTCCTCAGCATTTTGATCCGGGCTCGTTAAGTGGTAACAAGGTAACCGCTATTGGATCCTTAGAGTTTGATCCGGCTCAGGAAGTCGTAACAAGGTAACCAGTATGGTCCTCTAGAG</span>
+<span class="s2">&gt;EF551905 1 1203 Bacteria/Beta Gammaproteobacteria/Xanthomonadales</span>
+<span class="s2">GATAGCGGCGCGATTCGCCCTTCCTACGGGGGGCAGCAGTGGGGAATATTGGACAATGGGCGAAAGCCAGATCCAGCCATGCCGCGTGGGTGAAGAAGGCCTTCGGGTTGTAAAGCCCTTTTGTTGGGAAAGAAAGACGTCCGGCTAATACCCGGATGGAATGACGGTACCCAAAGAATAAGCACCGGCTAACTTCGTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTACTCGGAATTACTGGGCGTAAAGGGTGCGTAGGTGGTTCGTTAAGTCTGATGTGAAAGCCCTGGGCTCAACCTGGGAATTGCATTGGATACTGGCGAGCTGGAGTGCGGTAGAGGGTAGTGGAATTCCCGGTGTAGCAGTGAAATGCGTAGATATCGGGAGGAACATCCGTGGCGAAGGCGACTACCTGGACCAGCACTGACACTGAGGCACGAAAGCGTGGGGAGCAAACAGGATTAGATACCCTGGTAGTCCACGCCCTAAACGATGCGAACTGGATGTTGGGTTCAATCAGGAACTCAGTATCGAAGCTAACGCGTTAAGTTCGCCGCCTGGGGAGTACGGTCGCAAGACTGAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGTGGAGTATGTGGTTTAATTCGATGCAACGCGAAGAACCTTACCTGGCCTTGACATGTCGAGAACTTTCCAGAGATGGATTGGTGCCTTCGGGAACTCGAACACAGGTGCTGCATGGCTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGTCCTTAGTTGCCAGCACGTAATGGTGGGAACTCTAAGGAGACCGCCGGTGACAAACCGGAGGAAGGTGGGGATGACGTCAAGTCATCATGGCCCTTACGGCCAGGGCTACACACGTACTACAATGGGAAAGGACAGAGGGCTGCGAACCCGCGAGGGCAAGCCAATCCCAGAAACCTTTCTCCCAGTCCGGATTGGAGTCTGCAACTCGACTCCATGAAGTCGGAATCGCTAGTAATCGCAGATCAGCATTGCTGCGGTGAATACGTTTCCGGTCTTGTACAACACCGCCCGTCACACCATGGGAGTGGGTGCCACCAGAAGTAGCTAGACTACGTTCGGGAGACCGTTACCCACGGTTGAATTCATGGACTTGGGGTGAGTCCGTAAACAGGGTTACCCCCG</span>
+<span class="s2">&gt;EU132755 1 1345 Bacteria/Actinobacteria/CMN et rel./CMN/Pseudonocardiaceae_3/Pseudonocardia aurantiaca et rel./Pseudonocardia aurantiaca et rel.</span>
+<span class="s2">GAACGCTTGACGGCGTGCTTACACATGCAAGTCGAACGGGCCATTGCTCTTCGGGGTGGTGGTTAGTGGCGAACGGGTGAGTAACACGTGAGTAACCTGCCCTCGGCTTCGGGATAAGCCTGGGAAACTGGGTCTAATACCGGATATTCACATCTTGTTGCATGGTGGGGTGTGGAAAGGGTTTCTGGCTGGGGATGGGCTCGCGGCCTATCAGCTTGTTGGTGGGGTGATGGCCTACCAAGGCGGTGACGGGTAGCCGGCCTGAGAGGGCGACCGGCCACACTGGGACTGAGACACGGCCCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGCGCAATGGGCGGAAGCCTGACGCAGCGACGCCGCGTGGGGGATGACGGCCTTCGGGTTGTAAACCTCTTTCAGCCCCGACGAAGCGAAAGTGACGGTAGGGGTAGAAGAAGCGCCGGCCAACTACGTGCCAGCAGCCGCGGTAATACGTAGGGCGCAAGCGTTGTCCGGATTTATTGGGCGTAAAGAGCTCGTAGGCGGTTTGTCGCGTCTTCCGTGAAAACTGGGGGCTTAACTTCCAGCTTGCGGTGGATACGGGCTGACTGGAGTGCGGCAGGGGAGACTGGAATTCCTGGTGTAGCGGTGAAATGCGCAGATATCAGGAGGAACACCGGTGGCGAAGGCGGGTCTCTGGGCCGTTACTGACGCTGAGGAGCGAAAGCGTGGGGAGCGAACAGGATTAGATACCCTGGTAGTCCACGCTGTAAACGTTGGGCGCTAGGTGTGGGGGACTTTCCACGTTCTCCGTGCCGTAGCTAACGCATTAAGCGCCCCGCCTGGGGAGTACGGCCGCAAGGCTAAAACTCAAAGGAATTGACGGGGGCCCGCACAAGCGGCGGAGCATGTGGCTTAATTCGATGCAACGCGAAGAACCTTACCTGGGTTTGACATGCGCGGTAATCCTGTAGAGATACAGGGTCCTTCGGGGCCGTGTACAGGTGGTGCATGGCTGTCGTCAGCTCGTGTCGTGAGATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGTTCCATGTTGCCAGCACGTGATGGTGGGGACTCATGGGAGACTGCCGGGGTCAACTCGGAGGAAGGTAGGGATGACGTCAAGTCATCATGCCCCTTATGTCCAGGGCTGCACACATGCTACAATGGCTCATACAGAGGGCTGCGATGCTGTGAGGCTGAGCGAATCCCTTAAAGTGAGTCTCAGTTCGGATCGGGGTCTGCAACTCGACCCCGTGAAGTCGGAGTCGCTAGTAATCGCAGATCAGCAACGCTGCGGTGATACGTTCCCGGGCATTGCACTCA</span>
+<span class="s2">&gt;EU570118 1 1433 Archaea/Euryarchaeota/Thermoplasmatales/uncultured</span>
+<span class="s2">CGGTTGATCCTGCCGGCGCTCACCGCTCTTGGAATCCGATTAAGCCATGTGAGTCGAGAGGGTTCGGCCCTCGGCAAACTGCTCAGTAACACGTGGATAACCTAACCTAAGGTGGGAGATAATCTCGGAAAACTGAGGCTAATATCCCATAGACCTTGATGACTGGAATGTTTTGAGGTTTAAAGTTACGACGCCTTAGGATGGGTCTGCGGCCTATCAGGTTGTAGTTAGTGTAAAGGACTAACTAGCCGACGACGGGTACGGGCCATGGGAGTGGTTGCCCGGAGATGGACTCTGAGACACGAGTCCAGGCCCTACGGGGCGCAGCAGGCGCGAAAACTTTGCAATGCGCGAAAGCGCGACAAGGGGATTCCAAGTGCATGCACTAAGTGTATGCTTTTCGTGAGTGTAAAAAGCTCACGGAATAAGGGCTGGGTAAGACTGGTGCCAGCCGCCGCGGTAATACCAGCGGCCCTAGTGGTGATCGTTTTTATTGGGCCTAAAGCGTCCGTAGCCGGTTCGGTAAATCTCTGGGTAAATCGTTGGGCTTAACCCAACGAATTCTGGGGAGACTGCCGAACTTGGGACCGGGAGAGGTCGGAGGTACTCCAGGGGTAGGGGTGAAATCCTGTAATCCTTGGGGGACCACCGGTGGCGAAAGCGTCCGACCAGAACGGGTCCGACGGTAAGGGACGAAGCCCTGGGTCGCGAACCGGATTAGATACCCGGGTAGTCCAGGGTGTAAACGCTGTGCGCTTGGTGTAGGGGGTCCTACGAGGGCATCCTGTGCCGGAGAGAAGTTGTTAAGCGCACCGCCTGGGGAGTACGGTCGCAAGACTGAAACTTAAAGGAATTGGCGGGGGAGCACAGCAACGGGAGGAGCGTGCGGTTTAATTGGATTCAACGCCGGAAAACTCACCAGGGGCGACTGCCACATGAAGATCAAGCTGATGACTTTATCTGATTGGTAGAGAGGTGGTGCATGGCCGTCGTCAGTTCGTACCGTAGGGCGTTCTGTTAAGTCAGATAACGAACGAGACCCTTGCCCTTAATTGCCATGTTTCCCTCCGGGGGAACGGTACTTTAAGGGGACCGCTGGTGCAAAATCAGAGGAAGGGAAGGGCAACGGTAGGTCAGTATGCCCCGAATCCCCTGGGCAACACGCGCGCTACAAAGGCCGGGACAAAGGGTTCCGACACCGAGAGGTGAAGGTAATCCCGAAACCTGTCCGTAGTTCGGATCGAGGGCTGCAACCCGCCCTCGTGAAGCTGGATTCCGTAGTAATCGCAGATCAACATCCTGCGGTGAATATGCCCCTGCTCCTTGCACACACCGCCCGTCAAACCATCCGAGTGGAGTTTCGATGAGGGTGGGATTCTTGTCCTTCTCAAATCGCGATTTCGCAAGGAGGGTTAAGTCGTAACAAGGTAACC&quot;&quot;&quot;</span>
 
 <span class="k">def</span> <span class="nf">label_to_name</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fasta_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">),</span><span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">label_to_name</span><span class="o">=</span><span class="n">label_to_name</span><span class="p">)</span>
+<span class="n">seqs</span> <span class="o">=</span> <span class="n">LoadSeqs</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fasta_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">moltype</span><span class="o">=</span><span class="n">DNA</span><span class="p">,</span><span class="n">aligned</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">label_to_name</span><span class="o">=</span><span class="n">label_to_name</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now pick up with <a class="reference external" href="./building_a_tree_of_life.html#step5">Step 5</a> above.</p>
+<p>Now pick up with <a class="reference internal" href="#step5"><span class="std std-ref">Step 5: Align the sequences using muscle</span></a> above.</p>
 </div>
 </div>
 </div>
@@ -310,87 +309,71 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
+        </div>
+        <div class="sidebar">
 <div class="news">
 <table id="feed"><tr><td><h3><a href="http://pycogent.wordpress.com/">PyCogent News and Announcements</a></h3></td>
 </tr></table></div>
 
     
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Building a tree of life</a><ul>
-<li><a class="reference internal" href="#building-a-tree-of-life-with-pycogent">Building a tree of life with PyCogent</a><ul>
-<li><a class="reference internal" href="#step-0-set-up-your-python-environment">Step 0. Set up your python environment</a></li>
-<li><a class="reference internal" href="#step-1-download-sequences-from-ncbi">Step 1: Download sequences from NCBI</a></li>
-<li><a class="reference internal" href="#step-2-load-the-sequences">Step 2: Load the sequences</a></li>
-<li><a class="reference internal" href="#step-3-select-a-random-subset-of-the-sequences">Step 3: Select a random subset of the sequences</a></li>
-<li><a class="reference internal" href="#step-4-load-the-sequences-into-a-sequencecollection-object">Step 4: Load the sequences into a SequenceCollection object</a></li>
-<li><a class="reference internal" href="#step-5-align-the-sequences-using-muscle">Step 5: Align the sequences using muscle</a></li>
-<li><a class="reference internal" href="#step-6-build-a-tree-from-the-alignment-using-fasttree">Step 6: Build a tree from the alignment using FastTree</a></li>
-<li><a class="reference internal" href="#step-7-visualize-the-tree">Step 7: Visualize the tree</a></li>
-<li><a class="reference internal" href="#step-8-save-the-tree-as-a-pdf">Step 8: Save the tree as a PDF</a></li>
-<li><a class="reference internal" href="#extra-credit-alignment-filtering">Extra credit: Alignment filtering</a><ul>
-<li><a class="reference internal" href="#filter-highly-gapped-positions-from-the-alignment">Filter highly gapped positions from the alignment</a></li>
-<li><a class="reference internal" href="#filtering-highly-variable-positions">Filtering highly variable positions</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#starting-with-silva-sequences-to-skip-steps-of-obtaining-sequences-from-ncbi">Starting with Silva sequences (to skip steps of obtaining sequences from NCBI)</a></li>
-</ul>
-</li>
-</ul>
-</li>
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Quick installation using pip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">The Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coding_guidelines.html">Coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_file_links.html">The data files used in the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Cogent Usage Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">PyCogent Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_notes.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripting_guidelines.html">Scripting guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Licenses and disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a></li>
 </ul>
 
 
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="building_alignments.html"
-                        title="previous chapter">Building alignments</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="building_phylogenies.html"
-                        title="next chapter">Building phylogenies</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/building_a_tree_of_life.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="building_phylogenies.html" title="Building phylogenies"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="building_alignments.html" title="Building alignments"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyCogent 1.5.3 documentation</a> &raquo;</li>
-          <li><a href="index.html" >PyCogent Cookbook</a> &raquo;</li> 
-      </ul>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="building_alignments.html" title="Building alignments"
+              >previous</a> |
+            <a href="building_phylogenies.html" title="Building phylogenies"
+              >next</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../_sources/cookbook/building_a_tree_of_life.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyCogent Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
-    <div class="footer">
-        &copy; Copyright 2009, PyCogent Team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        </div>
+        <div class="clearer"></div>
+      </div>
     </div>
+
   </body>
 </html>
